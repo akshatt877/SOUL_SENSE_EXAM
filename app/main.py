@@ -516,8 +516,10 @@ class SoulSenseApp:
         # -------- LOAD AGE-APPROPRIATE QUESTIONS --------
         try:
             print(self.age)
-            rows = load_questions(age=self.age)  # [(id, text)]
-            self.questions = [q[1] for q in rows]
+            rows = load_questions(age=self.age)  # [(id, text, tooltip)]
+            
+            # Store (text, tooltip) tuples
+            self.questions = [(q[1], q[2]) for q in rows]
 
             # temporary limit (existing behavior)
             self.questions = self.questions[:10]
@@ -593,14 +595,46 @@ class SoulSenseApp:
             self.finish_test()
             return
 
-        q = self.questions[self.current_question]
+        q_text, q_tooltip = self.questions[self.current_question]
+        
+        question_frame = tk.Frame(self.root, bg="#F5F7FA")
+        question_frame.pack(pady=20)
 
         tk.Label(
-            self.root,
-            text=f"Q{self.current_question + 1}: {q}",
+            question_frame,
+            text=f"Q{self.current_question + 1}: {q_text}",
             wraplength=400,
-            font=("Arial", 12)
-        ).pack(pady=20)
+            font=("Arial", 12),
+            bg="#F5F7FA"
+        ).pack(side="left")
+        
+        if q_tooltip:
+            tooltip_btn = tk.Label(
+                question_frame,
+                text="ℹ️",
+                font=("Arial", 12),
+                fg="#3498DB",
+                bg="#F5F7FA",
+                cursor="hand2"
+            )
+            tooltip_btn.pack(side="left", padx=5)
+            
+            # Simple tooltip functionality
+            def on_enter(e):
+                self.tooltip_w = tk.Toplevel(self.root)
+                self.tooltip_w.wm_overrideredirect(True)
+                x = e.widget.winfo_rootx() + 20
+                y = e.widget.winfo_rooty() + 20
+                self.tooltip_w.wm_geometry(f"+{x}+{y}")
+                label = tk.Label(self.tooltip_w, text=q_tooltip, bg="#FFFFE0", relief="solid", borderwidth=1, padx=5, pady=3)
+                label.pack()
+                
+            def on_leave(e):
+                if hasattr(self, 'tooltip_w'):
+                    self.tooltip_w.destroy()
+            
+            tooltip_btn.bind("<Enter>", on_enter)
+            tooltip_btn.bind("<Leave>", on_leave)
 
         self.answer_var = tk.IntVar()
 
