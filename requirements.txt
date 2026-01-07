@@ -8,5 +8,7 @@
 # - re (regular expressions)
 # - collections (Counter for analytics)
 
-# No external packages required
+# External packages for visualization
+matplotlib>=3.5.0
+
 # Python 3.6+ recommended
