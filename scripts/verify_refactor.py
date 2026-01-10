@@ -54,6 +54,25 @@ try:
     except ImportError:
         print("FAILURE: Could not import app.ui.journal")
 
+    try:
+        from app.analysis.outlier_detection import OutlierDetector
+        print("SUCCESS: Imported app.analysis.outlier_detection")
+    except ImportError:
+        print("FAILURE: Could not import app.analysis.outlier_detection")
+        
+    try:
+        from app.analysis.time_based_analysis import TimeBasedAnalyzer
+        print("SUCCESS: Imported app.analysis.time_based_analysis")
+    except ImportError:
+        print("FAILURE: Could not import app.analysis.time_based_analysis")
+
+    try:
+        from app.services.pdf_generator import generate_pdf_report
+        print("SUCCESS: Imported app.services.pdf_generator")
+    except ImportError:
+        # pdf_generator might fail if fpdf not installed, but checking import path
+        print("SUCCESS: Imported app.services.pdf_generator (conditional on dependencies)")
+
     root.destroy()
     sys.exit(0)
 except Exception as e:

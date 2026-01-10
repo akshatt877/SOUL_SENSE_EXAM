@@ -4,7 +4,7 @@ import logging
 from typing import Dict, List, Optional
 from app.db import get_session
 from app.models import Score, User
-from app.outlier_detection import OutlierDetector
+from app.analysis.outlier_detection import OutlierDetector
 
 logger = logging.getLogger(__name__)
 

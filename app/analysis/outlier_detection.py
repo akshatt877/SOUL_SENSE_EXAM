@@ -26,16 +26,17 @@ class OutlierDetector:
             threshold = self.threshold
             
         if len(scores) < 2:
-            return {"outliers": [], "indices": [], "z_scores": [], "method": "z-score"}
+            return {"outliers": [], "indices": [], "z_scores": [], "method": "zscore"}
         
         scores_array = np.array(scores, dtype=float)
         mean = np.mean(scores_array)
         std_dev = np.std(scores_array)
         
         if std_dev == 0:
-            return {"outliers": [], "indices": [], "z_scores": [], "method": "z-score"}
+            return {"outliers": [], "indices": [], "z_scores": [], "method": "zscore"}
         
         z_scores = np.abs((scores_array - mean) / std_dev)
+        # print(f"DEBUG: scores={scores_array}, mean={mean}, std={std_dev}, z_scores={z_scores}, threshold={threshold}")
         outlier_mask = z_scores > threshold
         
         return {
@@ -45,7 +46,7 @@ class OutlierDetector:
             "threshold": threshold,
             "mean": float(mean),
             "std_dev": float(std_dev),
-            "method": "z-score"
+            "method": "zscore"
         }
     
     # IQR: Bounds = Q1 ± 1.5*IQR

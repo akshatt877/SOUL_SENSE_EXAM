@@ -6,7 +6,7 @@ import random
 from app.db import get_connection
 from app.constants import BENCHMARK_DATA
 try:
-    from app.pdf_generator import generate_pdf_report
+    from app.services.pdf_generator import generate_pdf_report
 except ImportError:
     generate_pdf_report = None
 

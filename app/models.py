@@ -71,6 +71,8 @@ class Question(Base):
     category_id = Column(Integer)
     difficulty = Column(Integer)
     is_active = Column(Integer, default=1)
+    min_age = Column(Integer, default=0)
+    max_age = Column(Integer, default=120)
 
 class QuestionCategory(Base):
     __tablename__ = 'question_category'

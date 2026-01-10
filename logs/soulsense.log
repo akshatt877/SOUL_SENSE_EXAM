@@ -1157,3 +1157,148 @@ Traceback (most recent call last):
 TypeError: 'Response' object is not subscriptable
 2026-01-10 18:55:22,618 - app.time_based_analysis - ERROR - Error analyzing response patterns for rohan: An unexpected database error occurred.
 2026-01-10 18:55:22,714 - app.ml.clustering - WARNING - Model not fitted. Call fit() first.
+2026-01-10 19:11:29,144 - root - INFO - Logging initialized.
+2026-01-10 19:11:29,145 - root - INFO - Application started
+2026-01-10 19:11:29,167 - root - INFO - Loaded 10 total questions from DB
+2026-01-10 19:11:32,046 - root - INFO - ML Predictor initialized successfully
+2026-01-10 19:11:32,070 - root - INFO - SentimentIntensityAnalyzer initialized successfully
+2026-01-10 19:11:32,071 - root - INFO - Using 9 questions based on settings
+2026-01-10 19:11:53,417 - root - INFO - Session started | user=rohan | age=20 | age_group=adult | profession=Student | questions=9
+2026-01-10 19:12:32,488 - app.db - ERROR - Unexpected error in DB context: 'Response' object is not subscriptable
+Traceback (most recent call last):
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\db.py", line 32, in safe_db_context
+    yield session
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\time_based_analysis.py", line 218, in analyze_response_patterns_over_time
+    all_values = [r["response_value"] for r in responses]
+                  ~^^^^^^^^^^^^^^^^^^
+TypeError: 'Response' object is not subscriptable
+2026-01-10 19:12:32,655 - app.time_based_analysis - ERROR - Error analyzing response patterns for rohan: An unexpected database error occurred.
+2026-01-10 19:12:32,806 - app.ml.clustering - WARNING - Model not fitted. Call fit() first.
+2026-01-10 19:26:38,186 - root - INFO - Logging initialized.
+2026-01-10 19:26:38,247 - root - INFO - Application started
+2026-01-10 19:26:38,341 - root - INFO - Loaded 10 total questions from DB
+2026-01-10 19:26:38,658 - root - INFO - ML Predictor initialized successfully
+2026-01-10 19:26:38,700 - root - INFO - SentimentIntensityAnalyzer initialized successfully
+2026-01-10 19:26:38,705 - root - INFO - Using 9 questions based on settings
+2026-01-10 19:43:07,851 - root - INFO - Logging initialized.
+2026-01-10 19:43:07,862 - root - INFO - Application started
+2026-01-10 19:43:07,906 - root - INFO - Loaded 10 total questions from DB
+2026-01-10 19:43:11,008 - root - INFO - ML Predictor initialized successfully
+2026-01-10 19:43:11,038 - root - INFO - SentimentIntensityAnalyzer initialized successfully
+2026-01-10 19:43:11,038 - root - INFO - Using 9 questions based on settings
+2026-01-10 19:43:25,201 - root - CRITICAL - Unhandled exception in GUI
+Traceback (most recent call last):
+  File "C:\Python314\Lib\tkinter\__init__.py", line 2088, in __call__
+    return self.func(*args)
+           ~~~~~~~~~^^^^^^^
+  File "C:\Python314\Lib\tkinter\__init__.py", line 876, in callit
+    func(*args, **kw)
+    ~~~~^^^^^^^^^^^^^
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\main.py", line 568, in launch_main_app
+    root.mainloop()
+    ~~~~~~~~~~~~~^^
+  File "C:\Python314\Lib\tkinter\__init__.py", line 1613, in mainloop
+    self.tk.mainloop(n)
+    ~~~~~~~~~~~~~~~~^^^
+KeyboardInterrupt
+2026-01-10 19:43:25,213 - root - ERROR - Unexpected Error: An unexpected error occurred.
+2026-01-10 19:43:29,472 - root - INFO - Session started | user=rohan | age=20 | age_group=adult | profession=Student | questions=9
+2026-01-10 19:44:00,801 - app.db - ERROR - Unexpected error in DB context: 'Response' object is not subscriptable
+Traceback (most recent call last):
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\db.py", line 32, in safe_db_context
+    yield session
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\analysis\time_based_analysis.py", line 218, in analyze_response_patterns_over_time
+    all_values = [r["response_value"] for r in responses]
+                  ~^^^^^^^^^^^^^^^^^^
+TypeError: 'Response' object is not subscriptable
+2026-01-10 19:44:00,996 - app.analysis.time_based_analysis - ERROR - Error analyzing response patterns for rohan: An unexpected database error occurred.
+2026-01-10 19:44:01,173 - app.ml.clustering - WARNING - Model not fitted. Call fit() first.
+2026-01-10 19:44:10,770 - app.db - ERROR - Unexpected error in DB context: 'Response' object is not subscriptable
+Traceback (most recent call last):
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\db.py", line 32, in safe_db_context
+    yield session
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\analysis\time_based_analysis.py", line 218, in analyze_response_patterns_over_time
+    all_values = [r["response_value"] for r in responses]
+                  ~^^^^^^^^^^^^^^^^^^
+TypeError: 'Response' object is not subscriptable
+2026-01-10 19:44:10,781 - app.analysis.time_based_analysis - ERROR - Error analyzing response patterns for rohan: An unexpected database error occurred.
+2026-01-10 19:44:10,805 - app.ml.clustering - WARNING - Model not fitted. Call fit() first.
+2026-01-10 20:06:54,071 - root - INFO - Logging initialized.
+2026-01-10 20:06:54,081 - root - INFO - Application started
+2026-01-10 20:06:54,099 - root - INFO - Loaded 10 total questions from DB
+2026-01-10 20:06:56,826 - root - INFO - ML Predictor initialized successfully
+2026-01-10 20:06:56,856 - root - INFO - SentimentIntensityAnalyzer initialized successfully
+2026-01-10 20:06:56,859 - root - INFO - Using 9 questions based on settings
+2026-01-10 20:07:10,722 - app.db - ERROR - Unexpected error in DB context: 'Response' object is not subscriptable
+Traceback (most recent call last):
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\db.py", line 32, in safe_db_context
+    yield session
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\analysis\time_based_analysis.py", line 218, in analyze_response_patterns_over_time
+    all_values = [r["response_value"] for r in responses]
+                  ~^^^^^^^^^^^^^^^^^^
+TypeError: 'Response' object is not subscriptable
+2026-01-10 20:07:10,732 - app.analysis.time_based_analysis - ERROR - Error analyzing response patterns for rohan: An unexpected database error occurred.
+2026-01-10 20:07:10,892 - app.ml.clustering - WARNING - Model not fitted. Call fit() first.
+2026-01-10 20:07:10,937 - root - CRITICAL - Unhandled exception in GUI
+Traceback (most recent call last):
+  File "C:\Python314\Lib\tkinter\__init__.py", line 2088, in __call__
+    return self.func(*args)
+           ~~~~~~~~~^^^^^^^
+  File "C:\Python314\Lib\tkinter\__init__.py", line 876, in callit
+    func(*args, **kw)
+    ~~~~^^^^^^^^^^^^^
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\main.py", line 568, in launch_main_app
+    root.mainloop()
+    ~~~~~~~~~~~~~^^
+  File "C:\Python314\Lib\tkinter\__init__.py", line 1613, in mainloop
+    self.tk.mainloop(n)
+    ~~~~~~~~~~~~~~~~^^^
+  File "C:\Python314\Lib\tkinter\__init__.py", line 2083, in __call__
+    def __call__(self, *args):
+    
+KeyboardInterrupt
+2026-01-10 20:07:10,949 - root - ERROR - Unexpected Error: An unexpected error occurred.
+2026-01-10 20:07:43,724 - root - INFO - Session started | user=rohan | age=20 | age_group=adult | profession=Student | questions=9
+2026-01-10 20:20:38,784 - root - INFO - Logging initialized.
+2026-01-10 20:20:38,797 - root - INFO - Application started
+2026-01-10 20:20:38,813 - root - INFO - Loaded 10 total questions from DB
+2026-01-10 20:20:41,630 - root - INFO - ML Predictor initialized successfully
+2026-01-10 20:20:41,658 - root - INFO - SentimentIntensityAnalyzer initialized successfully
+2026-01-10 20:20:41,670 - root - INFO - Using 9 questions based on settings
+2026-01-10 20:21:17,910 - root - CRITICAL - Unhandled exception in GUI
+Traceback (most recent call last):
+  File "C:\Python314\Lib\tkinter\__init__.py", line 2088, in __call__
+    return self.func(*args)
+           ~~~~~~~~~^^^^^^^
+  File "C:\Python314\Lib\tkinter\__init__.py", line 876, in callit
+    func(*args, **kw)
+    ~~~~^^^^^^^^^^^^^
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\main.py", line 568, in launch_main_app
+    root.mainloop()
+    ~~~~~~~~~~~~~^^
+  File "C:\Python314\Lib\tkinter\__init__.py", line 1613, in mainloop
+    self.tk.mainloop(n)
+    ~~~~~~~~~~~~~~~~^^^
+KeyboardInterrupt
+2026-01-10 20:21:18,078 - root - ERROR - Unexpected Error: An unexpected error occurred.
+2026-01-10 20:21:21,755 - root - INFO - Session started | user=rohan | age=20 | age_group=adult | profession=Student | questions=9
+2026-01-10 20:22:38,539 - app.db - ERROR - Unexpected error in DB context: 'Response' object is not subscriptable
+Traceback (most recent call last):
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\db.py", line 32, in safe_db_context
+    yield session
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\analysis\time_based_analysis.py", line 218, in analyze_response_patterns_over_time
+    all_values = [r["response_value"] for r in responses]
+                  ~^^^^^^^^^^^^^^^^^^
+TypeError: 'Response' object is not subscriptable
+2026-01-10 20:22:38,614 - app.analysis.time_based_analysis - ERROR - Error analyzing response patterns for rohan: An unexpected database error occurred.
+2026-01-10 20:22:38,889 - app.ml.clustering - WARNING - Model not fitted. Call fit() first.
+2026-01-10 20:23:16,388 - app.db - ERROR - Unexpected error in DB context: 'Response' object is not subscriptable
+Traceback (most recent call last):
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\db.py", line 32, in safe_db_context
+    yield session
+  File "B:\Open_Source\soul_sence_Exam\SOUL_SENSE_EXAM\app\analysis\time_based_analysis.py", line 218, in analyze_response_patterns_over_time
+    all_values = [r["response_value"] for r in responses]
+                  ~^^^^^^^^^^^^^^^^^^
+TypeError: 'Response' object is not subscriptable
+2026-01-10 20:23:16,400 - app.analysis.time_based_analysis - ERROR - Error analyzing response patterns for rohan: An unexpected database error occurred.
+2026-01-10 20:23:16,446 - app.ml.clustering - WARNING - Model not fitted. Call fit() first.

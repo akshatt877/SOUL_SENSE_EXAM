@@ -448,7 +448,7 @@ python scripts/outlier_analysis.py --user john_doe --format json
 
 ```python
 from app.db import get_session
-from app.outlier_detection import OutlierDetector
+from app.analysis.outlier_detection import OutlierDetector
 
 detector = OutlierDetector()
 session = get_session()

@@ -31,7 +31,7 @@ from app.constants import BENCHMARK_DATA
 from app.models import User, Score, Response, Question
 from app.exceptions import DatabaseError, ValidationError, AuthenticationError, APIConnectionError, SoulSenseError
 from app.logger import setup_logging
-from app.data_cleaning import DataCleaner
+from app.analysis.data_cleaning import DataCleaner
 from app.utils import load_settings, save_settings, compute_age_group
 from app.questions import load_questions
 

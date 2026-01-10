@@ -88,7 +88,7 @@ else:
     DB_PATH = os.path.join(BASE_DIR, DB_DIR_NAME, DB_FILENAME)
 
 DATABASE_URL = f"sqlite:///{DB_PATH}"
-DATABASE_URL = f"sqlite:///{DB_PATH}"
+
 
 
 # Ensure DB Directory Exists

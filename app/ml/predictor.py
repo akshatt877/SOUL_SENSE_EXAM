@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import warnings
 warnings.filterwarnings('ignore')
-from app.data_cleaning import DataCleaner
+from app.analysis.data_cleaning import DataCleaner
 from .versioning import ModelVersioningManager, create_versioning_manager
 import logging
 from app.config import MODELS_DIR, DATA_DIR

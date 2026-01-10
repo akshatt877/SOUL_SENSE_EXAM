@@ -1,4 +1,4 @@
-# correlation_tab.py
+# app/ui/correlation.py
 import tkinter as tk
 from tkinter import ttk, scrolledtext
 import numpy as np
@@ -8,20 +8,15 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
-# SQLAlchemy imports
-from sqlalchemy import create_engine, func
-from sqlalchemy.orm import sessionmaker
+# App imports
 from app.models import Score, JournalEntry
-
-# Create database engine and session
-engine = create_engine('sqlite:///soulsense_db')
-Session = sessionmaker(bind=engine)
+from app.db import get_session
 
 class CorrelationTab:
     def __init__(self, parent_frame, username):
         self.parent = parent_frame
         self.username = username
-        self.session = Session()
+        self.session = get_session()
         self.setup_ui()
         
     def setup_ui(self):

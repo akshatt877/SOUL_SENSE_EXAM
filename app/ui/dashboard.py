@@ -19,7 +19,7 @@ from app.i18n_manager import get_i18n
 # from app.models import get_session, Score, JournalEntry
 from app.models import Score, JournalEntry
 from app.db import get_session, get_connection
-from app.time_based_analysis import time_analyzer
+from app.analysis.time_based_analysis import time_analyzer
 
 # Import emotional profile clustering
 try:

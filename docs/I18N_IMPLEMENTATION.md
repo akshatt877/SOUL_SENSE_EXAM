@@ -9,48 +9,58 @@ This implementation adds comprehensive internationalization (i18n) support to th
 ## 🎯 Acceptance Criteria Met
 
 ### ✓ All strings moved to resource files
+
 - Created structured JSON translation files in `locales/` directory
 - All UI strings, prompts, error messages, and questions extracted
 - Organized in logical groups (errors, quiz, journal, dashboard, etc.)
 
 ### ✓ Working language switcher that persists selection
+
 - Language dropdown added to main screen
 - Changes apply immediately to all UI elements
 - Language preference saved to `language_settings.json`
 - Persists across application restarts
 
 ### ✓ Documentation for contributing more translations
+
 - Comprehensive `I18N_GUIDE.md` with step-by-step instructions
-- `TRANSLATION_TEMPLATE.json` for easy translation
+- `docs/TRANSLATION_TEMPLATE.json` for easy translation
 - Clear examples and best practices included
 
 ## 📁 Files Created/Modified
 
 ### New Files:
+
 1. **`i18n_manager.py`** - Core internationalization manager
+
    - Handles translation loading and caching
    - Manages language switching
    - Supports parameter formatting
    - Persists user preferences
 
 2. **`locales/en.json`** - English translations (default)
+
    - Complete translation of all UI strings
    - Original application language
 
 3. **`locales/hi.json`** - Hindi translations (हिंदी)
+
    - Full Hindi language support
    - UTF-8 encoded for proper display
 
 4. **`locales/es.json`** - Spanish translations (Español)
+
    - Complete Spanish language support
    - Covers all UI elements
 
 5. **`I18N_GUIDE.md`** - Comprehensive documentation
+
    - How the system works
    - Adding new languages guide
    - Best practices and troubleshooting
 
-6. **`TRANSLATION_TEMPLATE.json`** - Template for contributors
+6. **`docs/TRANSLATION_TEMPLATE.json`** - Template for contributors
+
    - Ready-to-use template for new languages
    - Includes helpful comments
 
@@ -60,13 +70,16 @@ This implementation adds comprehensive internationalization (i18n) support to th
    - Verifies parameter formatting
 
 ### Modified Files:
+
 1. **`app.py`** - Main application
+
    - Integrated i18n manager
    - Added language selector dropdown
    - Updated all UI strings to use translations
    - Added dynamic UI update on language change
 
 2. **`journal_feature.py`** - Journal functionality
+
    - Translated all journal-related strings
    - Updated error messages and prompts
    - Internationalized sentiment analysis results
@@ -85,6 +98,7 @@ This implementation adds comprehensive internationalization (i18n) support to th
 ## 🔧 Technical Implementation
 
 ### Architecture:
+
 ```
 SoulSense/
 ├── i18n_manager.py          # Core i18n system
@@ -97,6 +111,7 @@ SoulSense/
 ```
 
 ### Key Features:
+
 - **Singleton pattern** for i18n manager (global instance)
 - **Lazy loading** of translation files
 - **Automatic fallback** to English if translation missing
@@ -106,6 +121,7 @@ SoulSense/
 - **Dot notation** for nested translations (e.g., `errors.empty_name`)
 
 ### Usage Example:
+
 ```python
 from i18n_manager import get_i18n
 
@@ -128,6 +144,7 @@ i18n.switch_language('hi')  # Switch to Hindi
 ## 📝 Translation Structure
 
 JSON files follow this structure:
+
 ```json
 {
   "app_title": "Simple string",
@@ -137,25 +154,26 @@ JSON files follow this structure:
   "quiz": {
     "question_counter": "String with {parameters}"
   },
-  "questions": [
-    "Array of questions"
-  ]
+  "questions": ["Array of questions"]
 }
 ```
 
 ## ✨ Features
 
 1. **Instant Language Switching**
+
    - Dropdown on main screen
    - Immediate UI update
    - No restart required
 
 2. **Persistent Preferences**
+
    - Saves to `language_settings.json`
    - Loads automatically on startup
    - User-specific settings
 
 3. **Comprehensive Coverage**
+
    - All UI elements translated
    - Error messages
    - Quiz questions and options
@@ -172,11 +190,13 @@ JSON files follow this structure:
 ## 🧪 Testing
 
 All tests pass successfully:
+
 ```bash
 python test_i18n.py
 ```
 
 Tests verify:
+
 - ✓ Translation file loading
 - ✓ Language switching
 - ✓ Parameter formatting
@@ -186,12 +206,14 @@ Tests verify:
 ## 🚀 Future Enhancements
 
 Easy to add more languages:
-1. Copy `TRANSLATION_TEMPLATE.json` to `locales/{code}.json`
+
+1. Copy `docs/TRANSLATION_TEMPLATE.json` to `locales/{code}.json`
 2. Translate all values
 3. Add to `SUPPORTED_LANGUAGES` in `i18n_manager.py`
 4. Test and submit PR
 
 Suggested languages for future:
+
 - French (fr)
 - German (de)
 - Portuguese (pt)
@@ -202,6 +224,7 @@ Suggested languages for future:
 ## 👥 Contributing Translations
 
 We welcome community contributions! See `I18N_GUIDE.md` for detailed instructions on:
+
 - How to add a new language
 - Translation best practices
 - Testing your translations
@@ -217,6 +240,7 @@ We welcome community contributions! See `I18N_GUIDE.md` for detailed instruction
 ## 🎉 Conclusion
 
 The i18n implementation successfully internationalizes the SoulSense application with:
+
 - ✅ All strings in resource files
 - ✅ Working language switcher with persistence
 - ✅ Comprehensive documentation for contributors
