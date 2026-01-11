@@ -1,7 +1,7 @@
-# 🧠 Soul Sense EQ Test
+# 🧠 Soul Sense EQ Test  
 
 Soul Sense EQ Test is a desktop-based Emotional Intelligence (EQ) assessment application built using Python, Tkinter, and SQLite.
-It provides a✅ Tip: If you see `ModuleNotFoundError`, it usually means your virtual environment is **not active** or the package isn't installed inside it.
+It provides a ✅ Tip: If you see `ModuleNotFoundError`, it usually means your virtual environment is **not active** or the package isn't installed inside it.
 
 ---
 
@@ -616,4 +616,5 @@ result = detector.detect_inconsistency_patterns(session, "john_doe", time_window
 
 We welcome contributions from the community.  
 Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing to help maintain a respectful and inclusive environment.
+
 
