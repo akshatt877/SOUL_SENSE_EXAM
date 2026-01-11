@@ -29,11 +29,17 @@ from app.db import get_session, get_connection
 from app.config import APP_CONFIG
 from app.constants import BENCHMARK_DATA
 from app.models import User, Score, Response, Question
-from app.exceptions import DatabaseError, ValidationError, AuthenticationError, APIConnectionError, SoulSenseError
+from app.exceptions import DatabaseError, ValidationError, AuthenticationError, APIConnectionError, SoulSenseError, ResourceError
 from app.logger import setup_logging
 from app.analysis.data_cleaning import DataCleaner
 from app.utils import load_settings, save_settings, compute_age_group
 from app.questions import load_questions
+
+# Try importing bias checker (optional)
+try:
+    from scripts.check_gender_bias import SimpleBiasChecker
+except ImportError:
+    SimpleBiasChecker = None
 
 # Try importing optional features
 try:
@@ -178,7 +184,11 @@ class SoulSenseApp:
             self.ml_predictor = None
 
         # Initialize Journal Feature
-        self.journal_feature = JournalFeature(self.root)
+        if JournalFeature:
+            self.journal_feature = JournalFeature(self.root)
+        else:
+            self.journal_feature = None
+            logging.warning("JournalFeature disabled: Module could not be imported")
 
 
 
@@ -318,9 +328,9 @@ class SoulSenseApp:
         settings_text = self.create_widget(
             tk.Label,
             settings_frame,
-            text=f"ΓÇó Questions: {len(self.questions)}\n" +
-                 f"ΓÇó Theme: {self.settings.get('theme', 'light').title()}\n" +
-                 f"ΓÇó Sound: {'On' if self.settings.get('sound_effects', True) else 'Off'}",
+            text=f"\u2022 Questions: {len(self.questions)}\n" +
+                 f"\u2022 Theme: {self.settings.get('theme', 'light').title()}\n" +
+                 f"\u2022 Sound: {'On' if self.settings.get('sound_effects', True) else 'Off'}",
             font=("Arial", 10),
             justify="left"
         )
@@ -441,6 +451,9 @@ class SoulSenseApp:
 
     def run_bias_check(self):
         """Quick bias check after test completion"""
+        if not SimpleBiasChecker:
+            return
+
         try:
             checker = SimpleBiasChecker()
             bias_result = checker.check_age_bias()
