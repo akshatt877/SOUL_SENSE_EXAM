@@ -3756,3 +3756,37 @@ KeyError: 'features'
 2026-01-12 18:33:25,952 - root - INFO - Session started | user=rohan | age=20 | age_group=adult | profession=Student | questions=10
 2026-01-12 18:33:26,144 - root - INFO - Loaded settings for user 4: {'theme': 'dark', 'question_count': 5, 'sound_enabled': True, 'notifications_enabled': True, 'language': 'en'}
 2026-01-12 18:33:26,145 - root - INFO - Reloaded 5 questions based on settings
+2026-01-12 18:47:48,499 - root - INFO - Logging initialized.
+2026-01-12 18:47:48,521 - root - INFO - Application started
+2026-01-12 18:47:48,524 - root - INFO - Loaded 10 total questions from DB
+2026-01-12 18:47:51,388 - root - INFO - Loading ML Model: models\risk_model_v20260111_223056.pkl
+2026-01-12 18:47:51,486 - root - INFO - ML Predictor initialized successfully
+2026-01-12 18:47:51,541 - root - INFO - SentimentIntensityAnalyzer initialized successfully
+2026-01-12 18:47:51,542 - root - ERROR - 
+
+>>> APP INITIALIZED V2.1 <<<
+
+2026-01-12 18:47:51,542 - root - INFO - Using 10 questions based on settings
+2026-01-12 18:48:22,362 - root - INFO - Session started | user=rohan | age=20 | age_group=adult | profession=Student | questions=10
+2026-01-12 18:48:22,536 - root - INFO - Loaded settings for user 4: {'theme': 'dark', 'question_count': 5, 'sound_enabled': True, 'notifications_enabled': True, 'language': 'en'}
+2026-01-12 18:48:22,538 - root - INFO - Reloaded 5 questions based on settings
+2026-01-12 18:48:23,971 - root - ERROR - 
+
+>>> DEBUG: Start Test Clicked! (New Handler)
+2026-01-12 18:48:23,971 - root - ERROR - >>> DEBUG: self.current_user_id = 4
+2026-01-12 18:48:23,972 - root - ERROR - >>> DEBUG: GOING TO EXAM
+2026-01-12 18:48:24,073 - app.services.exam_service - INFO - Exam session started for user: rohan
+2026-01-12 18:51:36,408 - root - INFO - Logging initialized.
+2026-01-12 18:51:36,431 - root - INFO - Application started
+2026-01-12 18:51:36,444 - root - INFO - Loaded 10 total questions from DB
+2026-01-12 18:51:39,296 - root - INFO - Loading ML Model: models\risk_model_v20260111_223056.pkl
+2026-01-12 18:51:39,373 - root - INFO - ML Predictor initialized successfully
+2026-01-12 18:51:39,458 - root - INFO - SentimentIntensityAnalyzer initialized successfully
+2026-01-12 18:51:39,473 - root - ERROR - 
+
+>>> APP INITIALIZED V2.1 <<<
+
+2026-01-12 18:51:39,488 - root - INFO - Using 10 questions based on settings
+2026-01-12 18:51:51,485 - root - INFO - Session started | user=rohan | age=20 | age_group=adult | profession=Student | questions=10
+2026-01-12 18:51:51,684 - root - INFO - Loaded settings for user 4: {'theme': 'dark', 'question_count': 5, 'sound_enabled': True, 'notifications_enabled': True, 'language': 'en'}
+2026-01-12 18:51:51,692 - root - INFO - Reloaded 5 questions based on settings
