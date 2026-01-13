@@ -422,19 +422,148 @@ class ExamManager:
         self.finish_test()
 
     def finish_test(self):
-        """Calculate final score and save to database"""
-        success = self.session.finish_exam()
+        """Calculate final score and save to database - FIXED VERSION"""
+        try:
+            success = self.session.finish_exam()
+            
+            if not success:
+                messagebox.showerror("Error", "Failed to save exam results.")
+                return
+            
+            # Sync back to Main App for compatibility with ResultsManager
+            self.app.current_score = self.session.score
+            self.app.responses = self.session.responses
+            self.app.response_times = self.session.response_times
+            self.app.current_max_score = len(self.session.responses) * 4
+            self.app.current_percentage = (self.app.current_score / self.app.current_max_score) * 100 if self.app.current_max_score > 0 else 0
+            self.app.sentiment_score = self.session.sentiment_score
+            self.app.reflection_text = self.session.reflection_text
+            
+            # Show satisfaction survey if available
+            if hasattr(self.app, 'offer_satisfaction_survey'):
+                try:
+                    self.app.offer_satisfaction_survey()
+                except Exception as e:
+                    logging.warning(f"Could not show satisfaction survey: {e}")
+            
+            # Show results - FIXED: Use the correct method name
+            self._show_results_safely()
+            
+        except Exception as e:
+            logging.error(f"Error finishing test: {e}")
+            # Don't call show_main_menu() since it doesn't exist
+            # Just show a completion message
+            messagebox.showinfo("Test Complete", 
+                               f"Your test is complete! Score: {self.app.current_score}")
+            # Clear the screen if possible
+            if hasattr(self.app, 'clear_screen'):
+                self.app.clear_screen()
+    
+    def _show_results_safely(self):
+        """Safely show results by trying different approaches"""
+        try:
+            # Approach 1: Try to call show_results on results manager if it exists
+            if hasattr(self.app, 'results'):
+                # Check for different possible method names
+                if hasattr(self.app.results, 'show_results'):
+                    self.app.results.show_results()
+                    return
+                elif hasattr(self.app.results, 'show_visual_results'):
+                    self.app.results.show_visual_results()
+                    return
+                elif hasattr(self.app.results, 'display_results'):
+                    self.app.results.display_results()
+                    return
+        except Exception as e:
+            logging.error(f"Error calling results manager: {e}")
         
-        if not success:
-            messagebox.showerror("Error", "Failed to save exam results.")
+        try:
+            # Approach 2: Try to import and create ResultsManager directly
+            from app.ui.results import ResultsManager
+            # Create a new results window
+            results_window = tk.Toplevel(self.root)
+            results_manager = ResultsManager(results_window, self.app)
+            results_manager.show_results()
+            return
+        except ImportError as e:
+            logging.error(f"Could not import ResultsManager: {e}")
+        except Exception as e:
+            logging.error(f"Error creating ResultsManager: {e}")
         
-        # Sync back to Main App for compatibility with ResultsManager
-        self.app.current_score = self.session.score
-        self.app.responses = self.session.responses
-        self.app.response_times = self.session.response_times
-        self.app.current_max_score = len(self.session.responses) * 4
-        self.app.current_percentage = (self.app.current_score / self.app.current_max_score) * 100 if self.app.current_max_score > 0 else 0
-        self.app.sentiment_score = self.session.sentiment_score
-        self.app.reflection_text = self.session.reflection_text
+        try:
+            # Approach 3: Show basic results directly
+            self._show_basic_results()
+            return
+        except Exception as e:
+            logging.error(f"Error showing basic results: {e}")
         
-        self.app.results.show_visual_results()
+        # If all else fails, show a simple message
+        messagebox.showinfo("Test Complete", 
+                           f"Your test is complete! Score: {self.app.current_score}")
+        
+        # Try to return to dashboard or clear screen
+        if hasattr(self.app, 'clear_screen'):
+            self.app.clear_screen()
+        elif hasattr(self.app, 'show_dashboard'):
+            self.app.show_dashboard()
+
+    def _show_basic_results(self):
+        """Show basic results when ResultsManager is not available"""
+        colors = self.app.colors if hasattr(self.app, 'colors') else {
+            "bg": "#f0f0f0",
+            "surface": "white",
+            "text_primary": "black",
+            "primary": "#3B82F6",
+            "success": "#10B981"
+        }
+        
+        # Create a simple results window
+        results_window = tk.Toplevel(self.root)
+        results_window.title("Test Results")
+        results_window.geometry("500x400")
+        results_window.configure(bg=colors["bg"])
+        
+        main_frame = tk.Frame(results_window, bg=colors["bg"])
+        main_frame.pack(fill="both", expand=True, padx=20, pady=20)
+        
+        # Title
+        tk.Label(main_frame, text="🎯 Test Results", 
+                font=("Arial", 24, "bold"),
+                bg=colors["bg"], fg=colors.get("text_primary", "black")).pack(pady=10)
+        
+        # Score display
+        score_frame = tk.Frame(main_frame, bg=colors["surface"], relief=tk.RIDGE, bd=2)
+        score_frame.pack(fill="x", pady=20, ipady=20)
+        
+        score_text = f"Score: {self.app.current_score}/{self.app.current_max_score}"
+        tk.Label(score_frame, text=score_text, font=("Arial", 18, "bold"),
+                bg=colors["surface"], fg=colors.get("text_primary", "black")).pack(pady=5)
+        
+        percentage_text = f"Percentage: {self.app.current_percentage:.1f}%"
+        tk.Label(score_frame, text=percentage_text, font=("Arial", 14),
+                bg=colors["surface"], fg=colors.get("text_primary", "black")).pack(pady=5)
+        
+        # Sentiment score if available
+        if hasattr(self.app, 'sentiment_score') and self.app.sentiment_score is not None:
+            sentiment_text = f"Sentiment: {self.app.sentiment_score:.1f}"
+            tk.Label(main_frame, text=sentiment_text, font=("Arial", 12),
+                    bg=colors["bg"], fg=colors.get("text_primary", "black")).pack(pady=10)
+        
+        # Interpretation
+        if self.app.current_percentage >= 70:
+            feedback = "Excellent! You show strong emotional intelligence."
+        elif self.app.current_percentage >= 50:
+            feedback = "Good! You have solid emotional awareness."
+        else:
+            feedback = "There's room for growth in emotional intelligence."
+        
+        tk.Label(main_frame, text=feedback, font=("Arial", 12),
+                bg=colors["bg"], fg=colors.get("text_primary", "black"),
+                wraplength=400).pack(pady=20)
+        
+        # Close button
+        close_button = tk.Button(main_frame, text="Close", 
+                 command=results_window.destroy,
+                 font=("Arial", 12), bg=colors.get("success", "#10B981"), fg="white",
+                 padx=20, pady=10)
+        close_button.pack(pady=20)

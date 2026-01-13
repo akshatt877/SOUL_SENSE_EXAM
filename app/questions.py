@@ -291,6 +291,219 @@ def load_questions(
             raise
         raise DatabaseError("Critical error loading questions.", original_exception=e)
 
+
+SATISFACTION_QUESTIONS = {
+    # Core satisfaction question
+    "satisfaction_level": {
+        "en": "Overall, how satisfied are you with your current work or studies?",
+        "es": "En general, ¿qué tan satisfecho está con su trabajo o estudios actuales?",
+        "hi": "कुल मिलाकर, आप अपने वर्तमान कार्य या अध्ययन से कितने संतुष्ट हैं?"
+    },
+    
+    # Context questions
+    "satisfaction_context": {
+        "en": "What best describes your current situation?",
+        "es": "¿Qué describe mejor su situación actual?",
+        "hi": "आपकी वर्तमान स्थिति का सबसे अच्छा वर्णन क्या करता है?"
+    },
+    
+    # Factor analysis
+    "positive_factors": {
+        "en": "What are the main positive aspects of your work/studies? (Select all that apply)",
+        "es": "¿Cuáles son los principales aspectos positivos de su trabajo/estudios? (Seleccione todos los que correspondan)",
+        "hi": "आपके कार्य/अध्ययन के मुख्य सकारात्मक पहलू क्या हैं? (लागू होने वाले सभी का चयन करें)"
+    },
+    
+    "negative_factors": {
+        "en": "What are the main challenges or negative aspects? (Select all that apply)",
+        "es": "¿Cuáles son los principales desafíos o aspectos negativos? (Seleccione todos los que correspondan)",
+        "hi": "मुख्य चुनौतियाँ या नकारात्मक पहलू क्या हैं? (लागू होने वाले सभी का चयन करें)"
+    },
+    
+    # Improvement suggestions
+    "improvement_suggestions": {
+        "en": "What would most improve your satisfaction?",
+        "es": "¿Qué mejoraría más su satisfacción?",
+        "hi": "आपकी संतुष्टि में सबसे अधिक क्या सुधार करेगा?"
+    }
+}
+
+SATISFACTION_OPTIONS = {
+    "scale_10": {
+        "en": [str(i) for i in range(1, 11)],  # 1-10
+        "es": [str(i) for i in range(1, 11)],
+        "hi": [str(i) for i in range(1, 11)]
+    },
+    
+    "context_options": {
+        "en": [
+            "Full-time employment",
+            "Part-time employment", 
+            "Student (undergraduate)",
+            "Student (graduate/postgrad)",
+            "Self-employed/Freelancer",
+            "Remote worker",
+            "Hybrid work arrangement",
+            "Looking for work",
+            "On a break/sabbatical",
+            "Other"
+        ],
+        "es": [
+            "Empleo a tiempo completo",
+            "Empleo a tiempo parcial",
+            "Estudiante (pregrado)",
+            "Estudiante (posgrado)",
+            "Autónomo/Freelancer",
+            "Trabajador remoto",
+            "Arreglo de trabajo híbrido",
+            "Buscando trabajo",
+            "En pausa/sabático",
+            "Otro"
+        ],
+        "hi": [
+            "पूर्णकालिक रोजगार",
+            "अंशकालिक रोजगार",
+            "छात्र (स्नातक)",
+            "छात्र (स्नातकोत्तर)",
+            "स्वरोजगार/फ्रीलांसर",
+            "दूरस्थ कार्यकर्ता",
+            "संकर कार्य व्यवस्था",
+            "काम की तलाश में",
+            "विराम/सैबेटिकल पर",
+            "अन्य"
+        ]
+    },
+    
+    "positive_factor_options": {
+        "en": [
+            "Good work-life balance",
+            "Supportive colleagues/peers",
+            "Interesting/meaningful work",
+            "Opportunities for growth",
+            "Fair compensation",
+            "Autonomy/freedom",
+            "Positive work environment",
+            "Good management/supervision",
+            "Learning opportunities",
+            "Job security"
+        ],
+        "es": [
+            "Buena balance trabajo-vida",
+            "Colegas/compañeros de apoyo",
+            "Trabajo interesante/significativo",
+            "Oportunidades de crecimiento",
+            "Compensación justa",
+            "Autonomía/libertad",
+            "Ambiente laboral positivo",
+            "Buena gestión/supervisión",
+            "Oportunidades de aprendizaje",
+            "Seguridad laboral"
+        ],
+        "hi": [
+            "अच्छा कार्य-जीवन संतुलन",
+            "सहायक सहयोगी/साथी",
+            "रोचक/सार्थक कार्य",
+            "विकास के अवसर",
+            "उचित पारिश्रमिक",
+            "स्वायत्तता/स्वतंत्रता",
+            "सकारात्मक कार्य वातावरण",
+            "अच्छा प्रबंधन/पर्यवेक्षण",
+            "सीखने के अवसर",
+            "नौकरी की सुरक्षा"
+        ]
+    },
+    
+    "negative_factor_options": {
+        "en": [
+            "Excessive workload",
+            "Poor work-life balance",
+            "Unsupportive colleagues",
+            "Lack of growth opportunities",
+            "Unfair compensation",
+            "Micromanagement",
+            "Toxic work environment",
+            "Unclear expectations",
+            "Job insecurity",
+            "Lack of recognition",
+            "Boring/repetitive tasks",
+            "Workplace politics"
+        ],
+        "es": [
+            "Carga de trabajo excesiva",
+            "Mal balance trabajo-vida",
+            "Colegas no solidarios",
+            "Falta de oportunidades de crecimiento",
+            "Compensación injusta",
+            "Micromanagement",
+            "Ambiente laboral tóxico",
+            "Expectativas poco claras",
+            "Inseguridad laboral",
+            "Falta de reconocimiento",
+            "Tareas aburridas/repetitivas",
+            "Políticas laborales"
+        ],
+        "hi": [
+            "अत्यधिक कार्यभार",
+            "खराब कार्य-जीवन संतुलन",
+            "असहायक सहयोगी",
+            "विकास के अवसरों की कमी",
+            "अनुचित पारिश्रमिक",
+            "सूक्ष्म प्रबंधन",
+            "विषाक्त कार्य वातावरण",
+            "अस्पष्ट अपेक्षाएँ",
+            "नौकरी की असुरक्षा",
+            "मान्यता की कमी",
+            "उबाऊ/दोहराव वाले कार्य",
+            "कार्यस्थल की राजनीति"
+        ]
+    },
+    
+    "improvement_options": {
+        "en": [
+            "Better work-life balance",
+            "Higher compensation",
+            "More growth opportunities",
+            "Improved relationships with colleagues",
+            "More autonomy/control",
+            "Clearer career path",
+            "Better management support",
+            "Reduced workload",
+            "More interesting work",
+            "Improved work environment",
+            "Better recognition",
+            "Other"
+        ],
+        "es": [
+            "Mejor balance trabajo-vida",
+            "Mayor compensación",
+            "Más oportunidades de crecimiento",
+            "Mejores relaciones con colegas",
+            "Más autonomía/control",
+            "Trayectoria profesional más clara",
+            "Mejor apoyo de gestión",
+            "Reducción de carga de trabajo",
+            "Trabajo más interesante",
+            "Mejor ambiente laboral",
+            "Mejor reconocimiento",
+            "Otro"
+        ],
+        "hi": [
+            "बेहतर कार्य-जीवन संतुलन",
+            "उच्च पारिश्रमिक",
+            "अधिक विकास के अवसर",
+            "सहयोगियों के साथ बेहतर संबंध",
+            "अधिक स्वायत्तता/नियंत्रण",
+            "स्पष्ट करियर पथ",
+            "बेहतर प्रबंधन सहायता",
+            "कार्यभार में कमी",
+            "अधिक रोचक कार्य",
+            "बेहतर कार्य वातावरण",
+            "बेहतर मान्यता",
+            "अन्य"
+        ]
+    }
+}
+
 # ------------------ ADDITIONAL OPTIMIZATION FUNCTIONS ------------------
 
 def get_question_count(age: Optional[int] = None) -> int:
@@ -408,3 +621,5 @@ def get_random_questions_by_age(all_questions, user_age, num_questions):
 _ensure_cache_dir()
 safe_thread_run(_warmup_cache)
 safe_thread_run(preload_all_question_sets)
+
+

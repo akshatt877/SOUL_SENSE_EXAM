@@ -14,6 +14,7 @@ from app.ui.auth import AuthManager
 from app.ui.exam import ExamManager
 from app.ui.results import ResultsManager
 from app.ui.settings import SettingsManager
+from app.i18n_manager import get_i18n
 
 # NLTK (optional) - import defensively so app can run without it
 try:
@@ -167,6 +168,9 @@ class SoulSenseApp:
         self.root.title("Soul Sense EQ Test")
         self.root.geometry("800x700")  # Increased size for better layout
         
+        # Initialize I18n Manager
+        self.i18n = get_i18n()
+        
         # Initialize Styles Manager
         self.styles = UIStyles(self)
         self.auth = AuthManager(self)
@@ -186,7 +190,7 @@ class SoulSenseApp:
 
         # Initialize Journal Feature
         if JournalFeature:
-            self.journal_feature = JournalFeature(self.root)
+            self.journal_feature = JournalFeature(self.root, self)
         else:
             self.journal_feature = None
             logging.warning("JournalFeature disabled: Module could not be imported")
@@ -273,7 +277,69 @@ class SoulSenseApp:
         self.age_group = None
         self.profession = None
         
+        self.profile_view = None # Singleton reference
+        
         self.create_welcome_screen()
+
+    def offer_satisfaction_survey(self):
+        """Offer satisfaction survey after test completion"""
+        # Only show if user has taken EQ test recently
+        if not self.username or not self.current_score:
+            return
+    
+        # Ask user if they want to take satisfaction survey
+        response = messagebox.askyesno(
+            "Career/Academic Insights",
+            "Would you like to complete a brief survey about your work/study satisfaction?\n\n"
+            "This helps provide personalized career/academic guidance."
+        )
+    
+        if response:
+            try:
+                from app.ui.satisfaction import SatisfactionSurvey
+                # Get latest score ID
+                session = get_session()
+                try:
+                    latest_score = session.query(Score).filter(
+                        Score.username == self.username
+                    ).order_by(Score.id.desc()).first()
+                
+                    eq_score_id = latest_score.id if latest_score else None
+                
+                    # Show survey
+                    survey = SatisfactionSurvey(
+                        parent=self.root,
+                        username=self.username,
+                        user_id=self.current_user_id,
+                        eq_score_id=eq_score_id,
+                        language=self.settings.get("language", "en")
+                    )
+                    survey.show()
+                
+                finally:
+                    session.close()
+            except Exception as e:
+                logging.error(f"Failed to show satisfaction survey: {e}")
+    # ... (other methods) ...
+
+    def open_profile_flow(self):
+        """Open User Profile (Medical + Settings)"""
+        if not self.username:
+             messagebox.showwarning("Login Required", "Please enter your name first.")
+             return
+
+        # Check existing window
+        if self.profile_view and self.profile_view.window.winfo_exists():
+            self.profile_view.window.lift()
+            self.profile_view.window.focus_force()
+            return
+
+        try:
+            from app.ui.profile import UserProfileView
+            self.profile_view = UserProfileView(self.root, self)
+        except Exception as e:
+            logging.error(f"Failed to open profile: {e}")
+            messagebox.showerror("Error", f"Profile module could not be loaded: {e}")
 
     def load_user_settings(self, user_id):
         """Load and apply settings for specific user"""
@@ -563,6 +629,8 @@ class SoulSenseApp:
 
     def finish_test(self):
         self.exam.finish_test()
+        # Show satisfaction survey offer
+        self.offer_satisfaction_survey()
 
     def show_reflection_screen(self):
         self.exam.show_reflection_screen()

@@ -1,4 +1,4 @@
-# analytics_dashboard.py - COMPLETE FIXED VERSION (Merged)
+# app/ui/dashboard.py - FIXED VERSION
 import tkinter as tk
 from tkinter import ttk
 from datetime import datetime
@@ -12,12 +12,10 @@ import matplotlib.dates as mdates
 import json
 import os
 import sqlite3
+import numpy as np
 
 from app.i18n_manager import get_i18n
-
-# REMOVE THIS LINE - it's causing the error
-# from app.models import get_session, Score, JournalEntry
-from app.models import Score, JournalEntry
+from app.models import Score, JournalEntry, SatisfactionRecord
 from app.db import get_session, get_connection
 from app.analysis.time_based_analysis import time_analyzer
 
@@ -117,6 +115,11 @@ class AnalyticsDashboard:
         insights_frame = ttk.Frame(notebook)
         notebook.add(insights_frame, text=self.i18n.get("dashboard.insights_tab"))
         self.show_insights(insights_frame)
+
+        # Wellbeing Analytics (New Feature)
+        wellbeing_frame = ttk.Frame(notebook)
+        notebook.add(wellbeing_frame, text="🧘 Wellbeing")
+        self.show_wellbeing_analytics(wellbeing_frame)
         
         # Emotional Profile Clustering Tab
         if CLUSTERING_AVAILABLE:
@@ -124,6 +127,127 @@ class AnalyticsDashboard:
             notebook.add(clustering_frame, text="🧬 Emotional Profile")
             self.show_emotional_profile(clustering_frame)
         
+        # Add Satisfaction Analytics Tab
+        satisfaction_frame = ttk.Frame(notebook)
+        notebook.add(satisfaction_frame, text="💼 Satisfaction")
+        self.show_satisfaction_analytics(satisfaction_frame)
+        
+    def show_satisfaction_analytics(self, parent):
+        """Show satisfaction analytics"""
+        # Fetch satisfaction data
+        session = get_session()
+        try:
+            records = session.query(SatisfactionRecord).filter(
+                SatisfactionRecord.username == self.username
+            ).order_by(SatisfactionRecord.timestamp.desc()).all()
+            
+            if not records:
+                tk.Label(parent, 
+                        text="No satisfaction data available.\n\n"
+                             "Complete a satisfaction survey to see your trends!",
+                        font=("Arial", 14)).pack(pady=50)
+                return
+            
+            # Title
+            tk.Label(parent, 
+                    text="📊 Work/Study Satisfaction Trends",
+                    font=("Arial", 16, "bold")).pack(pady=10)
+            
+            # Overall stats
+            stats_frame = tk.Frame(parent, bg="#f0f9ff", relief=tk.RIDGE, bd=2)
+            stats_frame.pack(fill="x", padx=20, pady=10)
+            
+            avg_score = sum(r.satisfaction_score for r in records) / len(records)
+            latest = records[0].satisfaction_score
+            
+            tk.Label(stats_frame, 
+                    text=f"Latest Score: {latest}/10 | Average: {avg_score:.1f}/10 | Total Surveys: {len(records)}",
+                    font=("Arial", 12, "bold"),
+                    bg="#f0f9ff").pack(pady=10)
+            
+            # Create matplotlib chart
+            fig = Figure(figsize=(8, 4), dpi=100)
+            ax = fig.add_subplot(111)
+            
+            # Plot satisfaction scores over time
+            dates = [datetime.fromisoformat(r.timestamp) for r in records]
+            scores = [r.satisfaction_score for r in records]
+            
+            ax.plot(dates, scores, 'o-', color='#8B5CF6', linewidth=2, markersize=8)
+            ax.fill_between(dates, scores, alpha=0.2, color='#8B5CF6')
+            ax.set_xlabel('Date')
+            ax.set_ylabel('Satisfaction Score (1-10)')
+            ax.set_title('Satisfaction Trend Over Time')
+            ax.grid(True, alpha=0.3)
+            
+            # Format x-axis dates
+            fig.autofmt_xdate()
+            
+            # Embed in tkinter
+            canvas = FigureCanvasTkAgg(fig, parent)
+            canvas.draw()
+            canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
+            
+            # Factors analysis
+            factors_frame = tk.Frame(parent)
+            factors_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
+            
+            tk.Label(factors_frame,
+                    text="📈 Top Factors Affecting Your Satisfaction",
+                    font=("Arial", 14, "bold")).pack(anchor="w", pady=10)
+            
+            # Analyze common factors
+            positive_counts = {}
+            negative_counts = {}
+            
+            for record in records:
+                if record.positive_factors:
+                    factors = json.loads(record.positive_factors)
+                    for factor in factors:
+                        positive_counts[factor] = positive_counts.get(factor, 0) + 1
+                
+                if record.negative_factors:
+                    factors = json.loads(record.negative_factors)
+                    for factor in factors:
+                        negative_counts[factor] = negative_counts.get(factor, 0) + 1
+            
+            # Display top factors
+            cols_frame = tk.Frame(factors_frame)
+            cols_frame.pack(fill=tk.BOTH, expand=True)
+            
+            # Positive factors column
+            pos_frame = tk.Frame(cols_frame, relief=tk.GROOVE, bd=1)
+            pos_frame.pack(side="left", fill=tk.BOTH, expand=True, padx=(0, 5))
+            
+            tk.Label(pos_frame, text="✅ Strengths", 
+                    font=("Arial", 12, "bold")).pack(pady=10)
+            
+            for factor, count in sorted(positive_counts.items(), key=lambda x: x[1], reverse=True)[:3]:
+                percentage = (count / len(records)) * 100
+                tk.Label(pos_frame, 
+                        text=f"• {factor} ({percentage:.0f}% of surveys)",
+                        font=("Arial", 10)).pack(anchor="w", padx=10, pady=2)
+            
+            # Negative factors column
+            neg_frame = tk.Frame(cols_frame, relief=tk.GROOVE, bd=1)
+            neg_frame.pack(side="right", fill=tk.BOTH, expand=True, padx=(5, 0))
+            
+            tk.Label(neg_frame, text="⚠️ Challenges", 
+                    font=("Arial", 12, "bold")).pack(pady=10)
+            
+            for factor, count in sorted(negative_counts.items(), key=lambda x: x[1], reverse=True)[:3]:
+                percentage = (count / len(records)) * 100
+                tk.Label(neg_frame, 
+                        text=f"• {factor} ({percentage:.0f}% of surveys)",
+                        font=("Arial", 10)).pack(anchor="w", padx=10, pady=2)
+            
+        except Exception as e:
+            tk.Label(parent, 
+                    text=f"Error loading satisfaction data: {str(e)}",
+                    font=("Arial", 12), fg="red").pack(pady=50)
+        finally:
+            session.close()
+    
     # ========== NEW CORRELATION ANALYSIS METHOD ==========
     def show_correlation_analysis(self, parent):
         """Show correlation analysis between EQ scores"""
@@ -964,4 +1088,212 @@ class AnalyticsDashboard:
             elif scores:
                 insights.append(f"📊 Global Average is {avg:.1f}. Keep practicing!")
 
+
         return insights
+
+    # ========== WELLBEING ANALYTICS (PR 1.5) ==========
+    def show_wellbeing_analytics(self, parent):
+        """Show wellbeing analytics (Sleep vs Mood, Work vs Mood)"""
+        # Fetch Data
+        conn = get_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute("""
+                SELECT sentiment_score, sleep_hours, energy_level, work_hours 
+                FROM journal_entries 
+                WHERE username = ? AND sleep_hours IS NOT NULL
+                ORDER BY entry_date ASC
+            """, (self.username,))
+            rows = cursor.fetchall()
+        finally:
+            conn.close()
+
+        # Handle Empty State
+        if len(rows) < 3:
+            tk.Label(parent, text="🧘 Wellbeing Analytics", font=("Arial", 16, "bold")).pack(pady=20)
+            tk.Label(parent, 
+                text="Not enough data yet!\n\n"
+                     "Track your Sleep, Energy, and Work for at least 3 days\n"
+                     "to unlock personalized health correlations.",
+                font=("Arial", 12), fg="#666").pack(pady=20)
+            return
+
+        # Prepare Data
+        sentiments = [r[0] for r in rows]
+        sleeps = [r[1] for r in rows]
+        energies = [r[2] for r in rows]
+        works = [r[3] for r in rows]
+
+        # --- UI Layout ---
+        parent.columnconfigure(0, weight=1)
+        parent.columnconfigure(1, weight=1)
+        parent.rowconfigure(0, weight=0) # Title
+        parent.rowconfigure(1, weight=1) # Charts
+        parent.rowconfigure(2, weight=0) # Insights
+
+        # Title & Controls
+        header_frame = tk.Frame(parent)
+        header_frame.grid(row=0, column=0, columnspan=2, sticky="ew", padx=20, pady=10)
+        tk.Label(header_frame, text="🧘 Daily Wellbeing Correlations", font=("Arial", 16, "bold")).pack(side="left")
+        
+        def open_history():
+            from app.ui.daily_view import DailyHistoryView
+            top = tk.Toplevel(self.parent_root)
+            DailyHistoryView(top, self, self.username)
+            
+        tk.Button(header_frame, text="📅 Explore History", command=open_history,
+                 bg=self.colors["primary"], fg="white", relief="flat", padx=15, pady=5).pack(side="right")
+        
+        # --- Visualizations ---
+        viz_frame = tk.Frame(parent)
+        viz_frame.grid(row=1, column=0, columnspan=2, sticky="nsew", padx=10, pady=5)
+        
+        # Matplotlib Setup - Modern Style
+        plt.style.use('seaborn-v0_8-whitegrid' if plt.style.available else 'fast')
+        fig = Figure(figsize=(10, 5), dpi=100)
+        
+        # Theme Colors
+        is_dark = self.theme == "dark"
+        bg_color = "#0F172A" if is_dark else "#FFFFFF"
+        text_color = "white" if is_dark else "#333333"
+        grid_color = "#334155" if is_dark else "#E5E7EB"
+        
+        fig.patch.set_facecolor(bg_color)
+
+        # Plot 1: Sleep vs Sentiment (Smooth Line + Gradient Fill)
+        ax1 = fig.add_subplot(121)
+        ax1.set_facecolor(bg_color)
+        
+        # Sort for line plotting
+        if len(sleeps) > 0:
+            sorted_indices = sorted(range(len(sleeps)), key=lambda k: sleeps[k])
+            s_sleep = np.array([sleeps[i] for i in sorted_indices])
+            s_mood = np.array([sentiments[i] for i in sorted_indices])
+            
+            # Smooth Line Interpolation
+            try:
+                from scipy.interpolate import make_interp_spline
+                if len(s_sleep) > 3:
+                    # Handle duplicate X values by grouping and averaging
+                    unique_sleep_dict = {}
+                    for s, m in zip(s_sleep, s_mood):
+                        if s not in unique_sleep_dict:
+                            unique_sleep_dict[s] = []
+                        unique_sleep_dict[s].append(m)
+                    
+                    sorted_unique_sleep = sorted(unique_sleep_dict.keys())
+                    avg_mood_unique = [np.mean(unique_sleep_dict[k]) for k in sorted_unique_sleep]
+                    
+                    X_unique = np.array(sorted_unique_sleep)
+                    Y_unique = np.array(avg_mood_unique)
+
+                    if len(X_unique) > 3: # Check again after deduplication
+                        X_line = np.linspace(X_unique.min(), X_unique.max(), 300)
+                        spl = make_interp_spline(X_unique, Y_unique, k=3)
+                        Y_line = spl(X_line)
+                        # Vibrant Purple Line
+                        ax1.plot(X_line, Y_line, color='#8B5CF6', linewidth=3, alpha=1.0)
+                        # Gradient Fill
+                        ax1.fill_between(X_line, Y_line, alpha=0.15, color='#8B5CF6')
+                    else:
+                        # Fallback if deduplication reduces points too much
+                         ax1.plot(s_sleep, s_mood, color='#8B5CF6', linewidth=2, alpha=0.8)
+                else:
+                    ax1.plot(s_sleep, s_mood, color='#8B5CF6', linewidth=3, alpha=1.0)
+            except Exception as e:
+                # Fallback for any spline error (duplicates, singular matrix, etc)
+                print(f"Spline error: {e}")
+                ax1.plot(s_sleep, s_mood, color='#8B5CF6', linewidth=3, alpha=1.0)
+
+            # Scatter Accents (Pink)
+            ax1.scatter(sleeps, sentiments, c='#EC4899', s=80, edgecolors='white', linewidth=2, zorder=5)
+
+        ax1.set_title("Sleep Quality & Mood", color=text_color, fontweight="bold", fontsize=11, pad=15)
+        ax1.set_xlabel("Sleep Hours", color="#94A3B8", fontsize=9)
+        ax1.set_ylabel("Sentiment Score", color="#94A3B8", fontsize=9)
+        
+        # Minimalist Grid
+        ax1.grid(True, linestyle= '--', alpha=0.2, color=grid_color)
+        ax1.tick_params(colors="#94A3B8")
+        # Despine
+        ax1.spines['top'].set_visible(False)
+        ax1.spines['right'].set_visible(False)
+        ax1.spines['left'].set_color(grid_color)
+        ax1.spines['bottom'].set_color(grid_color)
+
+        # Plot 2: Productivity Sweet Spot (Vibrant Pillars)
+        ax2 = fig.add_subplot(122)
+        ax2.set_facecolor(bg_color)
+        
+        # Binning Logic
+        buckets = {"0-4h": [], "4-8h": [], "8h+": []}
+        for w, s in zip(works, sentiments):
+            if w < 4: buckets["0-4h"].append(s)
+            elif w < 8: buckets["4-8h"].append(s)
+            else: buckets["8h+"].append(s)
+            
+        bucket_avgs = [
+            np.mean(buckets["0-4h"]) if buckets["0-4h"] else 0,
+            np.mean(buckets["4-8h"]) if buckets["4-8h"] else 0,
+            np.mean(buckets["8h+"]) if buckets["8h+"] else 0
+        ]
+        
+        # Vibrant Colors: Amber -> Emerald -> Blue
+        bar_colors = ["#F59E0B", "#10B981", "#3B82F6"]
+        bars = ax2.bar(buckets.keys(), bucket_avgs, color=bar_colors, width=0.5, edgecolor=None)
+        
+        ax2.set_title("Productivity Sweet Spot", color=text_color, fontweight="bold", fontsize=11, pad=15)
+        ax2.set_xlabel("Work Duration", color="#94A3B8", fontsize=9)
+        ax2.set_ylabel("Avg Happiness", color="#94A3B8", fontsize=9)
+        
+        ax2.grid(axis='y', linestyle= '--', alpha=0.2, color=grid_color)
+        ax2.tick_params(colors="#94A3B8", bottom=False) # Hide x ticks
+        
+        # Despine completely for cleaner look
+        ax2.spines['top'].set_visible(False)
+        ax2.spines['right'].set_visible(False)
+        ax2.spines['left'].set_visible(False)
+        ax2.spines['bottom'].set_color(grid_color)
+        
+        # Annotate Bars
+        for bar in bars:
+            height = bar.get_height()
+            if height != 0:
+                ax2.text(bar.get_x() + bar.get_width()/2., height + 0.5,
+                         f'{height:.1f}',
+                         ha='center', va='bottom',
+                         color=text_color, fontweight="bold", fontsize=9)
+
+        fig.tight_layout()
+        
+        # Render
+        canvas = FigureCanvasTkAgg(fig, viz_frame)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+
+        # --- Text Insights ---
+        insights_panel = tk.Frame(parent, bg="#F0F9FF" if not is_dark else "#1E293B", relief=tk.RIDGE, bd=1)
+        insights_panel.grid(row=2, column=0, columnspan=2, sticky="ew", padx=20, pady=10)
+        
+        # Generate Text Insight
+        best_bucket = max(zip(buckets.keys(), bucket_avgs), key=lambda x: x[1])[0]
+        max_val = max(bucket_avgs)
+        
+        insight_msg = f"💡 **Insight**: "
+        if max_val > 10:
+            insight_msg += f"You feel happiest when you work **{best_bucket}**. "
+        else:
+            insight_msg += "Your mood is relatively stable across work hours. "
+            
+        # Sleep Insight
+        avg_sleep = np.mean(sleeps)
+        if avg_sleep < 6:
+            insight_msg += "⚠️ Your average sleep is low (< 6h). Try to rest more!"
+        elif avg_sleep > 9:
+            insight_msg += "😴 You're getting plenty of rest!"
+        else:
+            insight_msg += "✨ Your sleep schedule (avg {:.1f}h) seems balanced.".format(avg_sleep)
+
+        tk.Label(insights_panel, text=insight_msg, 
+             font=("Arial", 11), bg=insights_panel["bg"], fg=text_color,
+             wraplength=800, justify="left", padx=15, pady=15).pack(anchor="w")

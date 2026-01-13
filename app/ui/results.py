@@ -3,7 +3,8 @@ from tkinter import messagebox
 import logging
 from datetime import datetime
 import random
-from app.db import get_connection
+from app.db import get_connection, get_session
+from app.models import Score
 from app.constants import BENCHMARK_DATA
 try:
     from app.services.pdf_generator import generate_pdf_report
@@ -14,6 +15,33 @@ class ResultsManager:
     def __init__(self, app):
         self.app = app
 
+    def show_satisfaction_survey(self):
+        """Show satisfaction survey from results page"""
+        try:
+            from app.ui.satisfaction import SatisfactionSurvey
+            
+            # Get latest score ID
+            session = get_session()
+            try:
+                latest_score = session.query(Score).filter(
+                    Score.username == self.app.username
+                ).order_by(Score.id.desc()).first()
+                
+                eq_score_id = latest_score.id if latest_score else None
+                
+                survey = SatisfactionSurvey(
+                    parent=self.app.root,
+                    username=self.app.username,
+                    user_id=self.app.current_user_id,
+                    eq_score_id=eq_score_id,
+                    language=self.app.settings.get("language", "en")
+                )
+                survey.show()
+            finally:
+                session.close()
+        except Exception as e:
+            messagebox.showerror("Error", f"Cannot open survey: {str(e)}")
+        
     # ---------- BENCHMARKING FUNCTIONS ----------
     def calculate_percentile(self, score, avg_score, std_dev):
         """Calculate percentile based on normal distribution"""
@@ -133,18 +161,17 @@ class ResultsManager:
 
     def create_benchmark_chart(self, parent, comparisons):
         """Create a visual benchmark comparison chart"""
-        chart_frame = self.app.create_widget(tk.Frame, parent)
+        chart_frame = tk.Frame(parent)
         chart_frame.pack(fill="x", pady=10)
         
-        self.app.create_widget(
-            tk.Label,
+        tk.Label(
             chart_frame,
             text="Benchmark Comparison",
             font=("Arial", 12, "bold")
         ).pack(anchor="w", pady=5)
         
         # Create canvas for benchmark bars
-        chart_canvas = tk.Canvas(chart_frame, height=150, bg=self.app.colors["chart_bg"], highlightthickness=0)
+        chart_canvas = tk.Canvas(chart_frame, height=150, bg="#F8FAFC", highlightthickness=0)
         chart_canvas.pack(fill="x", pady=10)
         
         # Prepare data for chart
@@ -175,13 +202,13 @@ class ResultsManager:
             # Your score bar
             your_height = data["your_score"] * scale_factor
             y_your = 130 - your_height
-            your_color = self.app.colors["benchmark_better"] if data["difference"] > 0 else self.app.colors["benchmark_worse"] if data["difference"] < 0 else self.app.colors["benchmark_same"]
+            your_color = "#22C55E" if data["difference"] > 0 else "#EF4444" if data["difference"] < 0 else "#F59E0B"
             
             chart_canvas.create_rectangle(x, y_your, x + bar_width/2, 130, 
                                          fill=your_color, outline="black")
             chart_canvas.create_text(x + bar_width/4, y_your - 10, 
                                     text=f"You: {data['your_score']}", 
-                                    fill=self.app.colors["chart_fg"], font=("Arial", 8, "bold"))
+                                    fill="#0F172A", font=("Arial", 8, "bold"))
             
             # Average score bar
             avg_height = data["avg_score"] * scale_factor
@@ -191,42 +218,42 @@ class ResultsManager:
                                          fill="#888888", outline="black")
             chart_canvas.create_text(x + bar_width * 0.75, y_avg - 10, 
                                     text=f"Avg: {data['avg_score']}", 
-                                    fill=self.app.colors["chart_fg"], font=("Arial", 8, "bold"))
+                                    fill="#0F172A", font=("Arial", 8, "bold"))
             
             # Label
             chart_canvas.create_text(x + bar_width/2, 145, text=label, 
-                                    fill=self.app.colors["chart_fg"], font=("Arial", 9))
+                                    fill="#0F172A", font=("Arial", 9))
             
             # Difference indicator
             diff = data["difference"]
             if diff != 0:
                 diff_text = f"{'+' if diff > 0 else ''}{diff:.1f}"
-                diff_color = self.app.colors["benchmark_better"] if diff > 0 else self.app.colors["benchmark_worse"]
+                diff_color = "#22C55E" if diff > 0 else "#EF4444"
                 chart_canvas.create_text(x + bar_width/2, y_your - 25, text=diff_text, 
                                         fill=diff_color, font=("Arial", 9, "bold"))
         
         # Y-axis labels
         for score in [0, max_score//2, max_score]:
             y = 130 - (score * scale_factor)
-            chart_canvas.create_text(80, y, text=str(score), fill=self.app.colors["chart_fg"], font=("Arial", 8))
+            chart_canvas.create_text(80, y, text=str(score), fill="#0F172A", font=("Arial", 8))
         
-        chart_canvas.create_text(50, 65, text="Score", fill=self.app.colors["chart_fg"], angle=90)
+        chart_canvas.create_text(50, 65, text="Score", fill="#0F172A", angle=90)
         
         # Legend
-        legend_frame = self.app.create_widget(tk.Frame, chart_frame)
+        legend_frame = tk.Frame(chart_frame, bg="#F8FAFC")
         legend_frame.pack(pady=5)
         
         # Your score legend
-        your_legend = tk.Canvas(legend_frame, width=20, height=20, bg=self.app.colors["chart_bg"], highlightthickness=0)
-        your_legend.create_rectangle(0, 0, 20, 20, fill=self.app.colors["benchmark_better"], outline="black")
+        your_legend = tk.Canvas(legend_frame, width=20, height=20, bg="#F8FAFC", highlightthickness=0)
+        your_legend.create_rectangle(0, 0, 20, 20, fill="#22C55E", outline="black")
         your_legend.pack(side="left", padx=5)
-        tk.Label(legend_frame, text="Your Score", bg=self.app.colors["chart_bg"], fg=self.app.colors["chart_fg"]).pack(side="left", padx=5)
+        tk.Label(legend_frame, text="Your Score", bg="#F8FAFC", fg="#0F172A").pack(side="left", padx=5)
         
         # Average score legend
-        avg_legend = tk.Canvas(legend_frame, width=20, height=20, bg=self.app.colors["chart_bg"], highlightthickness=0)
+        avg_legend = tk.Canvas(legend_frame, width=20, height=20, bg="#F8FAFC", highlightthickness=0)
         avg_legend.create_rectangle(0, 0, 20, 20, fill="#888888", outline="black")
         avg_legend.pack(side="left", padx=20)
-        tk.Label(legend_frame, text="Average Score", bg=self.app.colors["chart_bg"], fg=self.app.colors["chart_fg"]).pack(side="left", padx=5)
+        tk.Label(legend_frame, text="Average Score", bg="#F8FAFC", fg="#0F172A").pack(side="left", padx=5)
         
         return chart_frame
 
@@ -244,7 +271,7 @@ class ResultsManager:
             # Ask user for location
             from tkinter import filedialog
             filename = filedialog.asksaveasfilename(
-                title="Save PDF Reort",
+                title="Save PDF Report",
                 initialfile=default_name,
                 defaultextension=".pdf",
                 filetypes=[("PDF Documents", "*.pdf"), ("All Files", "*.*")]
@@ -275,6 +302,10 @@ class ResultsManager:
         except Exception as e:
             messagebox.showerror("Export Error", f"Failed to generate PDF:\n{str(e)}")
             logging.error(f"PDF Export failed: {e}")
+
+    def show_results(self):
+        """Main method to show results - calls show_visual_results"""
+        self.show_visual_results()
 
     def show_visual_results(self):
         """Modern, elegant results page with responsive design"""
@@ -475,7 +506,8 @@ class ResultsManager:
         actions = [
             ("\U0001f4ca Dashboard", "#14B8A6", self.app.open_dashboard_flow if hasattr(self.app, 'open_dashboard_flow') else None),
             ("\U0001f4c8 Analysis", "#EC4899", self.show_detailed_analysis),
-            ("\U0001f916 AI Insights", "#8B5CF6", self.show_ml_analysis if self.app.ml_predictor else None),
+            ("\U0001f916 AI Insights", "#8B5CF6", self.show_ml_analysis if hasattr(self.app, 'ml_predictor') and self.app.ml_predictor else None),
+            ("💼 Satisfaction", "#178240", self.show_satisfaction_survey),
             ("\U0001f4c4 Export PDF", "#06B6D4", self.export_results_pdf),
             ("\U0001f504 Retake Test", "#3B82F6", self.reset_test),
             ("\U0001f4dc History", "#F97316", self.show_history_screen),
@@ -714,7 +746,7 @@ class ResultsManager:
 
     def show_ml_analysis(self):
         """Show AI-powered analysis in a popup window"""
-        if not self.app.ml_predictor:
+        if not hasattr(self.app, 'ml_predictor') or not self.app.ml_predictor:
             messagebox.showerror("Error", "AI Model not loaded.")
             return
             
@@ -724,7 +756,7 @@ class ResultsManager:
                 self.app.responses,
                 self.app.age,
                 self.app.current_score,
-                sentiment_score=self.app.sentiment_score
+                sentiment_score=self.app.sentiment_score if hasattr(self.app, 'sentiment_score') else None
             )
             
             colors = self.app.colors
@@ -775,15 +807,15 @@ class ResultsManager:
             scrollbar.pack(side="right", fill="y")
 
             # --- CARD 1: OVERVIEW ---
-            risk_color = "#D32F2F" if result['prediction'] == 2 else "#FBC02D" if result['prediction'] == 1 else "#388E3C"
+            risk_color = "#D32F2F" if result.get('prediction') == 2 else "#FBC02D" if result.get('prediction') == 1 else "#388E3C"
             # Adjust bg color based on theme
-            if self.app.current_theme == "dark":
-                bg_color = "#450a0a" if result['prediction'] == 2 else "#422006" if result['prediction'] == 1 else "#052e16"
+            if hasattr(self.app, 'current_theme') and self.app.current_theme == "dark":
+                bg_color = "#450a0a" if result.get('prediction') == 2 else "#422006" if result.get('prediction') == 1 else "#052e16"
                 card_bg = colors.get("surface", "#1E293B")
                 text_color = colors.get("text_primary", "#F8FAFC")
                 subtext_color = colors.get("text_secondary", "#94A3B8")
             else:
-                bg_color = "#FFEBEE" if result['prediction'] == 2 else "#FFFDE7" if result['prediction'] == 1 else "#E8F5E9"
+                bg_color = "#FFEBEE" if result.get('prediction') == 2 else "#FFFDE7" if result.get('prediction') == 1 else "#E8F5E9"
                 card_bg = "white"
                 text_color = "#333333"
                 subtext_color = "#555"
@@ -797,7 +829,7 @@ class ResultsManager:
             
             tk.Label(
                 header_frame, 
-                text=result['prediction_label'].upper(), 
+                text=result.get('prediction_label', 'Unknown').upper(), 
                 font=("Arial", 18, "bold"),
                 bg=risk_color,
                 fg="white"
@@ -805,7 +837,7 @@ class ResultsManager:
             
             tk.Label(
                 header_frame,
-                text=f"Confidence: {result['confidence']:.1%}",
+                text=f"Confidence: {result.get('confidence', 0):.1%}",
                 font=("Arial", 12),
                 bg=risk_color,
                 fg="white"
@@ -852,13 +884,15 @@ class ResultsManager:
             card3.pack(fill="x", padx=20, pady=10)
 
             # Filter out non-5-point scale features for clean visualization
-            visual_features = {k: v for k, v in result['features'].items() 
-                             if k not in ['total_score', 'age', 'average_score']}
+            visual_features = result.get('features', {})
+            if visual_features:
+                visual_features = {k: v for k, v in visual_features.items() 
+                                 if k not in ['total_score', 'age', 'average_score']}
             
-            sorted_features = sorted(visual_features.items(), key=lambda x: result['feature_importance'].get(x[0], 0), reverse=True)[:3]
+            sorted_features = sorted(visual_features.items(), key=lambda x: result.get('feature_importance', {}).get(x[0], 0), reverse=True)[:3]
             
             for feature, value in sorted_features:
-                imp = result['feature_importance'].get(feature, 0)
+                imp = result.get('feature_importance', {}).get(feature, 0)
                 f_name = feature.replace('_', ' ').title()
                 
                 f_row = tk.Frame(card3, bg=card_bg)
@@ -938,23 +972,27 @@ class ResultsManager:
         """Show history of all tests for the current user"""
         self.app.clear_screen()
         
+        colors = self.app.colors
+        
         # Header with back button
-        header_frame = self.app.create_widget(tk.Frame, self.app.root)
+        header_frame = tk.Frame(self.app.root, bg=colors.get("bg", "#0F172A"))
         header_frame.pack(pady=10, fill="x")
         
-        self.app.create_widget(
-            tk.Button,
+        tk.Button(
             header_frame,
-            text="ΓåÉ Back",
+            text="← Back",
             command=self.app.create_welcome_screen,
-            font=("Arial", 10)
+            font=("Arial", 10),
+            bg=colors.get("surface", "#1E293B"),
+            fg=colors.get("text_primary", "#F8FAFC")
         ).pack(side="left", padx=10)
         
-        self.app.create_widget(
-            tk.Label,
+        tk.Label(
             header_frame,
             text="Test History" + (f" for {self.app.username}" if self.app.username else ""),
-            font=("Arial", 16, "bold")
+            font=("Arial", 16, "bold"),
+            bg=colors.get("bg", "#0F172A"),
+            fg=colors.get("text_primary", "#F8FAFC")
         ).pack(side="left", padx=50)
         
         conn = get_connection()
@@ -972,15 +1010,15 @@ class ResultsManager:
             users = cursor.fetchall()
             
             if not users:
-                self.app.create_widget(
-                    tk.Label,
+                tk.Label(
                     self.app.root,
                     text="No test history found. Please take a test first.",
-                    font=("Arial", 12)
+                    font=("Arial", 12),
+                    bg=colors.get("bg", "#0F172A"),
+                    fg=colors.get("text_primary", "#F8FAFC")
                 ).pack(pady=50)
                 
-                self.app.create_widget(
-                    tk.Button,
+                tk.Button(
                     self.app.root,
                     text="Back to Main",
                     command=self.app.create_welcome_screen,
@@ -989,20 +1027,20 @@ class ResultsManager:
                 return
             
             # Show user selection
-            user_frame = self.app.create_widget(tk.Frame, self.app.root)
+            user_frame = tk.Frame(self.app.root, bg=colors.get("bg", "#0F172A"))
             user_frame.pack(pady=20)
             
-            self.app.create_widget(
-                tk.Label,
+            tk.Label(
                 user_frame,
                 text="Select a user to view their history:",
-                font=("Arial", 12)
+                font=("Arial", 12),
+                bg=colors.get("bg", "#0F172A"),
+                fg=colors.get("text_primary", "#F8FAFC")
             ).pack(pady=10)
             
             for user in users:
                 username = user[0]
-                user_btn = self.app.create_widget(
-                    tk.Button,
+                user_btn = tk.Button(
                     user_frame,
                     text=username,
                     command=lambda u=username: self.view_user_history(u),
@@ -1025,6 +1063,8 @@ class ResultsManager:
         """Display history for a specific user"""
         self.app.clear_screen()
         
+        colors = self.app.colors
+        
         conn = get_connection()
         cursor = conn.cursor()
 
@@ -1041,34 +1081,36 @@ class ResultsManager:
         history = cursor.fetchall()
         
         # Header with back button
-        header_frame = self.app.create_widget(tk.Frame, self.app.root)
+        header_frame = tk.Frame(self.app.root, bg=colors.get("bg", "#0F172A"))
         header_frame.pack(pady=10, fill="x")
         
-        self.app.create_widget(
-            tk.Button,
+        tk.Button(
             header_frame,
-            text="ΓåÉ Back",
+            text="← Back",
             command=self.show_history_screen,
-            font=("Arial", 10)
+            font=("Arial", 10),
+            bg=colors.get("surface", "#1E293B"),
+            fg=colors.get("text_primary", "#F8FAFC")
         ).pack(side="left", padx=10)
         
-        self.app.create_widget(
-            tk.Label,
+        tk.Label(
             header_frame,
             text=f"Test History for {username}",
-            font=("Arial", 16, "bold")
+            font=("Arial", 16, "bold"),
+            bg=colors.get("bg", "#0F172A"),
+            fg=colors.get("text_primary", "#F8FAFC")
         ).pack(side="left", padx=50)
         
         if not history:
-            self.app.create_widget(
-                tk.Label,
+            tk.Label(
                 self.app.root,
                 text="No test history found.",
-                font=("Arial", 12)
+                font=("Arial", 12),
+                bg=colors.get("bg", "#0F172A"),
+                fg=colors.get("text_primary", "#F8FAFC")
             ).pack(pady=50)
             
-            self.app.create_widget(
-                tk.Button,
+            tk.Button(
                 self.app.root,
                 text="Back to History",
                 command=self.show_history_screen,
@@ -1077,9 +1119,9 @@ class ResultsManager:
             return
         
         # Create scrollable frame for history
-        canvas = tk.Canvas(self.app.root, bg=self.app.colors["bg"], highlightthickness=0)
+        canvas = tk.Canvas(self.app.root, bg=colors.get("bg", "#0F172A"), highlightthickness=0)
         scrollbar = tk.Scrollbar(self.app.root, orient="vertical", command=canvas.yview)
-        scrollable_frame = self.app.create_widget(tk.Frame, canvas)
+        scrollable_frame = tk.Frame(canvas, bg=colors.get("bg", "#0F172A"))
         
         scrollable_frame.bind(
             "<Configure>",
@@ -1095,7 +1137,7 @@ class ResultsManager:
             max_score = len(self.app.questions) * 4
             percentage = (score / max_score) * 100 if max_score > 0 else 0
             
-            test_frame = self.app.create_widget(tk.Frame, scrollable_frame, relief="groove", borderwidth=2)
+            test_frame = tk.Frame(scrollable_frame, bg=colors.get("surface", "#1E293B"), relief="groove", borderwidth=2)
             test_frame.pack(fill="x", padx=20, pady=5)
             
             # Format date
@@ -1105,48 +1147,52 @@ class ResultsManager:
                 date_str = str(timestamp)
             
             # Test info
-            info_frame = self.app.create_widget(tk.Frame, test_frame)
+            info_frame = tk.Frame(test_frame, bg=colors.get("surface", "#1E293B"))
             info_frame.pack(fill="x", padx=10, pady=5)
             
-            self.app.create_widget(
-                tk.Label,
+            tk.Label(
                 info_frame,
                 text=f"Test #{test_id}",
                 font=("Arial", 11, "bold"),
-                anchor="w"
+                anchor="w",
+                bg=colors.get("surface", "#1E293B"),
+                fg=colors.get("text_primary", "#F8FAFC")
             ).pack(side="left", padx=5)
             
-            self.app.create_widget(
-                tk.Label,
+            tk.Label(
                 info_frame,
                 text=f"Score: {score}/{max_score} ({percentage:.1f}%)",
                 font=("Arial", 10),
-                anchor="w"
+                anchor="w",
+                bg=colors.get("surface", "#1E293B"),
+                fg=colors.get("text_primary", "#F8FAFC")
             ).pack(side="left", padx=20)
             
             if age:
-                self.app.create_widget(
-                    tk.Label,
+                tk.Label(
                     info_frame,
                     text=f"Age: {age}",
                     font=("Arial", 10),
-                    anchor="w"
+                    anchor="w",
+                    bg=colors.get("surface", "#1E293B"),
+                    fg=colors.get("text_primary", "#F8FAFC")
                 ).pack(side="left", padx=20)
             
-            self.app.create_widget(
-                tk.Label,
+            tk.Label(
                 info_frame,
                 text=date_str,
                 font=("Arial", 9),
-                anchor="w"
+                anchor="w",
+                bg=colors.get("surface", "#1E293B"),
+                fg=colors.get("text_secondary", "#94A3B8")
             ).pack(side="right", padx=5)
             
             # Progress bar visualization
-            progress_frame = self.app.create_widget(tk.Frame, test_frame)
+            progress_frame = tk.Frame(test_frame, bg=colors.get("surface", "#1E293B"))
             progress_frame.pack(fill="x", padx=10, pady=2)
             
             # Progress bar using tkinter canvas
-            bar_canvas = tk.Canvas(progress_frame, height=20, bg=self.app.colors["bg"], highlightthickness=0)
+            bar_canvas = tk.Canvas(progress_frame, height=20, bg=colors.get("bg", "#0F172A"), highlightthickness=0)
             bar_canvas.pack(fill="x")
             
             # Draw progress bar
@@ -1159,7 +1205,7 @@ class ResultsManager:
             fill_color = "#4CAF50" if idx == 0 else "#2196F3"
             bar_canvas.create_rectangle(0, 0, fill_width, 20, fill=fill_color, outline="")
             # Percentage text
-            text_color = "black" if self.app.current_theme == "light" else "white"
+            text_color = "white"
             bar_canvas.create_text(bar_width/2, 10, text=f"{percentage:.1f}%", fill=text_color)
         
         # Pack canvas and scrollbar
@@ -1167,20 +1213,18 @@ class ResultsManager:
         scrollbar.pack(side="right", fill="y")
         
         # Buttons
-        button_frame = self.app.create_widget(tk.Frame, self.app.root)
+        button_frame = tk.Frame(self.app.root, bg=colors.get("bg", "#0F172A"))
         button_frame.pack(pady=20)
         
         if len(history) >= 2:
-            self.app.create_widget(
-                tk.Button,
+            tk.Button(
                 button_frame,
                 text="Compare All Tests",
                 command=self.show_comparison_screen,
                 font=("Arial", 12)
             ).pack(side="left", padx=10)
         
-        self.app.create_widget(
-            tk.Button,
+        tk.Button(
             button_frame,
             text="Back to Main",
             command=self.app.create_welcome_screen,
@@ -1190,6 +1234,8 @@ class ResultsManager:
     def show_comparison_screen(self):
         """Show visual comparison of current test with previous attempts"""
         self.app.clear_screen()
+        
+        colors = self.app.colors
         
         conn = get_connection()
         cursor = conn.cursor()
@@ -1212,29 +1258,32 @@ class ResultsManager:
             return
         
         # Header with back button
-        header_frame = self.app.create_widget(tk.Frame, self.app.root)
+        header_frame = tk.Frame(self.app.root, bg=colors.get("bg", "#0F172A"))
         header_frame.pack(pady=10, fill="x")
         
-        self.app.create_widget(
-            tk.Button,
+        tk.Button(
             header_frame,
-            text="ΓåÉ Back",
+            text="← Back",
             command=self.show_history_screen,
-            font=("Arial", 10)
+            font=("Arial", 10),
+            bg=colors.get("surface", "#1E293B"),
+            fg=colors.get("text_primary", "#F8FAFC")
         ).pack(side="left", padx=10)
         
-        self.app.create_widget(
-            tk.Label,
+        tk.Label(
             header_frame,
             text=f"Test Comparison for {self.app.username}",
-            font=("Arial", 16, "bold")
+            font=("Arial", 16, "bold"),
+            bg=colors.get("bg", "#0F172A"),
+            fg=colors.get("text_primary", "#F8FAFC")
         ).pack(side="left", padx=50)
         
-        self.app.create_widget(
-            tk.Label,
+        tk.Label(
             self.app.root,
             text=f"Showing {len(all_tests)} tests over time",
-            font=("Arial", 12)
+            font=("Arial", 12),
+            bg=colors.get("bg", "#0F172A"),
+            fg=colors.get("text_primary", "#F8FAFC")
         ).pack(pady=5)
         
         # Prepare data for visualization
@@ -1244,22 +1293,23 @@ class ResultsManager:
         percentages = [(score / max_score) * 100 for score in scores]
         
         # Create main comparison frame
-        comparison_frame = self.app.create_widget(tk.Frame, self.app.root)
+        comparison_frame = tk.Frame(self.app.root, bg=colors.get("bg", "#0F172A"))
         comparison_frame.pack(pady=20, padx=20, fill="both", expand=True)
         
         # Left side: Bar chart visualization
-        left_frame = self.app.create_widget(tk.Frame, comparison_frame)
+        left_frame = tk.Frame(comparison_frame, bg=colors.get("bg", "#0F172A"))
         left_frame.pack(side="left", fill="both", expand=True, padx=10)
         
-        self.app.create_widget(
-            tk.Label,
+        tk.Label(
             left_frame,
             text="Score Comparison",
-            font=("Arial", 14, "bold")
+            font=("Arial", 14, "bold"),
+            bg=colors.get("bg", "#0F172A"),
+            fg=colors.get("text_primary", "#F8FAFC")
         ).pack(pady=10)
         
         # Create bar chart using tkinter canvas
-        chart_canvas = tk.Canvas(left_frame, bg=self.app.colors["chart_bg"], height=300)
+        chart_canvas = tk.Canvas(left_frame, bg=colors.get("chart_bg", "#1E293B"), height=300)
         chart_canvas.pack(fill="both", expand=True, pady=10)
         
         # Draw bar chart
@@ -1279,7 +1329,7 @@ class ResultsManager:
             y = chart_height - bar_height
             
             # Color: green for current/latest test, blue for others
-            color = self.app.colors["improvement_good"] if i == len(test_numbers) - 1 else "#2196F3"
+            color = "#22C55E" if i == len(test_numbers) - 1 else "#3B82F6"
             
             # Draw bar
             chart_canvas.create_rectangle(x, y, x + bar_width, chart_height, fill=color, outline="black")
@@ -1287,12 +1337,12 @@ class ResultsManager:
             # Draw test number below bar
             chart_canvas.create_text(x + bar_width/2, chart_height + 15, 
                                    text=f"Test {test_num}", 
-                                   fill=self.app.colors["chart_fg"])
+                                   fill=colors.get("chart_fg", "#F8FAFC"))
             
             # Draw score above bar
             chart_canvas.create_text(x + bar_width/2, y - 15, 
                                    text=f"{score}", 
-                                   fill=self.app.colors["chart_fg"], 
+                                   fill=colors.get("chart_fg", "#F8FAFC"), 
                                    font=("Arial", 10, "bold"))
             
             # Draw percentage inside bar
@@ -1304,20 +1354,21 @@ class ResultsManager:
         # Draw Y-axis labels
         for i in range(0, max_score + 1, 10):
             y = chart_height - (i * scale_factor)
-            chart_canvas.create_text(30, y, text=str(i), fill=self.app.colors["chart_fg"])
-            chart_canvas.create_line(40, y, 45, y, fill=self.app.colors["chart_fg"])
+            chart_canvas.create_text(30, y, text=str(i), fill=colors.get("chart_fg", "#F8FAFC"))
+            chart_canvas.create_line(40, y, 45, y, fill=colors.get("chart_fg", "#F8FAFC"))
         
-        chart_canvas.create_text(20, 15, text="Score", fill=self.app.colors["chart_fg"], angle=90)
+        chart_canvas.create_text(20, 15, text="Score", fill=colors.get("chart_fg", "#F8FAFC"), angle=90)
         
         # Right side: Statistics and improvement
-        right_frame = self.app.create_widget(tk.Frame, comparison_frame)
+        right_frame = tk.Frame(comparison_frame, bg=colors.get("bg", "#0F172A"))
         right_frame.pack(side="right", fill="both", expand=True, padx=10)
         
-        self.app.create_widget(
-            tk.Label,
+        tk.Label(
             right_frame,
             text="Statistics & Improvement",
-            font=("Arial", 14, "bold")
+            font=("Arial", 14, "bold"),
+            bg=colors.get("bg", "#0F172A"),
+            fg=colors.get("text_primary", "#F8FAFC")
         ).pack(pady=10)
         
         # Calculate statistics
@@ -1338,36 +1389,38 @@ class ResultsManager:
         Average: {avg_score:.1f} ({(sum(percentages)/len(percentages)):.1f}%)
         """
         
-        stats_label = self.app.create_widget(
-            tk.Label,
+        stats_label = tk.Label(
             right_frame,
             text=stats_text.strip(),
             font=("Arial", 12),
-            justify="left"
+            justify="left",
+            bg=colors.get("bg", "#0F172A"),
+            fg=colors.get("text_primary", "#F8FAFC")
         )
         stats_label.pack(pady=10, padx=20, anchor="w")
         
         # Improvement indicator
-        improvement_frame = self.app.create_widget(tk.Frame, right_frame)
+        improvement_frame = tk.Frame(right_frame, bg=colors.get("bg", "#0F172A"))
         improvement_frame.pack(pady=20, padx=20, fill="x")
         
-        improvement_color = self.app.colors["improvement_good"] if improvement > 0 else self.app.colors["improvement_bad"] if improvement < 0 else self.app.colors["improvement_neutral"]
-        improvement_symbol = "Γåæ" if improvement > 0 else "Γåô" if improvement < 0 else "ΓåÆ"
+        improvement_color = "#22C55E" if improvement > 0 else "#EF4444" if improvement < 0 else "#F59E0B"
+        improvement_symbol = "↑" if improvement > 0 else "↓" if improvement < 0 else "→"
         
-        self.app.create_widget(
-            tk.Label,
+        tk.Label(
             improvement_frame,
             text="Overall Improvement:",
-            font=("Arial", 12, "bold")
+            font=("Arial", 12, "bold"),
+            bg=colors.get("bg", "#0F172A"),
+            fg=colors.get("text_primary", "#F8FAFC")
         ).pack(anchor="w")
         
         improvement_text = f"{improvement_symbol} {improvement:+.1f} points ({improvement_percent:+.1f}%)"
-        improvement_label = self.app.create_widget(
-            tk.Label,
+        improvement_label = tk.Label(
             improvement_frame,
             text=improvement_text,
             font=("Arial", 12, "bold"),
-            fg=improvement_color
+            fg=improvement_color,
+            bg=colors.get("bg", "#0F172A")
         )
         improvement_label.pack(pady=5)
         
@@ -1383,27 +1436,29 @@ class ResultsManager:
         else:
             interpretation = "Need to focus on improvement. Review your responses."
         
-        self.app.create_widget(
-            tk.Label,
+        tk.Label(
             improvement_frame,
             text=interpretation,
             font=("Arial", 10),
-            wraplength=200
+            wraplength=200,
+            bg=colors.get("bg", "#0F172A"),
+            fg=colors.get("text_primary", "#F8FAFC")
         ).pack(pady=10)
         
         # Trend visualization (simple arrow indicators)
-        trend_frame = self.app.create_widget(tk.Frame, right_frame)
+        trend_frame = tk.Frame(right_frame, bg=colors.get("bg", "#0F172A"))
         trend_frame.pack(pady=10)
         
-        self.app.create_widget(
-            tk.Label,
+        tk.Label(
             trend_frame,
             text="Score Trend:",
-            font=("Arial", 11, "bold")
+            font=("Arial", 11, "bold"),
+            bg=colors.get("bg", "#0F172A"),
+            fg=colors.get("text_primary", "#F8FAFC")
         ).pack(anchor="w")
         
         # Create simple trend line
-        trend_canvas = tk.Canvas(trend_frame, width=200, height=80, bg=self.app.colors["chart_bg"])
+        trend_canvas = tk.Canvas(trend_frame, width=200, height=80, bg=colors.get("chart_bg", "#1E293B"))
         trend_canvas.pack(pady=10)
         
         # Draw trend line
@@ -1417,35 +1472,32 @@ class ResultsManager:
             for i in range(len(points) - 1):
                 x1, y1 = points[i]
                 x2, y2 = points[i + 1]
-                color = self.app.colors["improvement_good"] if y2 < y1 else self.app.colors["improvement_bad"] if y2 > y1 else self.app.colors["improvement_neutral"]
+                color = "#22C55E" if y2 < y1 else "#EF4444" if y2 > y1 else "#F59E0B"
                 trend_canvas.create_line(x1, y1, x2, y2, fill=color, width=2)
         
         for i, (x, y) in enumerate(points):
-            color = self.app.colors["improvement_good"] if i == len(points) - 1 else "#2196F3"
+            color = "#22C55E" if i == len(points) - 1 else "#3B82F6"
             trend_canvas.create_oval(x-3, y-3, x+3, y+3, fill=color, outline="black")
         
         # Buttons at bottom
-        button_frame = self.app.create_widget(tk.Frame, self.app.root)
+        button_frame = tk.Frame(self.app.root, bg=colors.get("bg", "#0F172A"))
         button_frame.pack(pady=20)
         
-        self.app.create_widget(
-            tk.Button,
+        tk.Button(
             button_frame,
             text="View Detailed History",
             command=self.show_history_screen,
             font=("Arial", 12)
         ).pack(side="left", padx=10)
         
-        self.app.create_widget(
-            tk.Button,
+        tk.Button(
             button_frame,
             text="Take Another Test",
             command=self.reset_test,
             font=("Arial", 12)
         ).pack(side="left", padx=10)
         
-        self.app.create_widget(
-            tk.Button,
+        tk.Button(
             button_frame,
             text="Back to Main",
             command=self.app.create_welcome_screen,
