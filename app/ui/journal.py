@@ -32,13 +32,14 @@ class JournalFeature:
         self.i18n = get_i18n()
         
         # Initialize theme colors (with defaults)
+        # Initialize theme colors (standardized)
         self.colors = {
-            "bg_primary": "#f0f0f0",
-            "bg_secondary": "#f5f5f5",
+            "bg": "#f0f0f0",
             "surface": "white",
             "text_primary": "black",
             "text_secondary": "#666",
-            "secondary": "#8B5CF6"
+            "primary": "#8B5CF6",
+            "secondary": "#EC4899"
         }
         
         # Use app colors if available
@@ -67,21 +68,21 @@ class JournalFeature:
         self.journal_window = tk.Toplevel(self.parent_root)
         self.journal_window.title(self.i18n.get("journal.title"))
         self.journal_window.geometry("600x500")
-        self.journal_window.configure(bg=self.colors["bg_primary"])
+        self.journal_window.configure(bg=self.colors.get("bg", "#f0f0f0"))
         
         # Title
         tk.Label(self.journal_window, text=self.i18n.get("journal.daily_reflection"), 
-                font=("Arial", 16, "bold"), bg=self.colors["bg_primary"], 
+                font=("Arial", 16, "bold"), bg=self.colors.get("bg", "#f0f0f0"), 
                 fg=self.colors["text_primary"]).pack(pady=10)
         
         # Date display
         today = datetime.now().strftime("%Y-%m-%d")
         tk.Label(self.journal_window, text=self.i18n.get("journal.date", date=today), 
-                font=("Arial", 12), bg=self.colors["bg_primary"], 
+                font=("Arial", 12), bg=self.colors.get("bg", "#f0f0f0"), 
                 fg=self.colors["text_secondary"]).pack(pady=5)
         
         # --- Metrics Section ---
-        metrics_container = tk.Frame(self.journal_window, bg=self.colors["bg_primary"])
+        metrics_container = tk.Frame(self.journal_window, bg=self.colors.get("bg", "#f0f0f0"))
         metrics_container.pack(fill=tk.X, padx=20, pady=5)
                            
         metrics_frame = tk.LabelFrame(metrics_container, text=self.i18n.get("journal.metrics_title"), 
@@ -140,7 +141,7 @@ class JournalFeature:
         
         # Text area for journal entry
         tk.Label(self.journal_window, text=self.i18n.get("journal.write_reflection"), 
-                font=("Arial", 12), bg=self.colors["bg_primary"], 
+                font=("Arial", 12), bg=self.colors.get("bg", "#f0f0f0"), 
                 fg=self.colors["text_primary"]).pack(pady=(10,5))
         
         self.text_area = scrolledtext.ScrolledText(self.journal_window, 
@@ -151,12 +152,12 @@ class JournalFeature:
         self.text_area.pack(pady=10, padx=20)
         
         # Buttons
-        button_frame = tk.Frame(self.journal_window, bg=self.colors["bg_primary"])
+        button_frame = tk.Frame(self.journal_window, bg=self.colors.get("bg", "#f0f0f0"))
         button_frame.pack(pady=10)
         
         tk.Button(button_frame, text=self.i18n.get("journal.save_analyze"), 
                  command=self.save_and_analyze, 
-                 font=("Arial", 12), bg="#4CAF50", fg="white").pack(side=tk.LEFT, padx=5)
+                 font=("Arial", 12), bg=self.colors.get("primary", "#4CAF50"), fg="white").pack(side=tk.LEFT, padx=5)
         
         tk.Button(button_frame, text=self.i18n.get("journal.view_past"), 
                  command=self.view_past_entries, 
@@ -164,7 +165,7 @@ class JournalFeature:
         
         tk.Button(button_frame, text=self.i18n.get("journal.dashboard"), 
                  command=self.open_dashboard, 
-                 font=("Arial", 12), bg="#FF9800", fg="white").pack(side=tk.LEFT, padx=5)
+                 font=("Arial", 12), bg=self.colors.get("secondary", "#FF9800"), fg="white").pack(side=tk.LEFT, padx=5)
         
         tk.Button(button_frame, text=self.i18n.get("journal.close"), 
                  command=self.journal_window.destroy, 
@@ -282,7 +283,7 @@ class JournalFeature:
     def show_analysis_results(self, sentiment_score, patterns, nudge_advice=None):
         """Display AI analysis results"""
         # Use stored colors
-        bg_color = self.colors.get("bg_secondary", "#f5f5f5")
+        bg_color = self.colors.get("bg", "#f5f5f5")
         card_bg = self.colors.get("surface", "white")
         text_color = self.colors.get("text_primary", "black")
         subtext_color = self.colors.get("text_secondary", "#666")

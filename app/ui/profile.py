@@ -202,6 +202,13 @@ class UserProfileView:
         
         self._create_field_label(right_col, self.i18n.get("profile.conditions"))
         self.conditions_text = self._create_text_area(right_col)
+        
+        # --- PR #5: Surgeries & Therapy ---
+        self._create_field_label(right_col, "Surgery History")
+        self.surgeries_text = self._create_text_area(right_col)
+        
+        self._create_field_label(right_col, "Therapy History (Private 🔒)")
+        self.therapy_text = self._create_text_area(right_col)
 
         # Footer Actions (Save Button)
         footer = tk.Frame(card, bg=self.colors.get("card_bg"), height=80)
@@ -264,7 +271,15 @@ class UserProfileView:
         self.status_combo.pack(fill="x", pady=5)
         
         self._create_field_label(form_content, "Bio")
+        self._create_field_label(form_content, "Bio")
         self.bio_text = self._create_text_area(form_content)
+
+        # --- PR #5: Society Contribution & Life POV ---
+        self._create_field_label(form_content, "Contribution to Society")
+        self.society_text = self._create_text_area(form_content)
+
+        self._create_field_label(form_content, "Perspective on Life")
+        self.life_pov_text = self._create_text_area(form_content)
         
         # Save Button for Profile Details
         save_profile_btn = tk.Button(
@@ -393,7 +408,12 @@ class UserProfileView:
                 self.occ_var.set(profile.occupation or "")
                 self.edu_var.set(profile.education or "")
                 self.status_var.set(profile.marital_status or "")
+                self.status_var.set(profile.marital_status or "")
                 self.bio_text.insert("1.0", profile.bio or "")
+
+                # PR #5 Load
+                self.society_text.insert("1.0", profile.society_contribution or "")
+                self.life_pov_text.insert("1.0", profile.life_pov or "")
                 
                 # Load events
                 if profile.life_events:
@@ -421,7 +441,12 @@ class UserProfileView:
              profile.occupation = self.occ_var.get()
              profile.education = self.edu_var.get()
              profile.marital_status = self.status_var.get()
+             profile.marital_status = self.status_var.get()
              profile.bio = self.bio_text.get("1.0", tk.END).strip()
+
+             # PR #5 Save
+             profile.society_contribution = self.society_text.get("1.0", tk.END).strip()
+             profile.life_pov = self.life_pov_text.get("1.0", tk.END).strip()
              
              session.commit()
              session.close()
@@ -482,7 +507,12 @@ class UserProfileView:
                 
                 self.allergies_text.insert("1.0", profile.allergies or "")
                 self.medications_text.insert("1.0", profile.medications or "")
+                self.medications_text.insert("1.0", profile.medications or "")
                 self.conditions_text.insert("1.0", profile.medical_conditions or "")
+                
+                # PR #5 Load
+                self.surgeries_text.insert("1.0", profile.surgeries or "")
+                self.therapy_text.insert("1.0", profile.therapy_history or "")
             else:
                 self.blood_type_var.set("Unknown")
             
@@ -520,6 +550,10 @@ class UserProfileView:
             profile.allergies = self.allergies_text.get("1.0", tk.END).strip()
             profile.medications = self.medications_text.get("1.0", tk.END).strip()
             profile.medical_conditions = self.conditions_text.get("1.0", tk.END).strip()
+            
+            # PR #5 Save
+            profile.surgeries = self.surgeries_text.get("1.0", tk.END).strip()
+            profile.therapy_history = self.therapy_text.get("1.0", tk.END).strip()
             
             session.commit()
             session.close()
@@ -608,7 +642,12 @@ class UserProfileView:
         comm_styles = ["Direct & Concise", "Supportive & Gentle", "Data-Driven", "Storytelling"]
         self.comm_style_var = tk.StringVar()
         self.comm_style_combo = ttk.Combobox(right_col, textvariable=self.comm_style_var, values=comm_styles, state="readonly", font=("Segoe UI", 12))
+        self.comm_style_combo = ttk.Combobox(right_col, textvariable=self.comm_style_var, values=comm_styles, state="readonly", font=("Segoe UI", 12))
         self.comm_style_combo.pack(fill="x", pady=(0, 20))
+
+        # --- PR #5: Detailed Comm Style ---
+        self._create_field_label(right_col, "Detailed Communication Style")
+        self.comm_style_text = self._create_text_area(right_col)
         
         # Boundaries
         self._create_section_label(right_col, "Privacy Boundaries")
@@ -653,7 +692,12 @@ class UserProfileView:
                 
                 self.learn_style_var.set(s.learning_style or "")
                 self.comm_style_var.set(s.communication_preference or "")
+                self.learn_style_var.set(s.learning_style or "")
+                self.comm_style_var.set(s.communication_preference or "")
                 self.goals_text.insert("1.0", s.goals or "")
+
+                # PR #5 Load
+                self.comm_style_text.insert("1.0", s.comm_style or "")
                 
             session.close()
         except Exception as e:
@@ -677,7 +721,12 @@ class UserProfileView:
             
             strengths.learning_style = self.learn_style_var.get()
             strengths.communication_preference = self.comm_style_var.get()
+            strengths.learning_style = self.learn_style_var.get()
+            strengths.communication_preference = self.comm_style_var.get()
             strengths.goals = self.goals_text.get("1.0", tk.END).strip()
+            
+            # PR #5 Save
+            strengths.comm_style = self.comm_style_text.get("1.0", tk.END).strip()
             
             session.commit()
             session.close()

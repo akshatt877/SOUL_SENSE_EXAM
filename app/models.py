@@ -56,6 +56,10 @@ class MedicalProfile(Base):
     medications = Column(Text, nullable=True)      # Store as JSON string or plain text
     medical_conditions = Column(Text, nullable=True) # Store as JSON string or plain text
     
+    # New fields for PR #5 (Issues #258, #263)
+    surgeries = Column(Text, nullable=True)        # History of surgeries
+    therapy_history = Column(Text, nullable=True)  # Past counselling/therapy
+    
     emergency_contact_name = Column(String, nullable=True)
     emergency_contact_phone = Column(String, nullable=True)
     
@@ -75,6 +79,11 @@ class PersonalProfile(Base):
     hobbies = Column(Text, nullable=True)     # Store as JSON string or comma-separated
     bio = Column(Text, nullable=True)
     life_events = Column(Text, nullable=True) # JSON: [{date, title, description, impact}]
+    
+    # New fields for PR #5 (Issues #261, #260)
+    society_contribution = Column(Text, nullable=True) # How user contributes to community
+    life_pov = Column(Text, nullable=True)             # User's philosophy/perspective
+    
     avatar_path = Column(String, nullable=True) # Path to local image file
     
     last_updated = Column(String, default=lambda: datetime.utcnow().isoformat())
@@ -94,6 +103,9 @@ class UserStrengths(Base):
     # Preferences
     learning_style = Column(String, nullable=True) # Visual, Auditory, etc.
     communication_preference = Column(String, nullable=True) # Direct, Supportive
+    
+    # New field for PR #5 (Issue #266)
+    comm_style = Column(Text, nullable=True) # Detailed communication style
     
     # Boundaries & Goals
     sharing_boundaries = Column(Text, default="[]") # JSON List

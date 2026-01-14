@@ -1,77 +1,707 @@
 {
-  "timestamp": "2026-01-13T12:44:14.214564",
+  "timestamp": "2026-01-14T16:36:31.086067",
   "questions": [
     [
       1,
-      "I recognize my emotions as I experience them.",
+      "You can recognize your emotions as they happen",
       null,
-      0,
-      120
+      16,
+      100
     ],
     [
       2,
-      "I lose my temper when I get frustrated.",
+      "You manage to stay calm even under pressure",
       null,
-      0,
-      120
+      16,
+      100
     ],
     [
       3,
-      "I know when others are feeling sad or down.",
+      "You are aware of how your emotions affect others",
       null,
-      0,
-      120
+      16,
+      100
     ],
     [
       4,
-      "I can resolve conflicts effectively.",
+      "You can motivate yourself to pursue long term goals",
       null,
-      0,
-      120
+      16,
+      100
     ],
     [
       5,
-      "I stay calm under pressure.",
+      "You stay optimistic even after facing setbacks",
       null,
-      0,
-      120
+      16,
+      100
     ],
     [
       6,
-      "I understand how my behavior affects others.",
+      "You are able to express your feelings clearly",
       null,
-      0,
-      120
+      16,
+      100
     ],
     [
       7,
-      "I listen effectively to others.",
+      "You handle conflict effectively and calmly",
       null,
-      0,
-      120
+      16,
+      100
     ],
     [
       8,
-      "I help others manage their emotions.",
+      "You find it easy to empathize with others emotions",
       null,
-      0,
-      120
+      16,
+      100
     ],
     [
       9,
-      "I am aware of my strengths and weaknesses.",
+      "You adapt well to changing situations",
       null,
-      0,
-      120
+      16,
+      100
     ],
     [
       10,
-      "I find it difficult to handle change.",
+      "You keep your promises and commitments",
       null,
-      0,
-      120
+      16,
+      100
+    ],
+    [
+      11,
+      "You actively listen to others when they speak",
+      null,
+      16,
+      100
+    ],
+    [
+      12,
+      "You accept constructive criticism without being defensive",
+      null,
+      16,
+      100
+    ],
+    [
+      13,
+      "You remain positive in emotionally difficult situations",
+      null,
+      16,
+      100
+    ],
+    [
+      14,
+      "You recognize stress in others and offer support",
+      null,
+      16,
+      100
+    ],
+    [
+      15,
+      "You maintain strong relationships over time",
+      null,
+      16,
+      100
+    ],
+    [
+      16,
+      "You can identify your emotional triggers",
+      null,
+      16,
+      100
+    ],
+    [
+      17,
+      "You take responsibility for your actions",
+      null,
+      16,
+      100
+    ],
+    [
+      18,
+      "You resolve misunderstandings diplomatically",
+      null,
+      16,
+      100
+    ],
+    [
+      19,
+      "You stay focused and productive when under pressure",
+      null,
+      16,
+      100
+    ],
+    [
+      20,
+      "You show appreciation and gratitude regularly",
+      null,
+      16,
+      100
+    ],
+    [
+      21,
+      "You understand the difference between thoughts and emotions",
+      null,
+      16,
+      100
+    ],
+    [
+      22,
+      "You can regulate your emotional reactions effectively",
+      null,
+      16,
+      100
+    ],
+    [
+      23,
+      "You feel comfortable asking for help when needed",
+      null,
+      16,
+      100
+    ],
+    [
+      24,
+      "You recover quickly from emotional setbacks",
+      null,
+      16,
+      100
+    ],
+    [
+      25,
+      "You maintain emotional balance in daily life",
+      null,
+      16,
+      100
+    ],
+    [
+      26,
+      "You are mindful of your emotional limits",
+      null,
+      16,
+      100
+    ],
+    [
+      27,
+      "You can say no without feeling excessive guilt",
+      null,
+      16,
+      100
+    ],
+    [
+      28,
+      "You stay patient during frustrating situations",
+      null,
+      16,
+      100
+    ],
+    [
+      29,
+      "You manage anxiety in a healthy way",
+      null,
+      16,
+      100
+    ],
+    [
+      30,
+      "You feel confident in expressing your needs",
+      null,
+      16,
+      100
+    ],
+    [
+      31,
+      "You remain composed during disagreements",
+      null,
+      16,
+      100
+    ],
+    [
+      32,
+      "You are aware of your strengths and weaknesses",
+      null,
+      16,
+      100
+    ],
+    [
+      33,
+      "You respond thoughtfully rather than impulsively",
+      null,
+      16,
+      100
+    ],
+    [
+      34,
+      "You can forgive yourself for past mistakes",
+      null,
+      16,
+      100
+    ],
+    [
+      35,
+      "You maintain self control during emotional moments",
+      null,
+      16,
+      100
+    ],
+    [
+      36,
+      "You feel connected to your sense of purpose",
+      null,
+      16,
+      100
+    ],
+    [
+      37,
+      "You handle rejection without losing self worth",
+      null,
+      16,
+      100
+    ],
+    [
+      38,
+      "You show compassion toward yourself",
+      null,
+      16,
+      100
+    ],
+    [
+      39,
+      "You can separate emotions from decision making",
+      null,
+      16,
+      100
+    ],
+    [
+      40,
+      "You maintain focus despite emotional distractions",
+      null,
+      16,
+      100
+    ],
+    [
+      41,
+      "You cope well with uncertainty",
+      null,
+      16,
+      100
+    ],
+    [
+      42,
+      "You can calm yourself without relying on others",
+      null,
+      16,
+      100
+    ],
+    [
+      43,
+      "You recognize when you need rest or recovery",
+      null,
+      16,
+      100
+    ],
+    [
+      44,
+      "You handle feedback with emotional maturity",
+      null,
+      16,
+      100
+    ],
+    [
+      45,
+      "You stay resilient during prolonged stress",
+      null,
+      16,
+      100
+    ],
+    [
+      46,
+      "You respect emotional boundaries in relationships",
+      null,
+      16,
+      100
+    ],
+    [
+      47,
+      "You can communicate discomfort respectfully",
+      null,
+      16,
+      100
+    ],
+    [
+      48,
+      "You stay grounded during emotionally intense moments",
+      null,
+      16,
+      100
+    ],
+    [
+      49,
+      "You reflect on your emotional experiences",
+      null,
+      16,
+      100
+    ],
+    [
+      50,
+      "You feel emotionally safe expressing vulnerability",
+      null,
+      16,
+      100
+    ],
+    [
+      51,
+      "You recognize emotional patterns in your behavior",
+      null,
+      16,
+      100
+    ],
+    [
+      52,
+      "You manage anger in constructive ways",
+      null,
+      16,
+      100
+    ],
+    [
+      53,
+      "You can delay gratification when needed",
+      null,
+      16,
+      100
+    ],
+    [
+      54,
+      "You feel emotionally stable most days",
+      null,
+      16,
+      100
+    ],
+    [
+      55,
+      "You adapt emotionally to new environments",
+      null,
+      16,
+      100
+    ],
+    [
+      56,
+      "You manage disappointment without shutting down",
+      null,
+      16,
+      100
+    ],
+    [
+      57,
+      "You stay emotionally present in conversations",
+      null,
+      16,
+      100
+    ],
+    [
+      58,
+      "You avoid blaming others for your feelings",
+      null,
+      16,
+      100
+    ],
+    [
+      59,
+      "You maintain optimism during challenges",
+      null,
+      16,
+      100
+    ],
+    [
+      60,
+      "You notice early signs of emotional burnout",
+      null,
+      16,
+      100
+    ],
+    [
+      61,
+      "You feel comfortable discussing mental wellbeing",
+      null,
+      16,
+      100
+    ],
+    [
+      62,
+      "You maintain healthy emotional habits",
+      null,
+      16,
+      100
+    ],
+    [
+      63,
+      "You stay engaged even during difficult tasks",
+      null,
+      16,
+      100
+    ],
+    [
+      64,
+      "You recover emotionally after conflicts",
+      null,
+      16,
+      100
+    ],
+    [
+      65,
+      "You balance logic and emotion effectively",
+      null,
+      16,
+      100
+    ],
+    [
+      66,
+      "You show patience toward others mistakes",
+      null,
+      16,
+      100
+    ],
+    [
+      67,
+      "You manage emotional fatigue responsibly",
+      null,
+      16,
+      100
+    ],
+    [
+      68,
+      "You maintain confidence during uncertainty",
+      null,
+      16,
+      100
+    ],
+    [
+      69,
+      "You can acknowledge emotions without judgment",
+      null,
+      16,
+      100
+    ],
+    [
+      70,
+      "You handle emotional pressure with clarity",
+      null,
+      16,
+      100
+    ],
+    [
+      71,
+      "You remain respectful during emotional disagreements",
+      null,
+      16,
+      100
+    ],
+    [
+      72,
+      "You stay emotionally flexible rather than rigid",
+      null,
+      16,
+      100
+    ],
+    [
+      73,
+      "You respond to stress with awareness",
+      null,
+      16,
+      100
+    ],
+    [
+      74,
+      "You maintain emotional consistency over time",
+      null,
+      16,
+      100
+    ],
+    [
+      75,
+      "You understand how emotions influence behavior",
+      null,
+      16,
+      100
+    ],
+    [
+      76,
+      "You can pause before reacting emotionally",
+      null,
+      16,
+      100
+    ],
+    [
+      77,
+      "You stay motivated despite emotional challenges",
+      null,
+      16,
+      100
+    ],
+    [
+      78,
+      "You recognize when emotions cloud judgment",
+      null,
+      16,
+      100
+    ],
+    [
+      79,
+      "You manage frustration constructively",
+      null,
+      16,
+      100
+    ],
+    [
+      80,
+      "You maintain emotional honesty with yourself",
+      null,
+      16,
+      100
+    ],
+    [
+      81,
+      "You recover from emotional exhaustion effectively",
+      null,
+      16,
+      100
+    ],
+    [
+      82,
+      "You remain emotionally grounded during success",
+      null,
+      16,
+      100
+    ],
+    [
+      83,
+      "You respond to change with emotional adaptability",
+      null,
+      16,
+      100
+    ],
+    [
+      84,
+      "You sustain emotional wellbeing through self care",
+      null,
+      16,
+      100
+    ],
+    [
+      85,
+      "You recognize when emotional support is needed",
+      null,
+      16,
+      100
+    ],
+    [
+      86,
+      "You remain emotionally aware during challenging conversations",
+      null,
+      16,
+      100
+    ],
+    [
+      87,
+      "You manage emotional expectations realistically",
+      null,
+      16,
+      100
+    ],
+    [
+      88,
+      "You stay emotionally engaged without becoming overwhelmed",
+      null,
+      16,
+      100
+    ],
+    [
+      89,
+      "You adjust emotional responses based on context",
+      null,
+      16,
+      100
+    ],
+    [
+      90,
+      "You maintain emotional clarity during decision making",
+      null,
+      16,
+      100
+    ],
+    [
+      91,
+      "You respond to emotional setbacks with patience",
+      null,
+      16,
+      100
+    ],
+    [
+      92,
+      "You respect your own emotional boundaries",
+      null,
+      16,
+      100
+    ],
+    [
+      93,
+      "You maintain emotional stability during transitions",
+      null,
+      16,
+      100
+    ],
+    [
+      94,
+      "You notice subtle emotional shifts in yourself",
+      null,
+      16,
+      100
+    ],
+    [
+      95,
+      "You stay emotionally open to learning",
+      null,
+      16,
+      100
+    ],
+    [
+      96,
+      "You regulate emotions without suppression",
+      null,
+      16,
+      100
+    ],
+    [
+      97,
+      "You maintain emotional integrity under pressure",
+      null,
+      16,
+      100
+    ],
+    [
+      98,
+      "You recover confidence after emotional failure",
+      null,
+      16,
+      100
+    ],
+    [
+      99,
+      "You remain emotionally balanced during uncertainty",
+      null,
+      16,
+      100
+    ],
+    [
+      100,
+      "You support others without neglecting yourself",
+      null,
+      16,
+      100
     ]
   ],
   "age_filter": 50,
-  "count": 10
+  "count": 100
 }
