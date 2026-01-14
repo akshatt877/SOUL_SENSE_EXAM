@@ -180,11 +180,11 @@ class JournalFeature:
         btn_frame.pack(fill="x", pady=20)
         
         # Navigation Buttons
-        tk.Button(btn_frame, text=self.i18n.get("journal.view_past", "📜 History"), command=self.view_past_entries,
+        tk.Button(btn_frame, text=self.i18n.get("journal.view_past"), command=self.view_past_entries,
                  font=("Segoe UI", 11), bg=colors["surface"], fg=colors["text_primary"],
                  relief="flat", padx=15).pack(side="left", padx=(0, 10))
 
-        tk.Button(btn_frame, text=self.i18n.get("journal.dashboard", "📊 Dashboard"), command=self.open_dashboard,
+        tk.Button(btn_frame, text=self.i18n.get("journal.dashboard"), command=self.open_dashboard,
                  font=("Segoe UI", 11), bg=colors["surface"], fg=colors["text_primary"],
                  relief="flat", padx=15).pack(side="left")
         
