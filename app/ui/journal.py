@@ -179,6 +179,15 @@ class JournalFeature:
         btn_frame = tk.Frame(container, bg=colors["bg"])
         btn_frame.pack(fill="x", pady=20)
         
+        # Navigation Buttons
+        tk.Button(btn_frame, text=self.i18n.get("journal.view_past", "📜 History"), command=self.view_past_entries,
+                 font=("Segoe UI", 11), bg=colors["surface"], fg=colors["text_primary"],
+                 relief="flat", padx=15).pack(side="left", padx=(0, 10))
+
+        tk.Button(btn_frame, text=self.i18n.get("journal.dashboard", "📊 Dashboard"), command=self.open_dashboard,
+                 font=("Segoe UI", 11), bg=colors["surface"], fg=colors["text_primary"],
+                 relief="flat", padx=15).pack(side="left")
+        
         tk.Button(btn_frame, text="Save Entry", command=self.save_and_analyze,
                  font=("Segoe UI", 11, "bold"), bg=colors["primary"], fg=colors.get("text_inverse", "white"),
                  padx=20, pady=8, relief="flat").pack(side="right")
@@ -581,42 +590,70 @@ class JournalFeature:
                 screens.append(getattr(entry, 'screen_time_mins', None))
                 stresses.append(getattr(entry, 'stress_level', None))
             
-            # 1. Digital Overload (High Screen + High Stress)
+            # --- ADVANCED ANALYSIS ENGINE ---
+            
+            risk_factors = []
+            advice_components = []
+            
+            # 1. Digital Overload Check
             avg_screen = sum(s for s in screens if s)/len([s for s in screens if s]) if any(screens) else 0
             avg_stress = sum(s for s in stresses if s)/len([s for s in stresses if s]) if any(stresses) else 0
             
-            insights = []
-            
             if avg_screen > 240 and avg_stress > 6:
-                insights.append("⚠️ **Digital Overload**: Your high screen time (>4h) correlates with elevated stress. Try a 'tech-free' hour before bed.")
-                
-            # 2. Burnout Risk (High Work + Low Energy)
+                risk_factors.append("Digital Overload")
+                advice_components.append("Reducing screen time by 1 hour could lower your stress levels.")
+
+            # 2. Burnout Check
             avg_work = sum(w for w in works if w)/len([w for w in works if w]) if any(works) else 0
             avg_energy = sum(e for e in energies if e)/len([e for e in energies if e]) if any(energies) else 0
             
             if avg_work > 9 and avg_energy < 5:
-                 insights.append("🔥 **Burnout Warning**: You're working long hours while energy is low. Schedule a mandatory break tomorrow.")
-            
-            # 3. Recovery Deficit (Low Sleep)
+                risk_factors.append("Early Burnout")
+                advice_components.append("Your energy is low despite high work output. This is sustainable for only short periods.")
+
+            # 3. Sleep Check
             avg_sleep = sum(s for s in sleeps if s)/len([s for s in sleeps if s]) if any(sleeps) else 0
             if avg_sleep < 6:
-                insights.append("💤 **Sleep Debt**: You're averaging <6 hours. This significantly impacts mood regulation.")
+                risk_factors.append("Sleep Deprivation")
+                advice_components.append("Recovery is your #1 priority right now. Aim for 7h tonight.")
 
-            # 4. Trigger Awareness (New)
+            # 4. Contextual Triggers & Schedule
             recent_triggers = [t for t in [getattr(e, 'stress_triggers', '') for e in entries] if t]
-            if recent_triggers:
-                common_trigger = recent_triggers[0][:20] + "..." # Simplified "topic extraction"
-                insights.append(f"🧠 **Trigger Awareness**: You noted '{common_trigger}'. Awareness is the first step to management.")
-
-            # 5. Schedule Optimization (New)
+            common_trigger = recent_triggers[0][:15] + "..." if recent_triggers else None
+            
             schedules = [s for s in [getattr(e, 'daily_schedule', '') for e in entries] if s]
-            if schedules and len(schedules[0]) > 50: # Arbitrary length check for "busy"
-                 insights.append("🗓️ **Schedule Check**: Your days look packed. Ensure you have 15 mins of 'white space' for transition time.")
+            is_busy = schedules and len(schedules[0]) > 50
 
-            if insights:
-                return "\n\n".join(insights)
+            # --- SYNTHESIS ---
+            
+            if not risk_factors:
+                return "🌟 **Balanced State**: Your metrics look healthy! Keep maintaining this rhythm."
+            
+            if len(risk_factors) == 1:
+                # Single issue
+                msg = f"⚠️ **Attention Needed**: I've detected signs of {risk_factors[0]}.\n"
+                msg += advice_components[0]
+                if common_trigger: msg += f"\n(Context: You mentioned '{common_trigger}' as a trigger)"
+                return msg
+            
             else:
-                return "You're balancing well! No major risk factors detected this week."
+                # Complex/Combined issue (Smart Synthesis)
+                combined = " + ".join(risk_factors)
+                msg = f"🛑 **Complex Alert**: You are facing a combination of {combined}.\n\n"
+                msg += "This compounding effect requires immediate action:\n"
+                
+                # Prioritize Sleep if present
+                if "Sleep Deprivation" in risk_factors:
+                    msg += "1. **Fix Sleep First**: Without rest, stress and burnout are 2x harder to manage.\n"
+                    msg += "2. **Secondary Step**: " + ("Cut screen time." if "Digital Overload" in risk_factors else "Limit work hours.")
+                elif "Digital Overload" in risk_factors and "Early Burnout" in risk_factors:
+                    msg += "1. **Disconnect**: Your high screen time is preventing mental recovery from work.\n"
+                    msg += "2. **Hard Stop**: Set a strict work cutoff time today."
+                
+                if is_busy:
+                    msg += "\n\n🗓️ **Note**: Your schedule looks packed. Clear 30 mins for 'do nothing' time."
+                
+                return msg
             
             # Calculate Averages
             avg_sleep = sum(sleeps) / len(sleeps) if sleeps else 0

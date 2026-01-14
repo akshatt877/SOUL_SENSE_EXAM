@@ -47,7 +47,7 @@ class TestSmartInsights(unittest.TestCase):
         # Verify
         print(f"Insight Generated: {insight}")
         self.assertIn("Digital Overload", insight)
-        self.assertIn("tech-free", insight)
+        self.assertIn("Reducing screen time", insight)
         
     @patch('app.ui.journal.get_session')
     def test_burnout_insight(self, mock_get_session):
@@ -77,7 +77,7 @@ class TestSmartInsights(unittest.TestCase):
         
         # Verify
         print(f"Insight Generated: {insight}")
-        self.assertIn("Burnout Warning", insight)
+        self.assertIn("Early Burnout", insight)
 
 if __name__ == '__main__':
     unittest.main()
