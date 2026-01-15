@@ -419,7 +419,7 @@ class AnalyticsDashboard:
         
         # Text area for results
         self.correlation_text = tk.Text(parent, wrap=tk.WORD, height=15, 
-                                       font=("Arial", 11))
+                                       font=("Arial", 11), state='disabled')
         self.correlation_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
         # Visualization frame
@@ -430,7 +430,11 @@ class AnalyticsDashboard:
         """Run correlation analysis"""
         try:
             # Clear previous content
-            self.correlation_text.delete(1.0, tk.END)
+            if self.correlation_text:
+                self.correlation_text.configure(state='normal') # Enable for updates
+                self.correlation_text.delete(1.0, tk.END)
+            else:
+                return
             
             # Clear previous visualization
             for widget in self.correlation_viz_frame.winfo_children():
@@ -467,6 +471,8 @@ class AnalyticsDashboard:
                 self.correlation_text.insert(tk.END, 
                     "⚠️ Need at least 2 EQ tests for correlation analysis.\n\n"
                     "Complete more tests and try again!")
+                if self.correlation_text:
+                     self.correlation_text.configure(state='disabled')
                 return
             
             scores = [row[0] for row in data]
@@ -605,12 +611,18 @@ class AnalyticsDashboard:
             fig.tight_layout()
             
             # Embed in tkinter
-            canvas = FigureCanvasTkAgg(fig, self.correlation_viz_frame)
+            canvas = FigureCanvasTkAgg(fig, master=self.correlation_viz_frame)
             canvas.draw()
             canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+
+            # Make read-only
+            if self.correlation_text:
+                 self.correlation_text.configure(state='disabled')
             
         except Exception as e:
             self.correlation_text.insert(tk.END, f"⚠️ Could not create visualizations: {str(e)}\n")
+            if self.correlation_text:
+                 self.correlation_text.configure(state='disabled')
     
     # ========== EXISTING METHODS (UPDATED) ==========
     def show_eq_trends(self, parent):

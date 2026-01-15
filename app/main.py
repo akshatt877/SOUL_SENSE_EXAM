@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 import logging
 from app.ui.sidebar import SidebarNav
+from app.ui.styles import UIStyles
 from app.ui.dashboard import AnalyticsDashboard
 from app.ui.journal import JournalFeature
 from app.ui.profile import UserProfileView
@@ -22,28 +23,10 @@ class SoulSenseApp:
         # Initialize Logger
         self.logger = logging.getLogger(__name__)
         
-        # Colors (Dark Theme Default)
-        self.colors = {
-            "bg": "#0F172A", 
-            "surface": "#1E293B",
-            "sidebar_bg": "#0F172A",
-            "sidebar_active": "#3B82F6",
-            "sidebar_fg": "#94A3B8",
-            "sidebar_divider": "#334155",
-            "sidebar_hover": "#1E293B",
-            "text_primary": "#F8FAFC",
-            "text_secondary": "#94A3B8",
-            "text_tertiary": "#64748B",
-            "text_inverse": "#FFFFFF",
-            "primary": "#3B82F6",
-            "primary_hover": "#2563EB",
-            "secondary": "#8B5CF6",
-            "accent": "#F59E0B",
-            "success": "#10B981",
-            "border": "#334155",
-            "bg_secondary": "#1E293B", # For compatibility
-            "surface_hover": "#334155"
-        }
+        # Initialize Styles
+        self.ui_styles = UIStyles(self)
+        self.colors = {} # Will be populated by apply_theme
+        self.ui_styles.apply_theme("dark") # Default theme
         
         # Fonts
         self.fonts = {
@@ -212,30 +195,8 @@ class SoulSenseApp:
 
     def apply_theme(self, theme_name):
         """Update colors based on theme"""
-        if theme_name == "dark":
-            self.colors.update({
-                "bg": "#0F172A", "surface": "#1E293B", "sidebar_bg": "#0F172A",
-                "sidebar_active": "#3B82F6", "sidebar_fg": "#94A3B8", "sidebar_divider": "#334155",
-                "sidebar_hover": "#1E293B",
-                "text_primary": "#F8FAFC", "text_secondary": "#94A3B8",
-                
-                # Extended UI Colors
-                "card_bg": "#1E293B", "card_border": "#334155",
-                "input_bg": "#0F172A", "input_fg": "#F8FAFC", "input_border": "#334155",
-                "success": "#10B981", "success_hover": "#059669"
-            })
-        else:
-            self.colors.update({
-                 "bg": "#F8FAFC", "surface": "#FFFFFF", "sidebar_bg": "#FFFFFF",
-                 "sidebar_active": "#3B82F6", "sidebar_fg": "#64748B", "sidebar_divider": "#E2E8F0",
-                 "sidebar_hover": "#F1F5F9",
-                 "text_primary": "#0F172A", "text_secondary": "#64748B",
-
-                 # Extended UI Colors
-                 "card_bg": "#FFFFFF", "card_border": "#E2E8F0",
-                 "input_bg": "#F8FAFC", "input_fg": "#0F172A", "input_border": "#E2E8F0",
-                 "success": "#10B981", "success_hover": "#059669"
-            })
+        # Delegate to UIStyles manager
+        self.ui_styles.apply_theme(theme_name)
         
         # Refresh current view
         # A full restart might be best, but we'll try to update existing frames
@@ -254,6 +215,9 @@ class SoulSenseApp:
              self.switch_view(self.current_view)
         elif hasattr(self, 'sidebar') and self.sidebar.active_id:
              self.switch_view(self.sidebar.active_id)
+
+        
+
 
     def switch_view(self, view_id):
         self.current_view = view_id

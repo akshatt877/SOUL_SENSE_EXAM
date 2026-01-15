@@ -247,18 +247,33 @@ class SidebarNav(tk.Frame):
         self.configure(bg=self.app.colors.get("sidebar_bg"))
         self.nav_frame.configure(bg=self.app.colors.get("sidebar_bg"))
         
-        # Header (if exists, children of self before nav_frame)
-        # We can iterate through children to be safe, or just rebuild header if complex
-        # For now, let's just update known children
-        for widget in self.winfo_children():
-            if isinstance(widget, tk.Frame) and widget != self.nav_frame:
-                widget.configure(bg=self.app.colors.get("sidebar_bg"))
-                # Header content
+        # Update Header
+        if hasattr(self, 'name_label'):
+             self.name_label.configure(bg=self.app.colors.get("sidebar_bg"), fg="white")
+        if hasattr(self, 'edit_label'):
+             self.edit_label.configure(bg=self.app.colors.get("sidebar_bg"), fg=self.app.colors.get("sidebar_divider"))
+        
+        # Recursive update for all children to ensure nested frames (like info_frame) get updated
+        def update_recursive(widget):
+            try:
+                if isinstance(widget, (tk.Frame, tk.Canvas)):
+                     widget.configure(bg=self.app.colors.get("sidebar_bg"))
+                elif isinstance(widget, tk.Label):
+                     # Be careful not to overwrite custom fgs, but bg should match sidebar
+                     # Unless it's a specific button label. 
+                     # For header labels, we handled them above or they match sidebar_bg
+                     if widget not in self.buttons.values(): # Don't touch nav buttons here
+                        widget.configure(bg=self.app.colors.get("sidebar_bg"))
+                
                 for child in widget.winfo_children():
-                   try: child.configure(bg=self.app.colors.get("sidebar_bg"))
-                   except: pass
-            elif isinstance(widget, tk.Canvas): # Avatar
-                 widget.configure(bg=self.app.colors.get("sidebar_bg"))
+                    update_recursive(child)
+            except:
+                pass
+
+        # Update non-nav items (Header)
+        for widget in self.winfo_children():
+            if widget != self.nav_frame:
+                update_recursive(widget)
 
         # Update Buttons
         for item_id, widgets in self.buttons.items():
