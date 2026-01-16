@@ -5,7 +5,7 @@ import logging
 import time
 import math
 import math
-from typing import Optional, Dict, Any, Tuple
+from typing import Optional, Dict, Any, Tuple, List
 from app.services.exam_service import ExamSession
 
 # Ensure app is in path
