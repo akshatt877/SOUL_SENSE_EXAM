@@ -4,6 +4,11 @@ import logging
 import copy
 from typing import Dict, Any, Union, Optional, TypeVar, Type, cast, overload
 
+from app.exceptions import ConfigurationError
+
+BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CONFIG_PATH: str = os.path.join(BASE_DIR, "config.json")
+
 T = TypeVar("T")
 
 @overload
