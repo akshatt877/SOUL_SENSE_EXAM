@@ -1,6 +1,6 @@
 # Contributor Activity Dashboard
 
-## Repository: nupurmadaan04/SOUL_SENSE_EXAM
+## Repository: ssislive/SOUL_SENSE_EXAM
 
 ### Open Issues: 8
 ### Total PRs: 196
