@@ -339,88 +339,67 @@ class UserResponse(BaseModel):
     created_at: str
 
 
-# Question schemas
-class QuestionResponse(BaseModel):
-    """Response schema for a single question"""
-    id: int
-    question_text: str
-    category_id: Optional[int] = None
-    difficulty: Optional[int] = None
-    min_age: int = Field(default=0, description="Minimum age for this question")
-    max_age: int = Field(default=120, description="Maximum age for this question")
-    weight: float = Field(default=1.0, description="Question weight for scoring")
-    tooltip: Optional[str] = Field(default=None, description="Helpful hint for the question")
-    is_active: bool = Field(default=True, description="Whether the question is active")
-    
-    class Config:
-        from_attributes = True
-
-
-class QuestionSetResponse(BaseModel):
-    """Response schema for a set of questions"""
-    version: str = Field(description="Version identifier for the question set")
-    total_questions: int = Field(description="Total number of questions in the set")
-    questions: List[QuestionResponse] = Field(description="List of questions")
-    age_range: Optional[dict] = Field(default=None, description="Age range filter applied")
-    
-
-class QuestionCategoryResponse(BaseModel):
-    """Response schema for question category"""
-    id: int
-    name: str
-    
-    class Config:
-        from_attributes = True
-
-
-# Assessment schemas
-class AssessmentResponse(BaseModel):
-    """Response schema for a single assessment result"""
-    id: int
-    username: str
-    total_score: int
-    sentiment_score: Optional[float] = Field(default=0.0, description="NLTK sentiment analysis score")
-    is_rushed: bool = Field(default=False, description="Indicates if assessment was rushed")
-    is_inconsistent: bool = Field(default=False, description="Indicates inconsistent answers")
-    age: Optional[int] = None
-    detailed_age_group: Optional[str] = None
-    timestamp: str
-    
-    class Config:
-        from_attributes = True
-
-
-class AssessmentDetailResponse(BaseModel):
-    """Detailed assessment response with additional metadata"""
-    id: int
-    username: str
-    total_score: int
-    sentiment_score: Optional[float] = 0.0
-    reflection_text: Optional[str] = None
-    is_rushed: bool = False
-    is_inconsistent: bool = False
-    age: Optional[int] = None
-    detailed_age_group: Optional[str] = None
-    timestamp: str
-    responses_count: Optional[int] = Field(default=0, description="Number of responses in this assessment")
-    
-    class Config:
-        from_attributes = True
-
-
-class AssessmentListResponse(BaseModel):
-    """Response schema for listing assessments"""
-    total: int = Field(description="Total number of assessments")
-    assessments: List[AssessmentResponse] = Field(description="List of assessments")
-    page: int = Field(default=1, description="Current page number")
-    page_size: int = Field(default=10, description="Number of items per page")
-
-
-class AssessmentStatsResponse(BaseModel):
-    """Statistical summary of assessments"""
+# Analytics schemas
+class AgeGroupStats(BaseModel):
+    """Aggregated statistics by age group"""
+    age_group: str
     total_assessments: int
     average_score: float
-    highest_score: int
-    lowest_score: int
+    min_score: int
+    max_score: int
     average_sentiment: float
-    age_group_distribution: dict = Field(description="Distribution of assessments by age group")
+
+
+class ScoreDistribution(BaseModel):
+    """Score distribution for analytics"""
+    score_range: str
+    count: int
+    percentage: float
+
+
+class TrendDataPoint(BaseModel):
+    """Time-series data point"""
+    period: str
+    average_score: float
+    assessment_count: int
+
+
+class AnalyticsSummary(BaseModel):
+    """Overall analytics summary - aggregated data only"""
+    total_assessments: int = Field(description="Total number of assessments")
+    unique_users: int = Field(description="Number of unique users")
+    global_average_score: float = Field(description="Overall average score")
+    global_average_sentiment: float = Field(description="Overall sentiment score")
+    age_group_stats: List[AgeGroupStats] = Field(description="Stats by age group")
+    score_distribution: List[ScoreDistribution] = Field(description="Score distribution")
+    assessment_quality_metrics: Dict[str, int] = Field(
+        description="Quality metrics (rushed, inconsistent counts)"
+    )
+
+
+class TrendAnalytics(BaseModel):
+    """Trend analytics over time"""
+    period_type: str = Field(description="Time period type (daily, weekly, monthly)")
+    data_points: List[TrendDataPoint] = Field(description="Time series data")
+    trend_direction: str = Field(description="Overall trend (increasing, decreasing, stable)")
+
+
+class BenchmarkComparison(BaseModel):
+    """Benchmark comparison data"""
+    category: str
+    global_average: float
+    percentile_25: float
+    percentile_50: float
+    percentile_75: float
+    percentile_90: float
+
+
+class PopulationInsights(BaseModel):
+    """Population-level insights - no individual data"""
+    most_common_age_group: str
+    highest_performing_age_group: str
+    total_population_size: int
+    assessment_completion_rate: Optional[float] = Field(
+        default=None, 
+        description="Percentage of started assessments that were completed"
+    )

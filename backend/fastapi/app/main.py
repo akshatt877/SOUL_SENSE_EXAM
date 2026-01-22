@@ -39,8 +39,11 @@ def create_app() -> FastAPI:
     # Register routers
     app.include_router(health.router, tags=["health"])
     app.include_router(auth.router, prefix="/auth", tags=["authentication"])
-    app.include_router(assessments.router, prefix="/api/v1/assessments", tags=["assessments"])
-    app.include_router(questions.router, prefix="/api/v1/questions", tags=["questions"])
+    app.include_router(
+        analytics.router, 
+        prefix="/api/v1/analytics", 
+        tags=["analytics"]
+    )
 
     @app.on_event("startup")
     async def startup_event():
