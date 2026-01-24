@@ -9,3 +9,5 @@ python-jose[cryptography]
 passlib[bcrypt]
 bcrypt
 python-multipart
+requests>=2.31.0
+nltk>=3.8.1
