@@ -905,3 +905,44 @@ AttributeError: 'UserProfileView' object has no attribute '_render_export_view'.
 2026-01-24 19:19:48 - __main__ - INFO - [main.py:482] - Initiating graceful application shutdown...
 2026-01-24 19:19:48 - __main__ - INFO - [main.py:491] - Database session committed and removed successfully
 2026-01-24 19:19:48 - __main__ - INFO - [main.py:496] - Application shutdown complete
+2026-01-27 11:53:16 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-27 11:53:16 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-27 11:53:16 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-27 11:53:16 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-27 11:53:16 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-27 11:53:16 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-27 11:53:16 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-27 11:53:16 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-27 11:53:16 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-27 11:53:16 - __main__ - INFO - [main.py:540] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-27 11:53:16 - __main__ - INFO - [main.py:570] - Preloading questions into memory...
+2026-01-27 11:53:16 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-27 11:53:23 - app.questions - INFO - [questions.py:87] - Questions not initialized, loading now...
+2026-01-27 11:53:23 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-27 12:01:49 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-27 12:01:49 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-27 12:01:49 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-27 12:01:49 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-27 12:01:49 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-27 12:01:49 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-27 12:01:49 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-27 12:01:49 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-27 12:01:49 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-27 12:01:49 - __main__ - INFO - [main.py:540] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-27 12:01:49 - __main__ - INFO - [main.py:570] - Preloading questions into memory...
+2026-01-27 12:01:49 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-27 12:01:50 - app.questions - INFO - [questions.py:87] - Questions not initialized, loading now...
+2026-01-27 12:01:50 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-27 12:05:04 - __main__ - INFO - [main.py:482] - Initiating graceful application shutdown...
+2026-01-27 12:05:04 - __main__ - INFO - [main.py:491] - Database session committed and removed successfully
+2026-01-27 12:05:04 - __main__ - INFO - [main.py:496] - Application shutdown complete
