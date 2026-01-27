@@ -25,6 +25,7 @@ class SidebarNav(tk.Frame):
         
         self._render_header()
         self._render_items()
+        self._render_footer()
         
     def _render_header(self):
         # User Profile Summary Area
@@ -220,6 +221,55 @@ class SidebarNav(tk.Frame):
         if self.on_change and trigger_callback:
             self.on_change(item_id)
             
+    def _render_footer(self):
+        """Render Logout button at the bottom"""
+        self.footer_frame = tk.Frame(self, bg=self.app.colors.get("sidebar_bg"), height=60)
+        self.footer_frame.pack(side="bottom", fill="x", padx=10, pady=20)
+        self.footer_frame.pack_propagate(False)
+
+        # Divider
+        divider = tk.Frame(self.footer_frame, bg=self.app.colors.get("sidebar_divider"), height=1)
+        divider.pack(fill="x", side="top", pady=(0, 10))
+
+        # Logout Button
+        logout_btn = tk.Frame(self.footer_frame, bg=self.app.colors.get("sidebar_bg"), cursor="hand2", height=40)
+        logout_btn.pack(fill="x")
+        logout_btn.pack_propagate(False)
+
+        # Icon
+        self.logout_icon = tk.Label(
+            logout_btn, 
+            text="🚪", 
+            font=self.app.ui_styles.get_font("md"),
+            bg=self.app.colors.get("sidebar_bg"),
+            fg=self.app.colors.get("sidebar_fg")
+        )
+        self.logout_icon.pack(side="left", padx=5)
+
+        # Label
+        self.logout_text = tk.Label(
+            logout_btn, 
+            text="Logout", 
+            font=self.app.ui_styles.get_font("sm", "bold"),
+            bg=self.app.colors.get("sidebar_bg"),
+            fg=self.app.colors.get("sidebar_fg")
+        )
+        self.logout_text.pack(side="left", padx=10)
+
+        # Bindings
+        for widget in [logout_btn, self.logout_icon, self.logout_text]:
+            widget.bind("<Button-1>", lambda e: self.app.logout())
+            widget.bind("<Enter>", lambda e: self._on_logout_hover(True))
+            widget.bind("<Leave>", lambda e: self._on_logout_hover(False))
+
+        self.logout_btn_frame = logout_btn
+
+    def _on_logout_hover(self, is_hovering):
+        bg_color = self.app.colors.get("sidebar_hover") if is_hovering else self.app.colors.get("sidebar_bg")
+        self.logout_btn_frame.configure(bg=bg_color)
+        self.logout_icon.configure(bg=bg_color)
+        self.logout_text.configure(bg=bg_color)
+
     def _update_item_style(self, item_id, is_active):
         if item_id not in self.buttons:
             return
@@ -279,6 +329,13 @@ class SidebarNav(tk.Frame):
         for item_id, widgets in self.buttons.items():
             is_active = (item_id == self.active_id)
             self._update_item_style(item_id, is_active)
+
+        # Update Footer
+        if hasattr(self, 'footer_frame'):
+            self.footer_frame.configure(bg=self.app.colors.get("sidebar_bg"))
+            self.logout_btn_frame.configure(bg=self.app.colors.get("sidebar_bg"))
+            self.logout_icon.configure(bg=self.app.colors.get("sidebar_bg"), fg=self.app.colors.get("sidebar_fg"))
+            self.logout_text.configure(bg=self.app.colors.get("sidebar_bg"), fg=self.app.colors.get("sidebar_fg"))
 
     def update_user_info(self):
         """Update username display and avatar after login"""

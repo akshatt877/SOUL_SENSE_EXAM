@@ -89,6 +89,11 @@ class SoulSenseApp:
         """Delegate to ShutdownHandler"""
         self.shutdown_handler.graceful_shutdown()
 
+    def logout(self):
+        """Handle user logout with confirmation"""
+        if messagebox.askyesno("Confirm Logout", "Are you sure you want to log out? Any unsaved changes will be lost."):
+            self.initializer.logout_user()
+
 # --- Global Error Handlers ---
 
 def show_error(title, message, exception=None):
