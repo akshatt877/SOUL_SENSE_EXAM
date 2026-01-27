@@ -3,14 +3,12 @@ import importlib.util
 from unittest.mock import MagicMock, patch
 
 # CRITICAL: Automatically mock all GUI and visualization modules
-# This handles all sub-modules (e.g. matplotlib.dates, tkinter.ttk) without manual listing
 class MockFinder:
     def __init__(self, prefixes):
         self.prefixes = prefixes
     def find_spec(self, fullname, path, target=None):
         if any(fullname.startswith(p) for p in self.prefixes):
             spec = importlib.util.spec_from_loader(fullname, self)
-            # Mark as package to allow submodule imports
             spec.submodule_search_locations = [] 
             return spec
         return None
@@ -22,8 +20,18 @@ class MockFinder:
     def exec_module(self, module):
         pass
 
+# CRITICAL: Prevent any GUI/Display connection attempts in headless environments
+import os
+os.environ["DISPLAY"] = ":0.0" # Dummy display
+os.environ["MPLBACKEND"] = "Agg" # Force matplotlib to non-interactive backend
+
+# Clear existing GUI modules to force re-import through our MockFinder
+for mod in list(sys.modules.keys()):
+    if any(mod.startswith(p) for p in ['tkinter', 'matplotlib', 'PIL', '_tkinter', 'tcl', 'tk']):
+        del sys.modules[mod]
+
 # Register the finder before any app imports
-sys.meta_path.insert(0, MockFinder(['tkinter', 'matplotlib', 'PIL']))
+sys.meta_path.insert(0, MockFinder(['tkinter', 'matplotlib', 'PIL', '_tkinter', 'tcl', 'tk']))
 
 import pytest
 import os
