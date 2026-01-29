@@ -92,7 +92,8 @@ class AppInitializer:
 
     def show_login_screen(self):
         """Show login popup on startup"""
-        login_win = tk.Toplevel(self.app.root)
+        self.login_win = tk.Toplevel(self.app.root)
+        login_win = self.login_win
         login_win.title("SoulSense Login")
         login_win.geometry("400x500")
         login_win.configure(bg=self.app.colors.get("bg", "#111111"))
@@ -163,10 +164,19 @@ class AppInitializer:
 
             if success:
                 self.app.username = user
-                login_win.grab_release()
-                login_win.destroy()
-                self._load_user_settings(user)
-                self._post_login_init()
+                # Close login window properly
+                try:
+                    login_win.grab_release()
+                except:
+                    pass
+                    login_win.destroy()
+                    self.login_win = None
+                    # Bring main window front
+                    self.app.root.deiconify()
+                    self.app.root.lift()
+                    self.app.root.focus_force()
+                    self._load_user_settings(user)
+                    self._post_login_init()
 
             else:
                 messagebox.showerror("Login Failed", msg)
