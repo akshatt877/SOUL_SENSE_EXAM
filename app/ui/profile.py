@@ -449,12 +449,12 @@ class UserProfileView:
         if pov_text:
             # Increased font size and clarity
             lbl = tk.Label(man_content, text=f'"{pov_text}"', 
-                     font=(FONT_FAMILY_SECONDARY, 15, "italic"), bg=card_bg, fg=text_primary, 
+                     font=self.styles.get_font("md", "italic"), bg=card_bg, fg=text_primary, 
                      wraplength=700, justify="center")
             lbl.pack()
         else:
             lbl = tk.Label(man_content, text="(Click to define your life philosophy...)", 
-                     font=("Segoe UI", 12, "italic"), bg=card_bg, fg="gray")
+                     font=self.styles.get_font("sm", "italic"), bg=card_bg, fg="gray")
             lbl.pack()
             
         # Make clickable to edit
@@ -494,7 +494,7 @@ class UserProfileView:
                 font=self.styles.get_font("sm", "bold"), bg=bg, fg=fg).pack(pady=(20, 10))
                 
         # Text Area
-        text_area = tk.Text(dialog, font=(FONT_FAMILY_SECONDARY, 14), height=8, width=50, 
+        text_area = tk.Text(dialog, font=self.styles.get_font("sm"), height=8, width=50, 
                            bg=self.colors.get("bg", "#f5f5f5"), fg=fg, relief="flat", padx=10, pady=10)
         text_area.pack(padx=20, pady=10, fill="both", expand=True)
         text_area.insert("1.0", current_text)

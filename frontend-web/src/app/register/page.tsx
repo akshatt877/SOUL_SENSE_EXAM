@@ -14,9 +14,6 @@ type RegisterFormData = z.infer<typeof registrationSchema>;
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [passwordValue, setPasswordValue] = useState('');
 
   const handleSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
@@ -105,33 +102,11 @@ export default function RegisterPage() {
                 required
               >
                 {(fieldProps) => (
-                  <div>
-                    <div className="relative">
-                      <Input
-                        {...fieldProps}
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="Create a strong password"
-                        className="pr-10"
-                        onChange={(e) => {
-                          fieldProps.onChange(e);
-                          setPasswordValue(e.target.value);
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                        tabIndex={-1}
-                      >
-                        {showPassword ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
-                      </button>
-                    </div>
-                    <PasswordStrengthIndicator password={passwordValue} />
-                  </div>
+                  <input
+                    {...fieldProps}
+                    type={showPassword ? 'text' : 'password'}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  />
                 )}
               </FormField>
             </motion.div>
@@ -148,77 +123,26 @@ export default function RegisterPage() {
                 required
               >
                 {(fieldProps) => (
-                  <div className="relative">
-                    <Input
-                      {...fieldProps}
-                      type={showConfirmPassword ? 'text' : 'password'}
-                      placeholder="Confirm your password"
-                      className="pr-10"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                      tabIndex={-1}
-                    >
-                      {showConfirmPassword ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </button>
-                  </div>
+                  <input
+                    {...fieldProps}
+                    type={showPassword ? 'text' : 'password'}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  />
                 )}
               </FormField>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.45 }}
-              className="flex items-start gap-2"
-            >
-              <input
-                type="checkbox"
-                id="acceptTerms"
-                {...methods.register('acceptTerms')}
-                className="mt-1 h-4 w-4 rounded border-input text-primary focus:ring-primary"
-              />
-              <label htmlFor="acceptTerms" className="text-sm text-muted-foreground">
-                I agree to the{' '}
-                <Link href="/terms" className="text-primary hover:underline">
-                  Terms of Service
-                </Link>{' '}
-                and{' '}
-                <Link href="/privacy" className="text-primary hover:underline">
-                  Privacy Policy
-                </Link>
-              </label>
-            </motion.div>
-            {methods.formState.errors.acceptTerms && (
-              <p className="text-sm text-destructive">
-                {methods.formState.errors.acceptTerms.message}
-              </p>
-            )}
-
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full h-11 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Creating account...
-                  </>
-                ) : (
-                  'Create account'
-                )}
+              <div className="flex items-center space-x-2 mb-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-sm"
+                >
+                  {showPassword ? 'Hide Password' : 'Show Password'}
+                </Button>
+              </div>
+              <Button type="submit" className="w-full">
+                Register
               </Button>
             </motion.div>
 

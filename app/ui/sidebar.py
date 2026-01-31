@@ -12,13 +12,20 @@ class SidebarNav(tk.Frame):
             items: List of dicts {'id': str, 'icon': str, 'label': str}
             on_change: Callback function(item_id) when selection changes
         """
-        super().__init__(parent, bg=app.colors.get("sidebar_bg"), width=250)
+        super().__init__(parent, bg=app.colors.get("sidebar_bg"), width=250)  # Temporary width
         self.app = app
         self.items = items
         self.on_change = on_change
         self.is_collapsed = False
-        self.expanded_width = 250
-        self.collapsed_width = 70
+        
+        # Calculate responsive sidebar width based on screen size
+        screen_width = self.app.root.winfo_screenwidth()
+        base_sidebar_width = min(250, int(screen_width * 0.15))  # 15% of screen width, max 250
+        
+        # Update the width
+        self.configure(width=base_sidebar_width)
+        self.expanded_width = base_sidebar_width
+        self.collapsed_width = min(70, int(base_sidebar_width * 0.28))  # 28% of expanded width
         self.buttons = {}
         self.active_id = None
         

@@ -185,6 +185,9 @@ if __name__ == "__main__":
 
         app = SoulSenseApp(root)
 
+        # Show the initial home view
+        app.show_home()
+
         # Set up graceful shutdown handlers
         root.protocol("WM_DELETE_WINDOW", app.graceful_shutdown)
 

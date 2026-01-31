@@ -20,7 +20,22 @@ class AppInitializer:
     def setup_ui(self):
         """Set up the main UI components"""
         self.app.root.title("SoulSense AI - Mental Wellbeing")
-        self.app.root.geometry("1400x900")
+        
+        # Get screen dimensions for responsive sizing
+        screen_width = self.app.root.winfo_screenwidth()
+        screen_height = self.app.root.winfo_screenheight()
+        
+        # Calculate responsive window size (80% of screen, max 1400x900)
+        window_width = min(int(screen_width * 0.8), 1400)
+        window_height = min(int(screen_height * 0.8), 900)
+        
+        # Center the window on screen
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+        
+        self.app.root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        self.app.root.minsize(800, 600)  # Minimum size for usability
+        self.app.root.resizable(True, True)  # Allow resizing
 
         # Initialize Logger
         self.app.logger = get_logger(__name__)
@@ -28,15 +43,26 @@ class AppInitializer:
         # Initialize Styles
         self.app.ui_styles = UIStyles(self.app)
         self.app.colors: Dict[str, str] = {}
-        self.app.ui_styles.apply_theme("dark")  # Default theme
+        self.app.ui_styles.apply_theme("TERMINAL")  # Terminal-inspired theme
 
-        # Fonts
+        # Fonts (Terminal-style monospace) - responsive sizing
+        # Scale fonts based on screen size for better readability
+        font_scale = min(screen_width / 1920, screen_height / 1080, 1.0)  # Base on 1920x1080
+        
+        base_h1 = max(16, int(20 * font_scale))
+        base_h2 = max(14, int(16 * font_scale))
+        base_h3 = max(12, int(14 * font_scale))
+        base_body = max(10, int(11 * font_scale))
+        base_small = max(8, int(9 * font_scale))
+        base_mono = max(9, int(10 * font_scale))
+        
         self.app.fonts = {
-            "h1": ("Segoe UI", 24, "bold"),
-            "h2": ("Segoe UI", 20, "bold"),
-            "h3": ("Segoe UI", 16, "bold"),
-            "body": ("Segoe UI", 12),
-            "small": ("Segoe UI", 10),
+            "h1": ("Consolas", base_h1, "bold"),
+            "h2": ("Consolas", base_h2, "bold"),
+            "h3": ("Consolas", base_h3, "bold"),
+            "body": ("Consolas", base_body),
+            "small": ("Consolas", base_small),
+            "mono": ("Consolas", base_mono),  # Monospace for terminal-like text
         }
 
         # State

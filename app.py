@@ -90,9 +90,19 @@ def compute_analytics(responses, time_taken, total_questions):
 def show_splash():
     splash = tk.Tk()
     splash.title(i18n.get("app_title"))
-    splash.geometry("500x300")
+    
+    # Responsive sizing for splash screen
+    screen_width = splash.winfo_screenwidth()
+    screen_height = splash.winfo_screenheight()
+    window_width = min(500, int(screen_width * 0.3))
+    window_height = min(300, int(screen_height * 0.3))
+    x = (screen_width - window_width) // 2
+    y = (screen_height - window_height) // 2
+    
+    splash.geometry(f"{window_width}x{window_height}+{x}+{y}")
     splash.configure(bg="#1E1E2F")
-    splash.resizable(False, False)
+    splash.minsize(400, 250)
+    splash.resizable(True, True)
 
     tk.Label(
         splash,
@@ -125,8 +135,18 @@ def show_splash():
 def show_user_details():
     root = tk.Tk()
     root.title("SoulSense - User Details")
-    root.geometry("450x350")
-    root.resizable(False, False)
+    
+    # Responsive sizing
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+    window_width = min(450, int(screen_width * 0.4))
+    window_height = min(350, int(screen_height * 0.4))
+    x = (screen_width - window_width) // 2
+    y = (screen_height - window_height) // 2
+    
+    root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+    root.minsize(400, 300)
+    root.resizable(True, True)
 
     username = tk.StringVar()
     age = tk.StringVar()
@@ -168,8 +188,18 @@ def start_quiz(username, age):
 
     quiz = tk.Tk()
     quiz.title(i18n.get("app_title") + " " + i18n.get("quiz.question_counter", current=1, total=total_questions).split(" ")[-1])
-    quiz.geometry("750x600")
-    quiz.resizable(False, False)
+    
+    # Responsive sizing for quiz window
+    screen_width = quiz.winfo_screenwidth()
+    screen_height = quiz.winfo_screenheight()
+    window_width = min(750, int(screen_width * 0.6))
+    window_height = min(600, int(screen_height * 0.7))
+    x = (screen_width - window_width) // 2
+    y = (screen_height - window_height) // 2
+    
+    quiz.geometry(f"{window_width}x{window_height}+{x}+{y}")
+    quiz.minsize(600, 500)
+    quiz.resizable(True, True)
 
     responses = []
     score = 0

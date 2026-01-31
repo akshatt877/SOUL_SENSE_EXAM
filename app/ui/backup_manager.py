@@ -30,14 +30,22 @@ class BackupManager:
         # Create modal window
         self.backup_win = tk.Toplevel(self.root)
         self.backup_win.title("Data Backup & Restore")
-        self.backup_win.geometry("550x700")
-        self.backup_win.resizable(False, False)
+        
+        # Responsive sizing
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+        window_width = min(550, int(screen_width * 0.4))
+        window_height = min(700, int(screen_height * 0.7))
+        
+        self.backup_win.geometry(f"{window_width}x{window_height}")
+        self.backup_win.minsize(450, 500)
+        self.backup_win.resizable(True, True)
         self.backup_win.configure(bg=colors["bg"])
         
         # Center window on parent
         self.backup_win.update_idletasks()
-        x = self.root.winfo_x() + (self.root.winfo_width() - 550) // 2
-        y = self.root.winfo_y() + (self.root.winfo_height() - 700) // 2
+        x = self.root.winfo_x() + (self.root.winfo_width() - window_width) // 2
+        y = self.root.winfo_y() + (self.root.winfo_height() - window_height) // 2
         self.backup_win.geometry(f"+{x}+{y}")
         
         # Make modal

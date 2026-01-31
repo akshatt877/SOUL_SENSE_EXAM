@@ -313,6 +313,7 @@ class AdminInterface:
     def __init__(self):
         self.db = QuestionDatabase()
         self.current_user = None
+        self.show_password = False  # Add show password state
         self.create_login_window()
     
     def create_login_window(self):
@@ -334,8 +335,14 @@ class AdminInterface:
         self.username_entry.grid(row=0, column=1, pady=10, padx=10)
         
         tk.Label(login_frame, text="Password:", font=("Arial", 12)).grid(row=1, column=0, pady=10, padx=10, sticky="e")
-        self.password_entry = tk.Entry(login_frame, font=("Arial", 12), width=20, show="*")
+        self.password_entry = tk.Entry(login_frame, font=("Arial", 12), width=20, show="*" if not self.show_password else "")
         self.password_entry.grid(row=1, column=1, pady=10, padx=10)
+        
+        # Show Password Button
+        self.show_password_btn = tk.Button(login_frame, text="Show Password", command=self.toggle_password_visibility,
+                                          bg="#FF9800", fg="white", font=("Arial", 10),
+                                          width=12)
+        self.show_password_btn.grid(row=1, column=2, pady=10, padx=5)
         
         # Buttons
         button_frame = tk.Frame(self.login_window)
@@ -353,6 +360,26 @@ class AdminInterface:
         self.password_entry.bind('<Return>', lambda e: self.login())
         
         self.login_window.mainloop()
+    
+    def toggle_password_visibility(self):
+        """Toggle password visibility"""
+        self.show_password = not self.show_password
+        if self.show_password:
+            self.password_entry.config(show="")
+            self.show_password_btn.config(text="Hide Password", bg="#FF5722")
+        else:
+            self.password_entry.config(show="*")
+            self.show_password_btn.config(text="Show Password", bg="#FF9800")
+    
+    def toggle_entry_visibility(self, entry, button):
+        """Toggle visibility for any entry widget"""
+        current_show = entry.cget("show")
+        if current_show == "*":
+            entry.config(show="")
+            button.config(text="Hide Password", bg="#FF5722")
+        else:
+            entry.config(show="*")
+            button.config(text="Show Password", bg="#FF9800")
     
     def login(self):
         """Handle admin login"""
@@ -374,7 +401,7 @@ class AdminInterface:
         """Create new admin account"""
         dialog = tk.Toplevel(self.login_window)
         dialog.title("Create Admin Account")
-        dialog.geometry("400x250")
+        dialog.geometry("450x300")  # Increased width for button
         
         tk.Label(dialog, text="Create New Admin", font=("Arial", 14, "bold")).pack(pady=10)
         
@@ -389,9 +416,21 @@ class AdminInterface:
         new_password = tk.Entry(form_frame, font=("Arial", 11), width=20, show="*")
         new_password.grid(row=1, column=1, pady=10, padx=10)
         
+        # Show Password Button for new password
+        show_pass_btn = tk.Button(form_frame, text="Show Password", 
+                                 command=lambda: self.toggle_entry_visibility(new_password, show_pass_btn),
+                                 bg="#FF9800", fg="white", font=("Arial", 9), width=12)
+        show_pass_btn.grid(row=1, column=2, pady=10, padx=5)
+        
         tk.Label(form_frame, text="Confirm:", font=("Arial", 11)).grid(row=2, column=0, pady=10, padx=10, sticky="e")
         confirm_password = tk.Entry(form_frame, font=("Arial", 11), width=20, show="*")
         confirm_password.grid(row=2, column=1, pady=10, padx=10)
+        
+        # Show Password Button for confirm password
+        show_confirm_btn = tk.Button(form_frame, text="Show Password", 
+                                    command=lambda: self.toggle_entry_visibility(confirm_password, show_confirm_btn),
+                                    bg="#FF9800", fg="white", font=("Arial", 9), width=12)
+        show_confirm_btn.grid(row=2, column=2, pady=10, padx=5)
         
         def create():
             username = new_username.get()
