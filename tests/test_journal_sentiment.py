@@ -71,7 +71,9 @@ class TestJournalSentimentAnalysis:
         assert journal_feature._app_mood_from_score(0) == "Neutral"
 
     @patch('app.services.journal_service.JournalService.create_entry')
-    def test_save_and_analyze_integration(self, mock_create_entry, journal_feature):
+    @patch('app.ui.components.loading_overlay.show_loading')
+    @patch('app.ui.components.loading_overlay.hide_loading')
+    def test_save_and_analyze_integration(self, mock_hide, mock_show, mock_create_entry, journal_feature):
         # Setup mocks for UI elements
         journal_feature.text_area = MagicMock()
         journal_feature.text_area.get.return_value = "Great!"
@@ -89,6 +91,9 @@ class TestJournalSentimentAnalysis:
         # Mock internal method to avoid recursive logic execution
         journal_feature.analyze_sentiment = MagicMock(return_value=80.0)
         
+        # Mock show_analysis_results to avoid popup creation
+        journal_feature.show_analysis_results = MagicMock()
+
         journal_feature.save_and_analyze()
         
         assert mock_create_entry.called
