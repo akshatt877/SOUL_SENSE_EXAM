@@ -448,7 +448,18 @@ class JournalFeature:
         self.username = username
         self.journal_window = tk.Toplevel(self.parent_root)
         self.journal_window.title(self.i18n.get("journal.title"))
-        self.journal_window.geometry("800x600")
+        
+        # Responsive sizing
+        screen_width = self.journal_window.winfo_screenwidth()
+        screen_height = self.journal_window.winfo_screenheight()
+        window_width = min(800, int(screen_width * 0.7))
+        window_height = min(600, int(screen_height * 0.75))
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+        
+        self.journal_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        self.journal_window.minsize(600, 500)
+        self.journal_window.resizable(True, True)
         self.journal_window.configure(bg=self.colors.get("bg"))
         self.render_journal_view(self.journal_window, username)
     
@@ -659,7 +670,18 @@ class JournalFeature:
         
         result_window = tk.Toplevel(self.journal_window)
         result_window.title(self.i18n.get("journal.analysis_title"))
-        result_window.geometry("450x450")
+        
+        # Responsive sizing
+        screen_width = result_window.winfo_screenwidth()
+        screen_height = result_window.winfo_screenheight()
+        window_width = min(450, int(screen_width * 0.35))
+        window_height = min(450, int(screen_height * 0.5))
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+        
+        result_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        result_window.minsize(350, 350)
+        result_window.resizable(True, True)
         result_window.configure(bg=bg_color)
         
         main_frame = tk.Frame(result_window, bg=bg_color)
@@ -720,7 +742,18 @@ class JournalFeature:
         """View past journal entries"""
         entries_window = tk.Toplevel(self.journal_window)
         entries_window.title(self.i18n.get("journal.past_entries_title"))
-        entries_window.geometry("700x500")
+        
+        # Responsive sizing
+        screen_width = entries_window.winfo_screenwidth()
+        screen_height = entries_window.winfo_screenheight()
+        window_width = min(700, int(screen_width * 0.55))
+        window_height = min(500, int(screen_height * 0.6))
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+        
+        entries_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        entries_window.minsize(500, 400)
+        entries_window.resizable(True, True)
         entries_window.configure(bg=self.colors.get("bg", "#f0f0f0"))
 
         tk.Label(entries_window, text=self.i18n.get("journal.emotional_journey"),
@@ -997,7 +1030,18 @@ class JournalFeature:
         # Create chart window
         chart_window = tk.Toplevel(self.journal_window)
         chart_window.title("Mood Trends Over Time")
-        chart_window.geometry("800x600")
+        
+        # Responsive sizing
+        screen_width = chart_window.winfo_screenwidth()
+        screen_height = chart_window.winfo_screenheight()
+        window_width = min(800, int(screen_width * 0.65))
+        window_height = min(600, int(screen_height * 0.7))
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+        
+        chart_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        chart_window.minsize(600, 500)
+        chart_window.resizable(True, True)
         chart_window.configure(bg=self.colors.get("bg", "#f0f0f0"))
 
         # Header

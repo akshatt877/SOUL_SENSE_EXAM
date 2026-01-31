@@ -29,7 +29,22 @@ class SoulSenseApp:
     def __init__(self, root: tk.Tk) -> None:
         self.root = root
         self.root.title("SoulSense AI - Mental Wellbeing")
-        self.root.geometry("1400x900")
+        
+        # Responsive window sizing
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+        
+        # Calculate responsive window size (80% of screen, max 1400x900)
+        window_width = min(int(screen_width * 0.8), 1400)
+        window_height = min(int(screen_height * 0.8), 900)
+        
+        # Center the window on screen
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+        
+        self.root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        self.root.minsize(800, 600)  # Minimum size for usability
+        self.root.resizable(True, True)  # Allow resizing
         
         # Initialize Logger (use centralized logger)
         self.logger = get_logger(__name__)
@@ -39,13 +54,13 @@ class SoulSenseApp:
         self.colors: Dict[str, str] = {} # Will be populated by apply_theme
         self.ui_styles.apply_theme("dark") # Default theme
         
-        # Fonts
+        # Fonts - now using styles system for theme support
         self.fonts = {
-            "h1": ("Segoe UI", 24, "bold"),
-            "h2": ("Segoe UI", 20, "bold"),
-            "h3": ("Segoe UI", 16, "bold"),
-            "body": ("Segoe UI", 12),
-            "small": ("Segoe UI", 10)
+            "h1": self.ui_styles.get_font("xxl", "bold"),
+            "h2": self.ui_styles.get_font("xl", "bold"),
+            "h3": self.ui_styles.get_font("lg", "bold"),
+            "body": self.ui_styles.get_font("md"),
+            "small": self.ui_styles.get_font("sm")
         }
         
         # State
@@ -110,25 +125,33 @@ class SoulSenseApp:
         login_win.geometry(f"+{x}+{y}")
 
         # Logo/Title
-        tk.Label(login_win, text="SoulSense AI", font=("Segoe UI", 24, "bold"), 
+        tk.Label(login_win, text="SoulSense AI", font=self.fonts["h1"], 
                  bg=self.colors["bg"], fg=self.colors["primary"]).pack(pady=(40, 10))
         
-        tk.Label(login_win, text="Login to continue", font=("Segoe UI", 12), 
+        tk.Label(login_win, text="Login to continue", font=self.fonts["body"], 
                  bg=self.colors["bg"], fg=self.colors["text_secondary"]).pack(pady=(0, 30))
         
         # Form
         entry_frame = tk.Frame(login_win, bg=self.colors["bg"])
         entry_frame.pack(fill="x", padx=40)
         
-        tk.Label(entry_frame, text="Username", font=("Segoe UI", 10, "bold"), 
+        tk.Label(entry_frame, text="Username", font=self.fonts["small"], 
                  bg=self.colors["bg"], fg=self.colors["text_primary"]).pack(anchor="w")
-        username_entry = tk.Entry(entry_frame, font=("Segoe UI", 12))
+        username_entry = tk.Entry(entry_frame, font=self.fonts["body"])
         username_entry.pack(fill="x", pady=(5, 15))
         
-        tk.Label(entry_frame, text="Password", font=("Segoe UI", 10, "bold"), 
+        tk.Label(entry_frame, text="Password", font=self.fonts["small"], 
                  bg=self.colors["bg"], fg=self.colors["text_primary"]).pack(anchor="w")
-        password_entry = tk.Entry(entry_frame, font=("Segoe UI", 12), show="*")
-        password_entry.pack(fill="x", pady=(5, 20))
+        password_entry = tk.Entry(entry_frame, font=self.fonts["body"], show="*")
+        password_entry.pack(fill="x", pady=(5, 10))
+        
+        # Show Password Button
+        show_password = tk.BooleanVar()
+        show_password_btn = tk.Checkbutton(entry_frame, text="Show Password", variable=show_password,
+                                          command=lambda: password_entry.config(show="" if show_password.get() else "*"),
+                                          bg=self.colors["bg"], fg=self.colors["text_primary"],
+                                          font=self.fonts["small"])
+        show_password_btn.pack(anchor="w", pady=(0, 10))
         
         def do_login():
             user = username_entry.get().strip()
@@ -164,11 +187,11 @@ class SoulSenseApp:
 
         # Buttons
         tk.Button(login_win, text="Login", command=do_login,
-                 font=("Segoe UI", 12, "bold"), bg=self.colors["primary"], fg="white",
+                 font=self.fonts["body"], bg=self.colors["primary"], fg="white",
                  width=20).pack(pady=10)
                  
         tk.Button(login_win, text="Create Account", command=do_register,
-                 font=("Segoe UI", 10), bg=self.colors["bg"], fg=self.colors["primary"],
+                 font=self.fonts["small"], bg=self.colors["bg"], fg=self.colors["primary"],
                  bd=0, cursor="hand2").pack()
 
     def _load_user_settings(self, username: str) -> None:
@@ -323,11 +346,11 @@ class SoulSenseApp:
         
         # Hero Text
         tk.Label(hero_frame, text=f"Welcome back, {self.username or 'Guest'}!", 
-                 font=("Segoe UI", 28, "bold"), 
+                 font=self.fonts["h1"], 
                  bg=self.colors["primary"], fg=self.colors["text_inverse"]).pack(anchor="w", padx=30, pady=(40, 5))
                  
         tk.Label(hero_frame, text="Ready to continue your journey to better wellbeing?", 
-                 font=("Segoe UI", 14), 
+                 font=self.fonts["body"], 
                  bg=self.colors["primary"], fg=self.colors.get("primary_light", "#E0E7FF")).pack(anchor="w", padx=30)
 
         # Journal Summary Section (Enhanced Journal Feature)
@@ -348,7 +371,7 @@ class SoulSenseApp:
                     summary_frame.pack(fill="x", padx=30, pady=(10, 0))
 
                     tk.Label(summary_frame, text="📝 Recent Journal Insights",
-                             font=("Segoe UI", 14, "bold"), bg=self.colors["bg"],
+                             font=self.fonts["body"], bg=self.colors["bg"],
                              fg=self.colors["text_primary"]).pack(anchor="w")
 
                     # Calculate average mood
@@ -357,7 +380,7 @@ class SoulSenseApp:
                     mood_color = "#4CAF50" if avg_mood > 20 else "#FF9800" if avg_mood > -20 else "#F44336"
 
                     tk.Label(summary_frame, text=f"Average mood over last {len(recent_entries)} entries: {mood_text}",
-                             font=("Segoe UI", 11), bg=self.colors["bg"], fg=mood_color).pack(anchor="w", pady=(5, 0))
+                             font=self.fonts["small"], bg=self.colors["bg"], fg=mood_color).pack(anchor="w", pady=(5, 0))
             except Exception as e:
                 self.logger.error(f"Failed to load journal summary: {e}")
 
@@ -374,17 +397,17 @@ class SoulSenseApp:
             icon_canvas = tk.Canvas(card, width=50, height=50, bg=self.colors["surface"], highlightthickness=0)
             icon_canvas.pack(anchor="w", pady=(0, 15))
             icon_canvas.create_oval(2, 2, 48, 48, fill=color, outline=color)
-            icon_canvas.create_text(25, 25, text=icon, font=("Segoe UI", 20), fill="white")
+            icon_canvas.create_text(25, 25, text=icon, font=self.fonts["h2"], fill="white")
 
             # Text
-            tk.Label(card, text=title, font=("Segoe UI", 16, "bold"),
+            tk.Label(card, text=title, font=self.fonts["h3"],
                      bg=self.colors["surface"], fg=self.colors["text_primary"]).pack(anchor="w")
 
-            tk.Label(card, text=desc, font=("Segoe UI", 11), wraplength=200, justify="left",
+            tk.Label(card, text=desc, font=self.fonts["small"], wraplength=200, justify="left",
                      bg=self.colors["surface"], fg=self.colors["text_secondary"]).pack(anchor="w", pady=(5, 20))
 
             # Pseudo-Button
-            btn_lbl = tk.Label(card, text="Open →", font=("Segoe UI", 11, "bold"),
+            btn_lbl = tk.Label(card, text="Open →", font=self.fonts["small"],
                               bg=self.colors["surface"], fg=self.colors["primary"], cursor="hand2")
             btn_lbl.pack(anchor="w")
 

@@ -70,16 +70,15 @@ export default function Register() {
                 )}
               </FormField>
               <div className="flex items-center space-x-2 mb-4">
-                <input
-                  type="checkbox"
-                  id="showPassword"
-                  checked={showPassword}
-                  onChange={(e) => setShowPassword(e.target.checked)}
-                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-                />
-                <label htmlFor="showPassword" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Show Password
-                </label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-sm"
+                >
+                  {showPassword ? 'Hide Password' : 'Show Password'}
+                </Button>
               </div>
               <Button type="submit" className="w-full">
                 Register

@@ -220,6 +220,89 @@ class ColorSchemes:
         "card_border": "#334155",
         "card_shadow": "#00000066",
     }
+    
+    TERMINAL = {
+        # Terminal/Command Prompt inspired theme
+        # Background colors (Deep black like terminal)
+        "bg": "#0C0C0C",  # Deep black background
+        "bg_secondary": "#1A1A1A",  # Slightly lighter black
+        "bg_tertiary": "#2A2A2A",  # Dark gray
+        
+        # Surface colors (cards, panels) - Dark with subtle contrast
+        "surface": "#1E1E1E",  # Terminal window background
+        "surface_hover": "#2A2A2A",  # Hover state
+        "surface_active": "#3A3A3A",  # Active state
+        
+        # Text colors (Terminal green/white text)
+        "text_primary": "#00FF88",  # Bright terminal green
+        "text_secondary": "#CCCCCC",  # Light gray for secondary text
+        "text_tertiary": "#888888",  # Medium gray for tertiary text
+        "text_inverse": "#0C0C0C",  # Black text on light backgrounds
+        
+        # Primary accent (Terminal green)
+        "primary": "#00FF88",  # Bright terminal green
+        "primary_hover": "#00DD77",  # Slightly darker green
+        "primary_active": "#00BB66",  # Even darker green
+        "primary_light": "#1A3A2A",  # Dark green background
+        
+        # Secondary accent (Terminal blue)
+        "secondary": "#0088FF",  # Terminal blue
+        "secondary_hover": "#0066DD",  # Darker blue
+        "secondary_active": "#0044BB",  # Even darker blue
+        "secondary_light": "#1A2A3A",  # Dark blue background
+        
+        # Success (Terminal green)
+        "success": "#00FF88",  # Same as primary
+        "success_hover": "#00DD77",
+        "success_light": "#1A3A2A",
+        
+        # Warning (Terminal yellow)
+        "warning": "#FFFF00",  # Bright yellow
+        "warning_hover": "#DDDD00",  # Darker yellow
+        "warning_light": "#3A3A1A",  # Dark yellow background
+        
+        # Error (Terminal red)
+        "error": "#FF4444",  # Bright red
+        "error_hover": "#DD3333",  # Darker red
+        "error_light": "#3A1A1A",  # Dark red background
+        
+        # Border colors (Subtle terminal borders)
+        "border": "#333333",  # Dark gray borders
+        "border_focus": "#00FF88",  # Green focus border
+        
+        # Special (Terminal overlays)
+        "overlay": "#000000CC",  # Semi-transparent black overlay
+        "tooltip_bg": "#2A2A2A",  # Dark tooltip background
+        "tooltip_text": "#00FF88",  # Green tooltip text
+        
+        # Legacy compatibility mappings
+        "fg": "#00FF88",  # Terminal green foreground
+        "button_bg": "#00FF88",  # Green buttons
+        "button_fg": "#0C0C0C",  # Black text on green buttons
+        "entry_bg": "#1A1A1A",  # Dark entry background
+        "entry_fg": "#00FF88",  # Green entry text
+        "label_bg": "#0C0C0C",  # Black label background
+        "label_fg": "#00FF88",  # Green label text
+        "radiobutton_bg": "#0C0C0C",
+        "radiobutton_fg": "#00FF88",
+        "frame_bg": "#0C0C0C",
+        
+        # Modern Layout Tokens (Terminal styled)
+        "sidebar_bg": "#1A1A1A",  # Dark sidebar
+        "sidebar_fg": "#00FF88",  # Green sidebar text
+        "sidebar_hover": "#2A2A2A",  # Lighter hover
+        "sidebar_active": "#3A3A3A",  # Even lighter active
+        "sidebar_divider": "#333333",  # Gray divider
+        
+        "input_bg": "#1A1A1A",  # Dark input background
+        "input_fg": "#00FF88",  # Green input text
+        "input_border": "#333333",  # Gray input border
+        "accent": "#FFFF00",  # Yellow accent
+        
+        "card_bg": "#1E1E1E",  # Dark card background
+        "card_border": "#333333",  # Gray card border
+        "card_shadow": "#00000088",  # Black shadow with transparency
+    }
 
 
 class UIStyles:
@@ -231,7 +314,31 @@ class UIStyles:
         self.tokens = DesignTokens()
         
     def get_font(self, size="md", weight="normal"):
-        """Get font tuple with fallback"""
+        """Get font tuple with fallback - uses responsive fonts when available"""
+        # Check if app has responsive fonts (from AppInitializer)
+        if hasattr(self.app, 'fonts') and self.app.fonts:
+            # Map size names to responsive font keys
+            size_map = {
+                "xs": "small",
+                "sm": "small", 
+                "md": "body",
+                "lg": "h3",
+                "xl": "h2",
+                "xxl": "h1",
+                "hero": "h1",
+            }
+            font_key = size_map.get(size, "body")
+            if font_key in self.app.fonts:
+                base_font = self.app.fonts[font_key]
+                # Apply weight if needed
+                if weight == "bold" and len(base_font) == 2:
+                    return (base_font[0], base_font[1], "bold")
+                elif weight == "bold" and len(base_font) == 3:
+                    return (base_font[0], base_font[1], "bold")
+                else:
+                    return base_font
+        
+        # Fallback to original token-based sizing
         sizes = {
             "xs": self.tokens.FONT_SIZE_XS,
             "sm": self.tokens.FONT_SIZE_SM,
@@ -243,7 +350,14 @@ class UIStyles:
         }
         font_size = sizes.get(size, self.tokens.FONT_SIZE_MD)
         font_weight = "bold" if weight == "bold" else ""
-        return (self.tokens.FONT_FAMILY, font_size, font_weight) if font_weight else (self.tokens.FONT_FAMILY, font_size)
+        
+        # Use monospace font for TERMINAL theme
+        if hasattr(self.app, 'current_theme') and self.app.current_theme == "TERMINAL":
+            font_family = "Consolas"
+        else:
+            font_family = self.tokens.FONT_FAMILY
+            
+        return (font_family, font_size, font_weight) if font_weight else (font_family, font_size)
     def apply_theme(self, theme_name):
         """Apply the selected theme to the application"""
         self.app.current_theme = theme_name
@@ -251,6 +365,8 @@ class UIStyles:
         # Get appropriate color scheme
         if theme_name == "dark":
             self.app.colors = ColorSchemes.DARK.copy()
+        elif theme_name == "TERMINAL":
+            self.app.colors = ColorSchemes.TERMINAL.copy()
         else:
             self.app.colors = ColorSchemes.LIGHT.copy()
         

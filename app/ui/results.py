@@ -797,12 +797,21 @@ class ResultsManager:
         # Create popup window
         detail_win = tk.Toplevel(self.app.root)
         detail_win.title("Detailed Analysis")
-        detail_win.geometry("800x600")
+        
+        # Responsive sizing
+        screen_width = self.app.root.winfo_screenwidth()
+        screen_height = self.app.root.winfo_screenheight()
+        window_width = min(800, int(screen_width * 0.65))
+        window_height = min(600, int(screen_height * 0.7))
+        
+        detail_win.geometry(f"{window_width}x{window_height}")
+        detail_win.minsize(600, 500)
+        detail_win.resizable(True, True)
         detail_win.configure(bg=self.app.colors.get("bg", "#0F172A"))
         
         # Center window
         detail_win.update_idletasks()
-        x = self.app.root.winfo_x() + (self.app.root.winfo_width() - 800) // 2
+        x = self.app.root.winfo_x() + (self.app.root.winfo_width() - window_width) // 2
         y = self.app.root.winfo_y() + (self.app.root.winfo_height() - 600) // 2
         detail_win.geometry(f"+{x}+{y}")
         

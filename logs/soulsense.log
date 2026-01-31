@@ -2292,3 +2292,616 @@ AttributeError: 'AppInitializer' object has no attribute 'start_login_flow'
 2026-01-30 16:08:05 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
 2026-01-30 16:08:05 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
 2026-01-30 16:08:05 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+2026-01-31 11:10:13 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:10:13 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:10:13 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:10:13 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:10:13 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:10:13 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:10:13 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:10:13 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:10:13 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:10:13 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:10:13 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:10:13 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:10:15 - app.questions - INFO - [questions.py:87] - Questions not initialized, loading now...
+2026-01-31 11:10:15 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:10:34 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:10:34 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:10:34 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:10:34 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:10:34 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:10:34 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:12:53 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:12:53 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:12:53 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:12:53 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:12:53 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:12:53 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:12:53 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:12:53 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:12:53 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:12:53 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:12:53 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:12:53 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:12:55 - app.questions - INFO - [questions.py:87] - Questions not initialized, loading now...
+2026-01-31 11:12:55 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:12:59 - app.error_handler - ERROR - [error_handler.py:134] - [HIGH] tkinter.callback: TclError - unknown color name "transparent"
+Traceback (most recent call last):
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2074, in __call__
+    return self.func(*args)
+           ~~~~~~~~~^^^^^^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 84, in do_register
+    self.show_signup_screen()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 326, in show_signup_screen
+    back_btn = tk.Button(button_frame, text="← Back to Login", command=signup_win.destroy,
+                        font=("Segoe UI", 10), bg="transparent", fg=self.app.colors["text_secondary"],
+                        bd=0, cursor="hand2", activeforeground=self.app.colors["primary"])
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2858, in __init__
+    Widget.__init__(self, master, 'button', cnf, kw)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2780, in __init__
+    self.tk.call(
+    ~~~~~~~~~~~~^
+        (widgetName, self._w) + extra + self._options(cnf))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_tkinter.TclError: unknown color name "transparent"
+2026-01-31 11:13:40 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:13:40 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:13:40 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:13:40 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:13:40 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:13:40 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:17:56 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:17:56 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:17:56 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:17:56 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:17:56 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:17:56 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:17:56 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:17:56 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:17:56 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:17:56 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:17:56 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:17:56 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:17:57 - app.questions - INFO - [questions.py:87] - Questions not initialized, loading now...
+2026-01-31 11:17:57 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:18:06 - app.error_handler - ERROR - [error_handler.py:134] - [HIGH] tkinter.callback: TclError - unknown color name "transparent"
+Traceback (most recent call last):
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2074, in __call__
+    return self.func(*args)
+           ~~~~~~~~~^^^^^^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 84, in do_register
+    self.show_signup_screen()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 326, in show_signup_screen
+    back_btn = tk.Button(button_frame, text="← Back to Login", command=signup_win.destroy,
+                        font=("Segoe UI", 10), bg="transparent", fg=self.app.colors["text_secondary"],
+                        bd=0, cursor="hand2", activeforeground=self.app.colors["primary"])
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2858, in __init__
+    Widget.__init__(self, master, 'button', cnf, kw)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2780, in __init__
+    self.tk.call(
+    ~~~~~~~~~~~~^
+        (widgetName, self._w) + extra + self._options(cnf))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_tkinter.TclError: unknown color name "transparent"
+2026-01-31 11:18:53 - app.error_handler - ERROR - [error_handler.py:134] - [HIGH] tkinter.callback: TclError - unknown color name "transparent"
+Traceback (most recent call last):
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2074, in __call__
+    return self.func(*args)
+           ~~~~~~~~~^^^^^^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 84, in do_register
+    self.show_signup_screen()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 326, in show_signup_screen
+    back_btn = tk.Button(button_frame, text="← Back to Login", command=signup_win.destroy,
+                        font=("Segoe UI", 10), bg="transparent", fg=self.app.colors["text_secondary"],
+                        bd=0, cursor="hand2", activeforeground=self.app.colors["primary"])
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2858, in __init__
+    Widget.__init__(self, master, 'button', cnf, kw)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2780, in __init__
+    self.tk.call(
+    ~~~~~~~~~~~~^
+        (widgetName, self._w) + extra + self._options(cnf))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_tkinter.TclError: unknown color name "transparent"
+2026-01-31 11:19:17 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:19:17 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:19:17 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:19:17 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:19:17 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:19:17 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:22:16 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:22:16 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:22:16 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:22:16 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:22:16 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:22:16 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:22:16 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:22:16 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:22:16 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:22:16 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:22:16 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:22:16 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:22:16 - app.error_handler - CRITICAL - [error_handler.py:132] - [CRITICAL] main.startup: AttributeError - 'SidebarNav' object has no attribute 'app'
+Traceback (most recent call last):
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\temp_main.py", line 186, in <module>
+    app = SoulSenseApp(root)
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\temp_main.py", line 21, in __init__
+    self.initializer = AppInitializer(self)
+                       ~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\ui\app_initializer.py", line 16, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\ui\app_initializer.py", line 83, in setup_ui
+    self.app.sidebar = SidebarNav(
+                       ~~~~~~~~~~^
+        self.app.main_container,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+        on_change=self.app.switch_view,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\ui\sidebar.py", line 16, in __init__
+    screen_width = self.app.root.winfo_screenwidth()
+                   ^^^^^^^^
+AttributeError: 'SidebarNav' object has no attribute 'app'
+2026-01-31 11:22:56 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:22:56 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:22:56 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:22:56 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:22:56 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:22:56 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:22:56 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:22:56 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:22:56 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:22:56 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:22:56 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:22:56 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:22:56 - app.error_handler - CRITICAL - [error_handler.py:132] - [CRITICAL] main.startup: AttributeError - 'SidebarNav' object has no attribute 'app'
+Traceback (most recent call last):
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\temp_main.py", line 186, in <module>
+    app = SoulSenseApp(root)
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\temp_main.py", line 21, in __init__
+    self.initializer = AppInitializer(self)
+                       ~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\ui\app_initializer.py", line 16, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\ui\app_initializer.py", line 83, in setup_ui
+    self.app.sidebar = SidebarNav(
+                       ~~~~~~~~~~^
+        self.app.main_container,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+        on_change=self.app.switch_view,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\ui\sidebar.py", line 16, in __init__
+    screen_width = self.app.root.winfo_screenwidth()
+                   ^^^^^^^^
+AttributeError: 'SidebarNav' object has no attribute 'app'
+2026-01-31 11:23:56 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:23:56 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:23:56 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:23:56 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:23:56 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:23:56 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:23:56 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:23:56 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:23:56 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:23:56 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:23:56 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:23:56 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:23:56 - app.error_handler - CRITICAL - [error_handler.py:132] - [CRITICAL] main.startup: AttributeError - 'SidebarNav' object has no attribute 'app'
+Traceback (most recent call last):
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\temp_main.py", line 186, in <module>
+    app = SoulSenseApp(root)
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\temp_main.py", line 21, in __init__
+    self.initializer = AppInitializer(self)
+                       ~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\ui\app_initializer.py", line 16, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\ui\app_initializer.py", line 83, in setup_ui
+    self.app.sidebar = SidebarNav(
+                       ~~~~~~~~~~^
+        self.app.main_container,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+        on_change=self.app.switch_view,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\ui\sidebar.py", line 16, in __init__
+    screen_width = self.app.root.winfo_screenwidth()
+                   ^^^^^^^^
+AttributeError: 'SidebarNav' object has no attribute 'app'
+2026-01-31 11:24:33 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:24:33 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:24:33 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:24:33 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:24:33 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:24:33 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:24:33 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:24:33 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:24:33 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:24:33 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:24:33 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:24:34 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:24:34 - app.error_handler - CRITICAL - [error_handler.py:132] - [CRITICAL] main.startup: AttributeError - 'SidebarNav' object has no attribute 'app'
+Traceback (most recent call last):
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\temp_main.py", line 186, in <module>
+    app = SoulSenseApp(root)
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\temp_main.py", line 21, in __init__
+    self.initializer = AppInitializer(self)
+                       ~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\ui\app_initializer.py", line 16, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\ui\app_initializer.py", line 83, in setup_ui
+    self.app.sidebar = SidebarNav(
+                       ~~~~~~~~~~^
+        self.app.main_container,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+        on_change=self.app.switch_view,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\ui\sidebar.py", line 16, in __init__
+    screen_width = self.app.root.winfo_screenwidth()
+                   ^^^^^^^^
+AttributeError: 'SidebarNav' object has no attribute 'app'
+2026-01-31 11:24:59 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:24:59 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:24:59 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:24:59 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:24:59 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:24:59 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:24:59 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:24:59 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:24:59 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:24:59 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:24:59 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:24:59 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:25:00 - app.questions - INFO - [questions.py:87] - Questions not initialized, loading now...
+2026-01-31 11:25:00 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:25:09 - app.error_handler - ERROR - [error_handler.py:134] - [HIGH] tkinter.callback: TclError - unknown color name "transparent"
+Traceback (most recent call last):
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2074, in __call__
+    return self.func(*args)
+           ~~~~~~~~~^^^^^^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 84, in do_register
+    self.show_signup_screen()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 326, in show_signup_screen
+    back_btn = tk.Button(button_frame, text="← Back to Login", command=signup_win.destroy,
+                        font=("Segoe UI", 10), bg="transparent", fg=self.app.colors["text_secondary"],
+                        bd=0, cursor="hand2", activeforeground=self.app.colors["primary"])
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2858, in __init__
+    Widget.__init__(self, master, 'button', cnf, kw)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2780, in __init__
+    self.tk.call(
+    ~~~~~~~~~~~~^
+        (widgetName, self._w) + extra + self._options(cnf))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_tkinter.TclError: unknown color name "transparent"
+2026-01-31 11:26:44 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:26:44 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:26:44 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:26:44 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:26:44 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:26:44 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:27:47 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:27:47 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:27:47 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:27:47 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:27:47 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:27:47 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:27:47 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:27:47 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:27:47 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:27:47 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:27:47 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:27:47 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:27:48 - app.questions - INFO - [questions.py:87] - Questions not initialized, loading now...
+2026-01-31 11:27:48 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:28:07 - app.error_handler - ERROR - [error_handler.py:134] - [HIGH] tkinter.callback: TclError - unknown color name "transparent"
+Traceback (most recent call last):
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2074, in __call__
+    return self.func(*args)
+           ~~~~~~~~~^^^^^^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 93, in do_register
+    self.show_signup_screen()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 343, in show_signup_screen
+    back_btn = tk.Button(button_frame, text="← Back to Login", command=signup_win.destroy,
+                        font=("Segoe UI", 10), bg="transparent", fg=self.app.colors["text_secondary"],
+                        bd=0, cursor="hand2", activeforeground=self.app.colors["primary"])
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2858, in __init__
+    Widget.__init__(self, master, 'button', cnf, kw)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2780, in __init__
+    self.tk.call(
+    ~~~~~~~~~~~~^
+        (widgetName, self._w) + extra + self._options(cnf))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_tkinter.TclError: unknown color name "transparent"
+2026-01-31 11:28:23 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:28:23 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:28:23 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:28:23 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:28:23 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:28:23 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:28:23 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:28:23 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:28:23 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:29:34 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:29:34 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:29:34 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:29:34 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:29:34 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:29:34 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:29:34 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:29:34 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:29:34 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:29:34 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:29:34 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:29:34 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:29:35 - app.questions - INFO - [questions.py:87] - Questions not initialized, loading now...
+2026-01-31 11:29:35 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:29:38 - app.error_handler - ERROR - [error_handler.py:134] - [HIGH] tkinter.callback: TclError - unknown color name "transparent"
+Traceback (most recent call last):
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2074, in __call__
+    return self.func(*args)
+           ~~~~~~~~~^^^^^^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 93, in do_register
+    self.show_signup_screen()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 371, in show_signup_screen
+    back_btn = tk.Button(button_frame, text="← Back to Login", command=signup_win.destroy,
+                        font=("Segoe UI", 10), bg="transparent", fg=self.app.colors["text_secondary"],
+                        bd=0, cursor="hand2", activeforeground=self.app.colors["primary"])
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2858, in __init__
+    Widget.__init__(self, master, 'button', cnf, kw)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2780, in __init__
+    self.tk.call(
+    ~~~~~~~~~~~~^
+        (widgetName, self._w) + extra + self._options(cnf))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_tkinter.TclError: unknown color name "transparent"
+2026-01-31 11:29:58 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:29:58 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:29:58 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:29:58 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:29:58 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:29:58 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:29:58 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:29:58 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:29:58 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:31:44 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:31:44 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:31:44 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:31:44 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:31:44 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:31:44 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:31:44 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:31:44 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:31:44 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:31:44 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:31:44 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:31:44 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:31:46 - app.questions - INFO - [questions.py:87] - Questions not initialized, loading now...
+2026-01-31 11:31:46 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:31:48 - app.error_handler - ERROR - [error_handler.py:134] - [HIGH] tkinter.callback: TclError - unknown color name "transparent"
+Traceback (most recent call last):
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2074, in __call__
+    return self.func(*args)
+           ~~~~~~~~~^^^^^^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 93, in do_register
+    self.show_signup_screen()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 358, in show_signup_screen
+    back_btn = tk.Button(button_frame, text="← Back to Login", command=signup_win.destroy,
+                        font=("Segoe UI", 10), bg="transparent", fg=self.app.colors["text_secondary"],
+                        bd=0, cursor="hand2", activeforeground=self.app.colors["primary"])
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2858, in __init__
+    Widget.__init__(self, master, 'button', cnf, kw)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2780, in __init__
+    self.tk.call(
+    ~~~~~~~~~~~~^
+        (widgetName, self._w) + extra + self._options(cnf))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_tkinter.TclError: unknown color name "transparent"
+2026-01-31 11:32:18 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:32:18 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:32:18 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:32:18 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:32:18 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:32:18 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:33:20 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:33:20 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:33:20 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:33:20 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:33:20 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:33:20 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:33:20 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:33:20 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:33:20 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:33:20 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:33:20 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:33:20 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:33:21 - app.questions - INFO - [questions.py:87] - Questions not initialized, loading now...
+2026-01-31 11:33:21 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:33:26 - app.error_handler - ERROR - [error_handler.py:134] - [HIGH] tkinter.callback: TclError - unknown color name "transparent"
+Traceback (most recent call last):
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2074, in __call__
+    return self.func(*args)
+           ~~~~~~~~~^^^^^^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 93, in do_register
+    self.show_signup_screen()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Gupta\Downloads\SOUL_SENSE_EXAM\app\auth\app_auth.py", line 347, in show_signup_screen
+    back_btn = tk.Button(button_frame, text="← Back to Login", command=signup_win.destroy,
+                        font=("Segoe UI", 10), bg="transparent", fg=self.app.colors["text_secondary"],
+                        bd=0, cursor="hand2", activeforeground=self.app.colors["primary"])
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2858, in __init__
+    Widget.__init__(self, master, 'button', cnf, kw)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gupta\AppData\Local\Programs\Python\Python313\Lib\tkinter\__init__.py", line 2780, in __init__
+    self.tk.call(
+    ~~~~~~~~~~~~^
+        (widgetName, self._w) + extra + self._options(cnf))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_tkinter.TclError: unknown color name "transparent"
+2026-01-31 11:34:22 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:34:22 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:34:22 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:34:22 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:34:22 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:34:22 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:34:35 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:34:35 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:34:35 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:34:35 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:34:35 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:34:35 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:34:35 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:34:35 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:34:35 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:34:35 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:34:35 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:34:35 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:34:36 - app.questions - INFO - [questions.py:87] - Questions not initialized, loading now...
+2026-01-31 11:34:36 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:34:45 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:34:45 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:34:45 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:34:45 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:34:45 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:34:45 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:35:34 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:35:34 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:35:34 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:35:34 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:35:34 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:35:34 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:35:34 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:35:34 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:35:34 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:35:34 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:35:34 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:35:35 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:35:35 - app.questions - INFO - [questions.py:87] - Questions not initialized, loading now...
+2026-01-31 11:35:35 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:35:45 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:35:45 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:35:45 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:35:45 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:35:45 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:35:45 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:36:33 - root - INFO - [logger.py:85] - Logging initialized.
+2026-01-31 11:36:33 - app.startup_checks - INFO - [startup_checks.py:302] - Running startup integrity checks...
+2026-01-31 11:36:33 - app.startup_checks - INFO - [startup_checks.py:272] - Config integrity check passed
+2026-01-31 11:36:33 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ config_integrity: Configuration is valid
+2026-01-31 11:36:33 - app.startup_checks - INFO - [startup_checks.py:195] - Required files check passed
+2026-01-31 11:36:33 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ required_files: All required files and directories present
+2026-01-31 11:36:33 - app.startup_checks - INFO - [startup_checks.py:121] - Database schema check passed
+2026-01-31 11:36:33 - app.startup_checks - INFO - [startup_checks.py:320] - ✓ database_schema: All required tables present
+2026-01-31 11:36:33 - app.startup_checks - INFO - [startup_checks.py:345] - Integrity checks complete: 3 passed, 0 warnings, 0 failed
+2026-01-31 11:36:33 - __main__ - INFO - [temp_main.py:135] - Startup Integrity Check Results:
+========================================
+✓ config_integrity: Configuration is valid
+✓ required_files: All required files and directories present
+✓ database_schema: All required tables present
+========================================
+2026-01-31 11:36:33 - __main__ - INFO - [temp_main.py:164] - Preloading questions into memory...
+2026-01-31 11:36:33 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:36:34 - app.questions - INFO - [questions.py:87] - Questions not initialized, loading now...
+2026-01-31 11:36:34 - app.questions - INFO - [questions.py:52] - Loaded 0 active questions into memory.
+2026-01-31 11:37:10 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:37:10 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:37:10 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
+2026-01-31 11:37:10 - app.shutdown_handler - INFO - [shutdown_handler.py:56] - Initiating graceful application shutdown...
+2026-01-31 11:37:10 - app.shutdown_handler - INFO - [shutdown_handler.py:65] - Database session committed and removed successfully
+2026-01-31 11:37:10 - app.shutdown_handler - INFO - [shutdown_handler.py:70] - Application shutdown complete
