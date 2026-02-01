@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
@@ -63,6 +63,7 @@ export default function LoginPage() {
       <Form schema={loginSchema} onSubmit={handleSubmit} className="space-y-5">
         {(methods) => (
           <>
+            <FormKeyboardListener reset={methods.reset} />
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -175,4 +176,25 @@ export default function LoginPage() {
       </Form>
     </AuthLayout>
   );
+}
+
+function FormKeyboardListener({ reset }: { reset: (values?: any) => void }) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        // Clear all fields to empty strings
+        reset({
+          email: "",
+          password: "",
+          rememberMe: false
+        });
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [reset]);
+
+  return null;
 }
