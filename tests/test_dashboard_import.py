@@ -19,6 +19,10 @@ class TestProgressDashboard:
         """Create a mock parent widget"""
         parent = Mock()
         parent.configure = Mock()
+        parent._last_child_ids = {}
+        parent.tk = Mock()
+        parent.winfo_screenwidth = Mock(return_value=1920)
+        parent.winfo_screenheight = Mock(return_value=1080)
         return parent
 
     @pytest.fixture
