@@ -343,7 +343,6 @@ class AuthManager:
             attempt = LoginAttempt(
                 username=username,
                 is_successful=success,
-                timestamp=datetime.now(UTC),
                 timestamp=datetime.now(timezone.utc),
                 ip_address="desktop",
                 failure_reason=reason
