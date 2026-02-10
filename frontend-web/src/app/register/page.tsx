@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Eye, EyeOff, Loader2, CheckCircle2, XCircle, AlertCircle, ArrowLeft, ArrowRight, User, Mail, Lock, Shield } from 'lucide-react';
+import { Eye, EyeOff, Loader2, CheckCircle2, XCircle, AlertCircle, ArrowLeft, ArrowRight, User, Mail, Shield } from 'lucide-react';
 import { Form, FormField } from '@/components/forms';
 import { Button, Input } from '@/components/ui';
 import { AuthLayout, SocialLogin, PasswordStrengthIndicator, StepIndicator } from '@/components/auth';
@@ -437,7 +437,7 @@ function TermsStep({ methods, isLoading, onBack, lockoutTime = 0 }: StepContentP
         </Button>
         <Button
           type="submit"
-          disabled={isLoading || !methods.getValues('acceptTerms')}
+          disabled={isLoading || !field.value}
           className="flex-1"
         >
           {isLoading ? (
@@ -451,7 +451,7 @@ function TermsStep({ methods, isLoading, onBack, lockoutTime = 0 }: StepContentP
             )
           ) : (
             <>
-              <Lock className="mr-2 h-4 w-4" />
+              <Shield className="mr-2 h-4 w-4" />
               Create Account
             </>
           )}
