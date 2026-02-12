@@ -1,4 +1,6 @@
 from datetime import timedelta
+from typing import Annotated
+import logging  
 from typing import Annotated, Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Request, Response
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -22,6 +24,10 @@ from ..constants.errors import ErrorCode
 from ..constants.security_constants import REFRESH_TOKEN_EXPIRE_DAYS
 from ..exceptions import AuthException, APIException, RateLimitException
 from api.root_models import User
+
+#  Setup Logger
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 router = APIRouter()
 settings = get_settings()
@@ -75,6 +81,7 @@ async def check_username_availability(
     client_ip = request.client.host
     count = availability_limiter_cache.get(client_ip, 0)
     if count >= 20:
+        logger.warning(f"SUSPICIOUS: IP {client_ip} is checking too many usernames.")
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
             detail="Too many availability checks. Please wait a minute."
@@ -94,6 +101,7 @@ async def register(
     # Rate limit by IP
     is_limited, wait_time = registration_limiter.is_rate_limited(request.client.host)
     if is_limited:
+        logger.warning(f"SUSPICIOUS: IP {request.client.host} exceeded registration limits.")
         raise RateLimitException(
             message=f"Too many registration attempts. Please try again in {wait_time}s.",
             wait_seconds=wait_time
@@ -130,8 +138,11 @@ async def login(
     ip = request.client.host
     user_agent = request.headers.get("user-agent", "Unknown")
 
+    logger.info(f"Login attempt for user: {login_data.identifier} from IP: {ip}")
+
     # 1. Validate CAPTCHA first
     if not captcha_service.validate_captcha(login_data.session_id, login_data.captcha_input):
+        logger.warning(f"SUSPICIOUS: Invalid CAPTCHA from IP {ip} for user {login_data.identifier}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail={
@@ -140,18 +151,26 @@ async def login(
             }
         )
 
-    # 2. Rate Limit by IP
+    # 2. Rate Limit by IP (Suspicious Frequency)
     is_limited, wait_time = login_limiter.is_rate_limited(ip)
     if is_limited:
+         logger.warning(f"SUSPICIOUS ACTIVITY: IP {ip} exceeded login rate limits (Possible Brute Force).")
+         raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=f"Too many login attempts. Please try again in {wait_time}s."
         from api.exceptions import RateLimitException
         raise RateLimitException(
             message=f"Too many login attempts. Please try again in {wait_time}s.",
             wait_seconds=wait_time
         )
 
-    # 3. Rate Limit by Username (Identifier)
+    # 3. Rate Limit by Username (Targeted Attack)
     is_limited, wait_time = login_limiter.is_rate_limited(f"login_{login_data.identifier}")
     if is_limited:
+         logger.warning(f"SUSPICIOUS ACTIVITY: Multiple failed logins for account {login_data.identifier} from IP {ip}.")
+         raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=f"Account temporarily restricted due to multiple login attempts. Please try again in {wait_time}s."
         from api.exceptions import RateLimitException
         raise RateLimitException(
             message=f"Account temporarily restricted due to multiple login attempts. Please try again in {wait_time}s.",
@@ -160,6 +179,7 @@ async def login(
 
     user = auth_service.authenticate_user(login_data.identifier, login_data.password, ip_address=ip, user_agent=user_agent)
     
+    # PR 4: 2FA Check
     if not user:
         raise AuthException(
             code=ErrorCode.AUTH_INVALID_CREDENTIALS,
@@ -290,6 +310,7 @@ async def read_users_me(current_user: Annotated[User, Depends(get_current_user)]
 @router.post("/password-reset/initiate")
 async def initiate_password_reset(
     request: Request,
+    reset_data: PasswordResetRequest, 
     reset_data: PasswordResetRequest,
     auth_service: AuthService = Depends(get_auth_service)
 ):
@@ -300,6 +321,7 @@ async def initiate_password_reset(
     # Rate limit by IP
     is_limited, wait_time = password_reset_limiter.is_rate_limited(request.client.host)
     if is_limited:
+        logger.warning(f"SUSPICIOUS: IP {request.client.host} exceeded password reset limits.")
         raise RateLimitException(
             message=f"Too many reset requests. Please try again in {wait_time}s.",
             wait_seconds=wait_time
@@ -308,6 +330,7 @@ async def initiate_password_reset(
     # Rate limit by Email
     is_limited, wait_time = password_reset_limiter.is_rate_limited(f"reset_{reset_data.email}")
     if is_limited:
+        logger.warning(f"SUSPICIOUS: Multiple reset requests for email {reset_data.email}.")
         raise RateLimitException(
             message=f"Multiple requests for this email. Please try again in {wait_time}s.",
             wait_seconds=wait_time
@@ -323,6 +346,7 @@ async def initiate_password_reset(
 
 @router.post("/password-reset/complete")
 async def complete_password_reset(
+    req_obj: Request, 
     request: PasswordResetComplete,
     req_obj: Request,
     auth_service: AuthService = Depends(get_auth_service)
@@ -334,6 +358,7 @@ async def complete_password_reset(
     # Rate limit by IP for OTP attempts
     is_limited, wait_time = password_reset_limiter.is_rate_limited(req_obj.client.host)
     if is_limited:
+         logger.warning(f"SUSPICIOUS: IP {req_obj.client.host} exceeded OTP attempt limits.")
          raise RateLimitException(
             message=f"Too many attempts. Please try again in {wait_time}s.",
             wait_seconds=wait_time
