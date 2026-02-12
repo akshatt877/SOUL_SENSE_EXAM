@@ -121,7 +121,7 @@ export function Sidebar() {
                         </Button>
                       </Link>
                     </TooltipTrigger>
-                    <TooltipContent className="left-20">{item.label}</TooltipContent>
+                    <TooltipContent>{item.label}</TooltipContent>
                   </Tooltip>
                 </div>
               );
