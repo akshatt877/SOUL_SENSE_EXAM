@@ -59,7 +59,7 @@ export default function ExamPage() {
     if (result) {
       completeExam();
       // Redirect to completion page
-      router.push('/exam/complete');
+      router.replace('/exam/complete');
     }
   }, [result, completeExam, router]);
 
