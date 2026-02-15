@@ -19,7 +19,7 @@ from ..exceptions import AuthException
 from ..config import get_settings
 from ..services.db_service import get_db
 from ..schemas import UserCreate
-from api.root_models import User
+from ..root_models import User
 from sqlalchemy.orm import Session
 
 settings = get_settings()
@@ -200,7 +200,7 @@ class MockAuthService:
         logger.debug(f"🎭 Created mock pre-auth token for user_id: {user_id}")
         return encoded_jwt
 
-    def initiate_2fa_login(self, user: User) -> str:
+    def initiate_2fa_login(self, user: User) -> Tuple[str, str]:
         """
         Mock 2FA login initiation.
         
@@ -218,7 +218,7 @@ class MockAuthService:
         otp_code = MOCK_OTP_CODES.get(email, "123456")
         
         logger.info(f"🎭 Mock 2FA initiated for {email}. OTP: {otp_code}")
-        return pre_auth_token
+        return pre_auth_token, otp_code
 
     def verify_2fa_login(self, pre_auth_token: str, code: str) -> Optional[User]:
         """

@@ -4,7 +4,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Bell, LogOut, Settings, User } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage, Button } from '@/components/ui';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
 
@@ -13,7 +13,7 @@ interface HeaderProps {
   notificationCount?: number;
 }
 
-export const Header = React.forwardRef<HTMLHeaderElement, HeaderProps>(
+export const Header = React.forwardRef<HTMLElement, HeaderProps>(
   ({ className, notificationCount = 0 }, ref) => {
     const router = useRouter();
     const { user, logout } = useAuth();
@@ -40,16 +40,22 @@ export const Header = React.forwardRef<HTMLHeaderElement, HeaderProps>(
     // Get user initials from name
     const getUserInitials = (name?: string) => {
       if (!name) return 'U';
-      const parts = name.split(' ');
-      if (parts.length >= 2) {
+      const trimmedName = name.trim();
+      if (!trimmedName) return 'U';
+
+      // Split on any whitespace and ignore empty segments
+      const parts = trimmedName.split(/\s+/);
+
+      if (parts.length >= 2 && parts[0] && parts[1]) {
         return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
       }
-      return name.slice(0, 2).toUpperCase();
+
+      return trimmedName.slice(0, 2).toUpperCase();
     };
 
     const handleLogout = async () => {
       setIsDropdownOpen(false);
-      logout();
+      await logout();
     };
 
     const handleNavigate = (path: string) => {
@@ -103,7 +109,6 @@ export const Header = React.forwardRef<HTMLHeaderElement, HeaderProps>(
                 aria-expanded={isDropdownOpen}
               >
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={user?.avatarUrl} alt={user?.name} />
                   <AvatarFallback className="bg-blue-600 text-sm font-semibold text-white">
                     {getUserInitials(user?.name)}
                   </AvatarFallback>
@@ -112,7 +117,7 @@ export const Header = React.forwardRef<HTMLHeaderElement, HeaderProps>(
 
               {/* Dropdown Menu */}
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                <div className="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg z-50 dark:border-gray-700 dark:bg-gray-900">
                   {/* User Info */}
                   <div className="border-b border-gray-200 px-4 py-3 dark:border-gray-700">
                     <p className="text-sm font-semibold text-gray-900 dark:text-white">
