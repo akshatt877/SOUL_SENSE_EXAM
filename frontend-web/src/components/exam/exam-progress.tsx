@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
+import { Progress, Button } from '@/components/ui';
 import { cn } from '@/lib/utils';
 
 interface ExamProgressProps {
@@ -96,9 +95,7 @@ export const ExamProgress: React.FC<ExamProgressProps> = ({
 
       {/* For large exams (>50 questions), show simplified indicator */}
       {showQuestionDots && total > 50 && (
-        <div className="text-xs text-slate-500 dark:text-slate-400">
-          {total} questions total
-        </div>
+        <div className="text-xs text-slate-500 dark:text-slate-400">{total} questions total</div>
       )}
     </div>
   );

@@ -1,116 +1,94 @@
-'use client';
-
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { resultsApi } from '@/lib/api/results';
-import { ExamResult, ResultsHistory } from '@/types/results';
-import { ApiError } from '@/lib/api/errors';
+import { useState, useCallback } from 'react';
+import { resultsApi } from '../lib/api/results';
+import { DetailedExamResult, AssessmentResponse } from '../types/results';
+import { ApiError } from '../lib/api/errors';
 
 interface UseResultsOptions {
-  historyPage?: number;
-  historyPageSize?: number;
-  resultId?: string | number;
-  enabledHistory?: boolean;
-  enabledResult?: boolean;
+  initialPage?: number;
+  initialPageSize?: number;
+  autoFetch?: boolean;
 }
 
-interface UseResultsReturn {
-  result: ExamResult | null;
-  results: ExamResult[];
-  history: ResultsHistory | null;
-  isLoading: boolean;
-  error: string | null;
-  refetch: () => Promise<void>;
-}
-
-export function useResults(options: UseResultsOptions = {}): UseResultsReturn {
-  const {
-    historyPage = 1,
-    historyPageSize = 50,
-    resultId,
-    enabledHistory = true,
-    enabledResult = true,
-  } = options;
-
-  const [result, setResult] = useState<ExamResult | null>(null);
-  const [history, setHistory] = useState<ResultsHistory | null>(null);
-  const [isHistoryLoading, setIsHistoryLoading] = useState(false);
-  const [isResultLoading, setIsResultLoading] = useState(false);
+/**
+ * Custom hook for managing assessment results and history.
+ * Provides state for history list, detailed breakdowns, and loading/error status.
+ */
+export function useResults(options: UseResultsOptions = {}) {
+  const [history, setHistory] = useState<AssessmentResponse[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(options.initialPage || 1);
+  const [pageSize, setPageSize] = useState(options.initialPageSize || 10);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [detailedResult, setDetailedResult] = useState<DetailedExamResult | null>(null);
 
-  const isMountedRef = useRef(true);
+  /**
+   * Fetches paginated assessment history.
+   */
+  const fetchHistory = useCallback(
+    async (page = currentPage, size = pageSize) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await resultsApi.getHistory(page, size);
+        setHistory(data.assessments);
+        setTotalCount(data.total);
+        setCurrentPage(page);
+        setPageSize(size);
+        return data;
+      } catch (err) {
+        const message =
+          err instanceof ApiError ? err.message : 'Failed to fetch assessment history';
+        setError(message);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [currentPage, pageSize]
+  );
 
-  const fetchHistory = useCallback(async () => {
-    if (!enabledHistory) return;
-
-    setIsHistoryLoading(true);
+  /**
+   * Fetches detailed results for a specific assessment.
+   */
+  const fetchDetailedResult = useCallback(async (assessmentId: number) => {
+    setLoading(true);
     setError(null);
-
     try {
-      const data = await resultsApi.getHistory(historyPage, historyPageSize);
-      if (!isMountedRef.current) return;
-      setHistory(data);
+      const data = await resultsApi.getDetailedResult(assessmentId);
+      setDetailedResult(data);
+      return data;
     } catch (err) {
-      if (!isMountedRef.current) return;
-      if (err instanceof ApiError) {
-        setError(err.message);
-      } else if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Failed to load results history.');
-      }
+      const message = err instanceof ApiError ? err.message : 'Failed to fetch detailed results';
+      setError(message);
+      throw err;
     } finally {
-      if (isMountedRef.current) {
-        setIsHistoryLoading(false);
-      }
+      setLoading(false);
     }
-  }, [enabledHistory, historyPage, historyPageSize]);
+  }, []);
 
-  const fetchResult = useCallback(async () => {
-    if (!enabledResult || resultId === undefined || resultId === null) return;
-
-    setIsResultLoading(true);
-    setError(null);
-
-    try {
-      const data = await resultsApi.getResult(resultId);
-      if (!isMountedRef.current) return;
-      setResult(data);
-    } catch (err) {
-      if (!isMountedRef.current) return;
-      if (err instanceof ApiError) {
-        setError(err.message);
-      } else if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Failed to load result details.');
-      }
-    } finally {
-      if (isMountedRef.current) {
-        setIsResultLoading(false);
-      }
-    }
-  }, [enabledResult, resultId]);
-
-  const refetch = useCallback(async () => {
-    await Promise.all([fetchHistory(), fetchResult()]);
-  }, [fetchHistory, fetchResult]);
-
-  useEffect(() => {
-    isMountedRef.current = true;
-    fetchHistory();
-    fetchResult();
-
-    return () => {
-      isMountedRef.current = false;
-    };
-  }, [fetchHistory, fetchResult]);
+  /**
+   * Resets the detailed result state.
+   */
+  const clearDetailedResult = useCallback(() => {
+    setDetailedResult(null);
+  }, []);
 
   return {
-    result,
-    results: history?.results ?? [],
+    // State
     history,
-    isLoading: isHistoryLoading || isResultLoading,
+    totalCount,
+    currentPage,
+    pageSize,
+    loading,
     error,
-    refetch,
+    detailedResult,
+
+    // Actions
+    fetchHistory,
+    fetchDetailedResult,
+    clearDetailedResult,
+    setCurrentPage,
+    setPageSize,
   };
 }
