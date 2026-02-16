@@ -26,15 +26,18 @@ interface AuthContextType {
     },
     rememberMe: boolean,
     shouldRedirect?: boolean,
-    redirectTo?: string
+    redirectTo?: string,
+    stayLoadingOnSuccess?: boolean
   ) => Promise<any>;
   login2FA: (
     data: { pre_auth_token: string; code: string },
     rememberMe: boolean,
     shouldRedirect?: boolean,
-    redirectTo?: string
+    redirectTo?: string,
+    stayLoadingOnSuccess?: boolean
   ) => Promise<any>;
   logout: () => void;
+  setIsLoading: (loading: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -45,20 +48,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isMockMode, setIsMockMode] = useState(false);
   const router = useRouter();
 
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
-    // Check for existing session on mount
-    const session = getSession();
-    if (session) {
-      console.log('Session restored:', session.user.email);
-      setUser(session.user);
+    setMounted(true);
+    try {
+      // Check for existing session on mount
+      const session = getSession();
+      if (session) {
+        setUser(session.user);
+      }
+
+      // Check if backend is in mock mode (from main)
+      checkMockMode();
+    } catch (e) {
+      console.warn('Auth initialization error:', e);
+    } finally {
+      // Small delay to ensure state propagates
+      const timer = setTimeout(() => setIsLoading(false), 50);
+      return () => clearTimeout(timer);
     }
-
-    // Check if backend is in mock mode (from main)
-    checkMockMode();
-
-    // Small delay to ensure state propagates before layout checks
-    const timer = setTimeout(() => setIsLoading(false), 50);
-    return () => clearTimeout(timer);
   }, []);
 
   const checkMockMode = async () => {
@@ -86,7 +95,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
     rememberMe: boolean,
     shouldRedirect = true,
-    redirectTo = '/dashboard'
+    redirectTo = '/dashboard',
+    stayLoadingOnSuccess = false
   ) => {
     setIsLoading(true);
     try {
@@ -115,12 +125,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         router.push(redirectTo);
       }
 
+      // If we are redirecting and want to stay loading, we don't clear it here
+      if (stayLoadingOnSuccess) return result;
+
+      setIsLoading(false);
       return result;
     } catch (error) {
+      setIsLoading(false);
       console.error('Login failed:', error);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -128,7 +141,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     data: { pre_auth_token: string; code: string },
     rememberMe: boolean,
     shouldRedirect = true,
-    redirectTo = '/dashboard'
+    redirectTo = '/dashboard',
+    stayLoadingOnSuccess = false
   ) => {
     setIsLoading(true);
     try {
@@ -151,12 +165,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         router.push(redirectTo);
       }
 
+      if (stayLoadingOnSuccess) return result;
+
+      setIsLoading(false);
       return result;
     } catch (error) {
       console.error('2FA verification failed:', error);
       throw error;
     } finally {
-      setIsLoading(false);
+      if (!stayLoadingOnSuccess) {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -182,6 +201,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // ... existing code ...
 
+  if (!mounted) {
+    return <Loader fullScreen text="Bootstrapping..." />;
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -192,6 +215,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         login,
         login2FA,
         logout,
+        setIsLoading,
       }}
     >
       {isLoading ? <Loader fullScreen text="Authenticating..." /> : children}

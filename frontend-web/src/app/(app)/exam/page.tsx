@@ -2,8 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui';
 import { useExamStore } from '@/stores/examStore';
 
 type ExamHistoryItem = {
@@ -96,7 +95,9 @@ export default function ExamPage() {
           <div className="space-y-6">
             <div className="space-y-3">
               <p className="text-sm uppercase tracking-[0.2em] text-emerald-700/80">Assessment</p>
-              <h1 className="text-4xl font-semibold tracking-tight text-slate-900">EQ Assessment</h1>
+              <h1 className="text-4xl font-semibold tracking-tight text-slate-900">
+                EQ Assessment
+              </h1>
               <p className="text-muted-foreground text-base leading-relaxed">
                 Measure how you perceive, process, and respond to emotions in daily life. This
                 assessment explores self-awareness, empathy, and emotional regulation to help you
@@ -120,7 +121,10 @@ export default function ExamPage() {
             </div>
           </div>
 
-          <Card variant="elevated" className="bg-[linear-gradient(135deg,var(--calm-1),var(--calm-2),var(--calm-3))]">
+          <Card
+            variant="elevated"
+            className="bg-[linear-gradient(135deg,var(--calm-1),var(--calm-2),var(--calm-3))]"
+          >
             <CardHeader>
               <CardTitle className="text-2xl text-slate-900">Assessment Details</CardTitle>
               <CardDescription>Know what to expect before you begin.</CardDescription>

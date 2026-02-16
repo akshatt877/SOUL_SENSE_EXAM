@@ -22,20 +22,13 @@ const sizeMap = {
 export function Loader({ className, size = 'md', text, fullScreen = false }: LoaderProps) {
   const content = (
     <div className={cn('flex flex-col items-center justify-center gap-4', className)}>
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-      >
+      <div className="animate-spin">
         <Loader2 className={cn('text-sky-500', sizeMap[size])} />
-      </motion.div>
-      {text && (
-        <motion.p
-          initial={{ opacity: 0, y: 5 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-sm font-medium text-muted-foreground animate-pulse"
-        >
-          {text}
-        </motion.p>
+      </div>
+      {(text || fullScreen) && (
+        <p className="text-sm font-medium text-muted-foreground animate-pulse">
+          {text || 'Initializing...'}
+        </p>
       )}
     </div>
   );

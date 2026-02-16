@@ -36,7 +36,7 @@ async def generate_export(
     export_format = request.get("format", "json").lower()
     
     # Rate Limiting
-    last_req = _last_export_request.get(current_user.id)
+    last_req = _last_export_request.get(int(current_user.id))
     if last_req:
         elapsed = (datetime.now() - last_req).total_seconds()
         if elapsed < RATE_LIMIT_SECONDS:
@@ -47,7 +47,7 @@ async def generate_export(
         filepath, job_id = ExportService.generate_export(db, current_user, export_format)
         
         # Update Rate Limit
-        _last_export_request[current_user.id] = datetime.now()
+        _last_export_request[int(current_user.id)] = datetime.now()
         
         filename = os.path.basename(filepath)
         

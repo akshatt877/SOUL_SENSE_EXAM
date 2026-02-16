@@ -22,7 +22,7 @@ export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
-  const { login, login2FA, isAuthenticated, isLoading: authLoading } = useAuth();
+  const { login, login2FA, isAuthenticated, isLoading: authLoading, setIsLoading } = useAuth();
 
   // UI State
   const [showPassword, setShowPassword] = useState(false);
@@ -99,11 +99,13 @@ export default function LoginPage() {
         },
         data.rememberMe || false,
         false, // Don't auto-redirect from useAuth, handle below
-        callbackUrl
+        callbackUrl,
+        true // stayLoadingOnSuccess - keep loading until we decide otherwise
       );
 
       // Handle 2FA requirement (if result has pre_auth_token)
       if (result.pre_auth_token) {
+        setIsLoading(false); // Clear loader to show 2FA form
         if (result.warnings?.length > 0) {
           setSessionWarning(result.warnings[0].message);
         }
@@ -114,6 +116,7 @@ export default function LoginPage() {
 
       // Success - check for session warnings
       if (result.warnings?.length > 0) {
+        setIsLoading(false); // Clear loader to show warning modal
         setSessionWarning(result.warnings[0].message);
         setPendingRedirectToken(result.access_token);
         setShowWarningModal(true);
@@ -185,11 +188,13 @@ export default function LoginPage() {
         },
         false, // rememberMe - could be passed from state if needed
         false, // Don't redirect yet, check for warnings
-        callbackUrl
+        callbackUrl,
+        true // stayLoadingOnSuccess
       );
 
       // Check for warnings
       if (result.warnings?.length > 0) {
+        setIsLoading(false);
         setSessionWarning(result.warnings[0].message);
         setPendingRedirectToken(result.access_token);
         setShowWarningModal(true);
