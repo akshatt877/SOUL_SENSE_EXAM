@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { CheckCircle2, Clock, HelpCircle, ArrowRight } from 'lucide-react';
 import { useExamStore } from '@/stores/examStore';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Button, Card, CardContent } from '@/components/ui';
 
 // Confetti particle component
 const Particle = ({ delay }: { delay: number }) => {
@@ -47,13 +46,7 @@ export default function ExamCompletePage() {
   });
 
   // Get exam state
-  const {
-    questions,
-    answers,
-    startTime,
-    getAnsweredCount,
-    resetExam,
-  } = useExamStore();
+  const { questions, startTime, getAnsweredCount, resetExam } = useExamStore();
 
   // Capture summary and clear state on mount
   useEffect(() => {
@@ -72,16 +65,16 @@ export default function ExamCompletePage() {
 
     // Clear exam state to prevent going back
     window.history.replaceState(null, '', '/exam/complete');
-    
+
     // Prevent back navigation
     const handlePopState = (e: PopStateEvent) => {
       e.preventDefault();
       window.history.replaceState(null, '', '/exam/complete');
     };
-    
+
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
+  }, [getAnsweredCount, questions.length, startTime]);
 
   // Handle navigation
   const handleViewResults = () => {
@@ -113,9 +106,7 @@ export default function ExamCompletePage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center px-4 py-8">
       {/* Confetti animation */}
       <div className="pointer-events-none fixed inset-0 top-0">
-        <div className="relative h-screen w-full">
-          {confettiParticles}
-        </div>
+        <div className="relative h-screen w-full">{confettiParticles}</div>
       </div>
 
       {/* Main content container */}

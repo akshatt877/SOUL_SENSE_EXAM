@@ -10,6 +10,7 @@ import {
   getExpiryTimestamp,
 } from '@/lib/utils/sessionStorage';
 import { authApi } from '@/lib/api/auth';
+import { Loader } from '@/components/ui';
 
 interface AuthContextType {
   user: UserSession['user'] | null;
@@ -23,10 +24,20 @@ interface AuthContextType {
       captcha_input?: string;
       session_id?: string;
     },
-    rememberMe: boolean
+    rememberMe: boolean,
+    shouldRedirect?: boolean,
+    redirectTo?: string,
+    stayLoadingOnSuccess?: boolean
   ) => Promise<any>;
-  login2FA: (data: { pre_auth_token: string; code: string }, rememberMe: boolean) => Promise<void>;
+  login2FA: (
+    data: { pre_auth_token: string; code: string },
+    rememberMe: boolean,
+    shouldRedirect?: boolean,
+    redirectTo?: string,
+    stayLoadingOnSuccess?: boolean
+  ) => Promise<any>;
   logout: () => void;
+  setIsLoading: (loading: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -37,20 +48,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isMockMode, setIsMockMode] = useState(false);
   const router = useRouter();
 
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
-    // Check for existing session on mount
-    const session = getSession();
-    if (session) {
-      console.log('Session restored:', session.user.email);
-      setUser(session.user);
+    setMounted(true);
+    try {
+      // Check for existing session on mount
+      const session = getSession();
+      if (session) {
+        setUser(session.user);
+      }
+
+      // Check if backend is in mock mode (from main)
+      checkMockMode();
+    } catch (e) {
+      console.warn('Auth initialization error:', e);
+    } finally {
+      // Small delay to ensure state propagates
+      const timer = setTimeout(() => setIsLoading(false), 50);
+      return () => clearTimeout(timer);
     }
-
-    // Check if backend is in mock mode (from main)
-    checkMockMode();
-
-    // Small delay to ensure state propagates before layout checks
-    const timer = setTimeout(() => setIsLoading(false), 50);
-    return () => clearTimeout(timer);
   }, []);
 
   const checkMockMode = async () => {
@@ -76,7 +93,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       captcha_input?: string;
       session_id?: string;
     },
-    rememberMe: boolean
+    rememberMe: boolean,
+    shouldRedirect = true,
+    redirectTo = '/dashboard',
+    stayLoadingOnSuccess = false
   ) => {
     setIsLoading(true);
     try {
@@ -85,8 +105,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (result.pre_auth_token) {
         return result; // 2FA Required
       }
-
-      console.log('useAuth: Login successful, result:', !!result.access_token);
 
       const session: UserSession = {
         user: {
@@ -99,21 +117,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         expiresAt: getExpiryTimestamp(),
       };
 
-      console.log('useAuth: Saving session for:', session.user.email || session.user.name);
       saveSession(session, rememberMe);
       setUser(session.user);
 
-      console.log('useAuth: Navigation to /community triggered');
-      router.push('/community');
+      if (shouldRedirect) {
+        console.log(`useAuth: Navigation to ${redirectTo} triggered`);
+        router.push(redirectTo);
+      }
+
+      // If we are redirecting and want to stay loading, we don't clear it here
+      if (stayLoadingOnSuccess) return result;
+
+      setIsLoading(false);
+      return result;
     } catch (error) {
+      setIsLoading(false);
       console.error('Login failed:', error);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  const login2FA = async (data: { pre_auth_token: string; code: string }, rememberMe: boolean) => {
+  const login2FA = async (
+    data: { pre_auth_token: string; code: string },
+    rememberMe: boolean,
+    shouldRedirect = true,
+    redirectTo = '/dashboard',
+    stayLoadingOnSuccess = false
+  ) => {
     setIsLoading(true);
     try {
       const result = await authApi.login2FA(data);
@@ -130,12 +160,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       saveSession(session, rememberMe);
       setUser(session.user);
-      router.push('/community');
+
+      if (shouldRedirect) {
+        router.push(redirectTo);
+      }
+
+      if (stayLoadingOnSuccess) return result;
+
+      setIsLoading(false);
+      return result;
     } catch (error) {
       console.error('2FA verification failed:', error);
       throw error;
     } finally {
-      setIsLoading(false);
+      if (!stayLoadingOnSuccess) {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -159,6 +199,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     router.push('/login');
   };
 
+  // ... existing code ...
+
+  if (!mounted) {
+    return <Loader fullScreen text="Bootstrapping..." />;
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -169,9 +215,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         login,
         login2FA,
         logout,
+        setIsLoading,
       }}
     >
-      {!isLoading && children}
+      {isLoading ? <Loader fullScreen text="Authenticating..." /> : children}
     </AuthContext.Provider>
   );
 };
