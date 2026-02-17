@@ -1,49 +1,94 @@
-'use client';
+import { useState, useCallback } from 'react';
+import { resultsApi } from '../lib/api/results';
+import { DetailedExamResult, AssessmentResponse } from '../types/results';
+import { ApiError } from '../lib/api/errors';
 
-import { useState, useEffect, useCallback } from 'react';
-import { examsApi } from '@/lib/api/exams';
-import { ExamResult } from '@/types/results';
-import { ApiError } from '@/lib/api/errors';
-
-interface UseResultsReturn {
-  result: ExamResult | null;
-  isLoading: boolean;
-  error: string | null;
-  refetch: () => Promise<void>;
+interface UseResultsOptions {
+  initialPage?: number;
+  initialPageSize?: number;
+  autoFetch?: boolean;
 }
 
-export function useResults(id: number): UseResultsReturn {
-  const [result, setResult] = useState<ExamResult | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+/**
+ * Custom hook for managing assessment results and history.
+ * Provides state for history list, detailed breakdowns, and loading/error status.
+ */
+export function useResults(options: UseResultsOptions = {}) {
+  const [history, setHistory] = useState<AssessmentResponse[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(options.initialPage || 1);
+  const [pageSize, setPageSize] = useState(options.initialPageSize || 10);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [detailedResult, setDetailedResult] = useState<DetailedExamResult | null>(null);
 
-  const fetchResult = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const data = await examsApi.getExamResult(id);
-      setResult(data);
-    } catch (err) {
-      if (err instanceof ApiError) {
-        setError(err.message);
-      } else {
-        setError('Failed to load exam result');
+  /**
+   * Fetches paginated assessment history.
+   */
+  const fetchHistory = useCallback(
+    async (page = currentPage, size = pageSize) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await resultsApi.getHistory(page, size);
+        setHistory(data.assessments);
+        setTotalCount(data.total);
+        setCurrentPage(page);
+        setPageSize(size);
+        return data;
+      } catch (err) {
+        const message =
+          err instanceof ApiError ? err.message : 'Failed to fetch assessment history';
+        setError(message);
+        throw err;
+      } finally {
+        setLoading(false);
       }
-      console.error('Error fetching exam result:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [id]);
+    },
+    [currentPage, pageSize]
+  );
 
-  useEffect(() => {
-    fetchResult();
-  }, [fetchResult]);
+  /**
+   * Fetches detailed results for a specific assessment.
+   */
+  const fetchDetailedResult = useCallback(async (assessmentId: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await resultsApi.getDetailedResult(assessmentId);
+      setDetailedResult(data);
+      return data;
+    } catch (err) {
+      const message = err instanceof ApiError ? err.message : 'Failed to fetch detailed results';
+      setError(message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  /**
+   * Resets the detailed result state.
+   */
+  const clearDetailedResult = useCallback(() => {
+    setDetailedResult(null);
+  }, []);
 
   return {
-    result,
-    isLoading,
+    // State
+    history,
+    totalCount,
+    currentPage,
+    pageSize,
+    loading,
     error,
-    refetch: fetchResult,
+    detailedResult,
+
+    // Actions
+    fetchHistory,
+    fetchDetailedResult,
+    clearDetailedResult,
+    setCurrentPage,
+    setPageSize,
   };
 }
